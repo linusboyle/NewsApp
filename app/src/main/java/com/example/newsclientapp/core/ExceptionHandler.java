@@ -24,7 +24,7 @@ public final class ExceptionHandler implements Thread.UncaughtExceptionHandler {
 
 	private ExceptionHandler() {}
 
-	public ExceptionHandler getInstance() {
+	public static ExceptionHandler getInstance() {
 		if (_instance == null)
 			_instance = new ExceptionHandler();
 		return _instance;
