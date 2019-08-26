@@ -5,7 +5,7 @@
  * in the root directory or <http://www.gnu.org/licenses/gpl-3.0.html>.
  */
 
-package com.example.newsclientapp.ui;
+package com.example.newsclientapp.ui.activity;
 
 import android.os.Bundle;
 
@@ -26,18 +26,34 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.Menu;
 
+import butterknife.BindView;
+import java.util.HashMap;
+import com.example.newsclientapp.ui.fragment.*;
+import com.example.newsclientapp.ui.fragment.FragmentFactory.FragmentEnum;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    @BindView(R.id.toolbar) Toolbar mToolbar;
+
+    private HashMap<FragmentEnum, Fragment> mFragments = new HashMap<>(6);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+
+        // toolbar
+        this.mToolbar = findViewById(R.id.toolbar);
+        this.mToolbar.setTitle(R.string.display_news);
+        setSupportActionBar(this.mToolbar);
+
+        // fab
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,13 +62,20 @@ public class MainActivity extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });
+
+        // drawer_layout
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
+
+        // nav_view
         NavigationView navigationView = findViewById(R.id.nav_view);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, this.mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+
+        // fragment
+        setDefaultFragment(FragmentEnum.NEWS_TAB_FRAGMENT);
     }
 
     @Override
@@ -110,5 +133,57 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onAttachFragment(Fragment fragment) {
+        super.onAttachFragment(fragment);
+        try {
+            for (FragmentEnum fe : FragmentEnum.values()) {
+                Fragment target = this.mFragments.get(fe);
+                Class<? extends BaseFragment> targetClass = FragmentFactory.getFragmentClass(fe);
+                if (target == null && targetClass.equals(target.getClass())) {
+                    this.mFragments.put(fe, targetClass.getConstructor().newInstance());
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            System.out.print(e);
+        }
+    }
+
+
+    /**
+     * 设置默认的Fragment
+     * @param fIndex 选项卡的enum标号：id
+     */
+    private void setDefaultFragment(FragmentEnum fIndex){
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        hideFragments(fragmentTransaction);
+
+        try {
+            if (this.mFragments.get(fIndex) != null) {
+                fragmentTransaction.show(this.mFragments.get(fIndex));
+            } else {
+                this.mFragments.put(fIndex, FragmentFactory.getFragmentInstance(fIndex));
+                fragmentTransaction.add(R.id.fragment_content, this.mFragments.get(fIndex));
+            }
+        } catch (Exception e) {
+            // TODO: replace with ExceptionHandler
+        }
+
+        fragmentTransaction.commit();
+    }
+
+    /**
+     * 隐藏Fragment
+     * @param fragmentTransaction 事务
+     */
+    private void hideFragments(FragmentTransaction fragmentTransaction) {
+        for (Fragment fragment : this.mFragments.values()) {
+            if (fragment != null) {
+                fragmentTransaction.hide(fragment);
+            }
+        }
     }
 }
