@@ -35,6 +35,7 @@ import butterknife.BindView;
 import java.util.HashMap;
 import com.example.newsclientapp.ui.fragment.*;
 import com.example.newsclientapp.ui.fragment.FragmentFactory.FragmentEnum;
+import com.example.newsclientapp.core.ExceptionHandler;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -42,11 +43,16 @@ public class MainActivity extends AppCompatActivity
     @BindView(R.id.toolbar) Toolbar mToolbar;
 
     private HashMap<FragmentEnum, Fragment> mFragments = new HashMap<>(6);
+    private ExceptionHandler exceptionHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // exception handler
+        this.exceptionHandler = ExceptionHandler.getInstance();
+        this.exceptionHandler.init(this);
 
         // toolbar
         this.mToolbar = findViewById(R.id.toolbar);
@@ -148,7 +154,7 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         } catch (Exception e) {
-            System.out.print(e);
+            this.exceptionHandler.uncaughtException(Thread.currentThread(), e);
         }
     }
 
@@ -169,7 +175,7 @@ public class MainActivity extends AppCompatActivity
                 fragmentTransaction.add(R.id.fragment_content, this.mFragments.get(fIndex));
             }
         } catch (Exception e) {
-            // TODO: replace with ExceptionHandler
+            this.exceptionHandler.uncaughtException(Thread.currentThread(), e);
         }
 
         fragmentTransaction.commit();
