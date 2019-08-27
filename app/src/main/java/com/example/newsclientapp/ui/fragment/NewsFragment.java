@@ -24,7 +24,8 @@ import java.util.List;
 public class NewsFragment extends LazyFragment implements NewsView {
 
 	private final static String CATEGORY = "category";
-	private final static int COUNT = 15;
+	private final static int COUNT_PER_PAGE = 15;
+	private final static int BUFFER_MAX = 60;
 
 	@BindView(R.id.recycler_view)
 	RecyclerView mRecyclerView;
@@ -32,8 +33,8 @@ public class NewsFragment extends LazyFragment implements NewsView {
 	SwipeRefreshLayout mRefreshLayout;
 
 	private boolean isRefresh;
-	private boolean isLoadMore;
 
+	private List<NewsEntity> newsBuffer;
 	private int page = 1;
 	private NewsAdapter mAdapter;
 
@@ -52,7 +53,6 @@ public class NewsFragment extends LazyFragment implements NewsView {
 	protected void initPrepare(@Nullable Bundle savedInstanceState) {
 		page = 1;
 		isRefresh = true;
-		isLoadMore = false;
 
 		initPresenter();
 		initRecyclerView();
@@ -64,7 +64,7 @@ public class NewsFragment extends LazyFragment implements NewsView {
 
 	@Override
 	protected void initData() {
-		mPresenter.requestNews(COUNT, "", "", "", getCategory());
+		requestNews();
 	}
 
 	@Override
@@ -74,6 +74,26 @@ public class NewsFragment extends LazyFragment implements NewsView {
 
 	private String getCategory() {
 		return getArguments().getString(CATEGORY);
+	}
+
+	private void requestNews() {
+		mPresenter.requestNews(BUFFER_MAX, "", "", "", getCategory());
+	}
+
+	private boolean addPageFromBuffer(boolean reset) {
+		if (newsBuffer != null && newsBuffer.size() > 0) {
+			int startIndex = (page-1)*COUNT_PER_PAGE;
+			int endIndex = (page)*COUNT_PER_PAGE <= newsBuffer.size() ? (page)*COUNT_PER_PAGE : newsBuffer.size();
+			if (startIndex < newsBuffer.size()) {
+				if (reset)
+					mAdapter.newDataItem(newsBuffer.subList(startIndex, endIndex));
+				else
+					mAdapter.addMoreItem(newsBuffer.subList(startIndex, endIndex));
+				page++;
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private void initPresenter() {
@@ -92,7 +112,7 @@ public class NewsFragment extends LazyFragment implements NewsView {
 			public void onRefresh() {
 				isRefresh = true;
 				page = 1;
-				mPresenter.requestNews(COUNT, "", "", "", getCategory());
+				requestNews();
 			}
 		});
 		mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -102,7 +122,7 @@ public class NewsFragment extends LazyFragment implements NewsView {
 		 	@Override
 		 	public void onClick() {
 		 		mAdapter.setLoading();
-			    mPresenter.requestNews(COUNT, "", "", "", getCategory());
+		 		requestNews();
 		 	}
 		 });
 		 // mAdapter.setOnItemClickListener(new OnItemClickListener<NewsEntity>() {
@@ -121,12 +141,11 @@ public class NewsFragment extends LazyFragment implements NewsView {
 		 		int totalItemCount = recyclerView.getAdapter().getItemCount();
 		 		int lastVisibleItemPosition = lm.findLastVisibleItemPosition();
 		 		int visibleItemCount = recyclerView.getChildCount();
-		 		if (!isRefresh && !isLoadMore && newState == RecyclerView.SCROLL_STATE_IDLE &&
+		 		if (!isRefresh && newState == RecyclerView.SCROLL_STATE_IDLE &&
 		 				lastVisibleItemPosition == totalItemCount - 1 && visibleItemCount > 0) {
-		 			isLoadMore = true;
 		 			isRefresh = false;
-		 			mAdapter.setLoading();
-				    mPresenter.requestNews(COUNT, "", "", "", getCategory());
+		 			if (!addPageFromBuffer(false))
+		 				mAdapter.setNotMore();
 		 		}
 		 	}
 		 });
@@ -134,25 +153,12 @@ public class NewsFragment extends LazyFragment implements NewsView {
 
 	@Override
 	public void onNewsResponsed(NewsResponse res) {
-		List<NewsEntity> list = res.getData();
+		newsBuffer = res.getData();
 		closeRefreshing();
-		if (isRefresh) {
-			if (list != null && list.size() > 0) {
-				mAdapter.newDataItem(list);
-				page++;
-			} else {
-				Toast.makeText(getContext(), "暂无数据", Toast.LENGTH_SHORT).show();
-			}
-		} else {
-			if (list != null && list.size() > 0) {
-				mAdapter.addMoreItem(list);
-				page++;
-			} else {
-				mAdapter.setNotMore();
-			}
-		}
+		page = 1;
 		isRefresh = false;
-		isLoadMore = false;
+		if(!addPageFromBuffer(true))
+			Toast.makeText(getContext(), "暂无数据", Toast.LENGTH_SHORT).show();
 	}
 
 	@Override
