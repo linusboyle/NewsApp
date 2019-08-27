@@ -97,7 +97,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 		void loadViewHolder(final NewsEntity newsEntity) {
 			String[] picUrls = newsEntity.getImageURLs();
-			if (picUrls.length == 0 || TextUtils.isEmpty(picUrls[0])) {
+			if (picUrls == null || picUrls.length == 0 || TextUtils.isEmpty(picUrls[0])) {
 				photo.setVisibility(View.GONE);
 			} else {
 				String picUrl = picUrls[0];

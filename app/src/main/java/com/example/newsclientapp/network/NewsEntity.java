@@ -233,7 +233,7 @@ public class NewsEntity implements Serializable {
 	public String [] getImageURLs () {
 		if (this.image.length() < 3)
 			return null;
-		return this.image.substring(1, this.image.length() - 1).split(":");
+		return this.image.substring(1, this.image.length() - 1).split(", ");
 	}
 
 	public String getPublishTime () {
