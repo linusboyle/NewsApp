@@ -1,7 +1,6 @@
 package com.example.newsclientapp.ui.fragment;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -11,7 +10,6 @@ import butterknife.BindView;
 import com.example.newsclientapp.R;
 import com.example.newsclientapp.injection.DaggerNewsComponent;
 import com.example.newsclientapp.injection.NewsModule;
-import com.example.newsclientapp.listener.OnItemClickListener;
 import com.example.newsclientapp.listener.OnReloadClickListener;
 import com.example.newsclientapp.network.NewsEntity;
 import com.example.newsclientapp.network.NewsPresenter;
@@ -66,7 +64,7 @@ public class NewsFragment extends LazyFragment implements NewsView {
 
 	@Override
 	protected void initData() {
-		// mPresenter.requestListNews(getCategory(), COUNT, page);
+		mPresenter.requestNews(COUNT, "", "", "", getCategory());
 	}
 
 	@Override

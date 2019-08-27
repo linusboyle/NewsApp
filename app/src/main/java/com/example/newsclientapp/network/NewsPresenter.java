@@ -31,14 +31,14 @@ public class NewsPresenter implements Presenter {
 	@SuppressLint("CheckResult")
 	@Override
 	public void requestNews (int size, String startDate, String endDate, String words, String categories) {
+		Log.i("requestNews", "function called");
 		_service.getNews(size, startDate, endDate, words, categories)
 				.subscribeOn(Schedulers.io())
 				.observeOn(AndroidSchedulers.mainThread())
 				.compose(_view.bindToLife())
 				.subscribe(newsResponse -> {
-							System.exit(1);
+							Log.i("requestNews", "response received");
 							_view.onNewsResponsed(newsResponse);
-
 						},
 						throwable -> _view.onFailed(throwable.getMessage()));
 	}

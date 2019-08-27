@@ -8,7 +8,6 @@
 package com.example.newsclientapp.injection;
 
 import com.example.newsclientapp.ui.fragment.NewsFragment;
-import com.example.newsclientapp.ui.fragment.NewsTabFragment;
 
 import dagger.Component;
 

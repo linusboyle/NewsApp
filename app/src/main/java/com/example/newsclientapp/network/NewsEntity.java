@@ -11,14 +11,14 @@ import java.io.Serializable;
 import java.util.List;
 
 class Keyword implements Serializable {
-	private int score;
+	private double score;
 	private String word;
 
-	public int getScore () {
+	public double getScore () {
 		return score;
 	}
 
-	public void setScore (int score) {
+	public void setScore (double score) {
 		this.score = score;
 	}
 
@@ -32,14 +32,14 @@ class Keyword implements Serializable {
 }
 
 class MentionedTime implements Serializable {
-	private int score;
+	private double score;
 	private String word;
 
-	public int getScore () {
+	public double getScore () {
 		return score;
 	}
 
-	public void setScore (int score) {
+	public void setScore (double score) {
 		this.score = score;
 	}
 
@@ -113,17 +113,17 @@ class Organization implements Serializable {
 }
 
 class MentionedPlace implements Serializable {
-	private int lng;
+	private double lng;
 	private int count;
 	private String linkedURL;
-	private int lat;
+	private double lat;
 	private String mention;
 
-	public int getLng () {
+	public double getLng () {
 		return lng;
 	}
 
-	public void setLng (int lng) {
+	public void setLng (double lng) {
 		this.lng = lng;
 	}
 
@@ -143,11 +143,11 @@ class MentionedPlace implements Serializable {
 		this.linkedURL = linkedURL;
 	}
 
-	public int getLat () {
+	public double getLat () {
 		return lat;
 	}
 
-	public void setLat (int lat) {
+	public void setLat (double lat) {
 		this.lat = lat;
 	}
 
@@ -161,14 +161,14 @@ class MentionedPlace implements Serializable {
 }
 
 class NewsLocation implements Serializable {
-	private int score;
+	private double score;
 	private String word;
 
-	public int getScore () {
+	public double getScore () {
 		return score;
 	}
 
-	public void setScore (int score) {
+	public void setScore (double score) {
 		this.score = score;
 	}
 
@@ -182,10 +182,10 @@ class NewsLocation implements Serializable {
 }
 
 class NewsFigure implements Serializable {
-	private int score;
+	private double score;
 	private String word;
 
-	public int getScore () {
+	public double getScore () {
 		return score;
 	}
 
@@ -231,6 +231,8 @@ public class NewsEntity implements Serializable {
 	}
 
 	public String [] getImageURLs () {
+		if (this.image.length() < 3)
+			return null;
 		return this.image.substring(1, this.image.length() - 1).split(":");
 	}
 
