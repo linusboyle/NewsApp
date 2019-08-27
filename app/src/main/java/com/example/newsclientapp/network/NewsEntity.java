@@ -230,6 +230,10 @@ public class NewsEntity implements Serializable {
 		this.image = image;
 	}
 
+	public String [] getImageURLs () {
+		return this.image.substring(1, this.image.length() - 1).split(":");
+	}
+
 	public String getPublishTime () {
 		return publishTime;
 	}
