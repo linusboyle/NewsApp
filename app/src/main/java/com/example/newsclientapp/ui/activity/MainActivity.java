@@ -24,7 +24,6 @@ import com.google.android.material.navigation.NavigationView;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -37,7 +36,7 @@ import com.example.newsclientapp.ui.fragment.*;
 import com.example.newsclientapp.ui.fragment.FragmentFactory.FragmentEnum;
 import com.example.newsclientapp.core.ExceptionHandler;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
@@ -46,9 +45,12 @@ public class MainActivity extends AppCompatActivity
     private ExceptionHandler exceptionHandler;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    protected int getLayout() {
+        return R.layout.activity_main;
+    }
+
+    @Override
+    protected void initData(Bundle savedInstanceState) {
 
         // exception handler
         this.exceptionHandler = ExceptionHandler.getInstance();
@@ -119,11 +121,10 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_home) {
-            // Handle the camera action
+        if (id == R.id.nav_news_tab_fragment) {
+            this.setDefaultFragment(FragmentEnum.NEWS_TAB_FRAGMENT);
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
@@ -138,6 +139,7 @@ public class MainActivity extends AppCompatActivity
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+        this.mToolbar.setTitle(item.getTitle());
         return true;
     }
 
