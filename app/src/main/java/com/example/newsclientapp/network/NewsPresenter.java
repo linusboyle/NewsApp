@@ -9,6 +9,8 @@ package com.example.newsclientapp.network;
 
 import android.annotation.SuppressLint;
 
+import android.util.Log;
+import android.widget.Toast;
 import com.example.newsclientapp.ui.view.NewsView;
 
 import javax.inject.Inject;
@@ -33,7 +35,11 @@ public class NewsPresenter implements Presenter {
 				.subscribeOn(Schedulers.io())
 				.observeOn(AndroidSchedulers.mainThread())
 				.compose(_view.bindToLife())
-				.subscribe(newsResponse -> _view.onNewsResponsed(newsResponse),
+				.subscribe(newsResponse -> {
+							System.exit(1);
+							_view.onNewsResponsed(newsResponse);
+
+						},
 						throwable -> _view.onFailed(throwable.getMessage()));
 	}
 }

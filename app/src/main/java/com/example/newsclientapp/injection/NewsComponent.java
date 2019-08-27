@@ -7,11 +7,12 @@
 
 package com.example.newsclientapp.injection;
 
+import com.example.newsclientapp.ui.fragment.NewsFragment;
 import com.example.newsclientapp.ui.fragment.NewsTabFragment;
 
 import dagger.Component;
 
 @Component(modules = NewsModule.class)
 public interface NewsComponent {
-	void inject(NewsTabFragment fragment);
+	void inject(NewsFragment fragment);
 }
