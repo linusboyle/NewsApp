@@ -5,7 +5,9 @@
  * in the root directory or <http://www.gnu.org/licenses/gpl-3.0.html>.
  */
 
-package com.example.newsclientapp.storage;
+package com.example.newsclientapp.listener;
+
+import com.example.newsclientapp.storage.StorageEntity;
 
 public interface onCacheGotListener {
 	void onCacheGot(StorageEntity entity);

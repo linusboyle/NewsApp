@@ -11,15 +11,13 @@ import android.content.Context;
 import android.util.Log;
 
 
+import com.example.newsclientapp.listener.onCacheGotListener;
 import com.example.newsclientapp.network.NewsEntity;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.PrintStream;
-import java.lang.annotation.Target;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -11,7 +11,7 @@ import com.example.newsclientapp.network.NewsEntity;
 
 import java.io.Serializable;
 
-class StorageEntity implements Serializable {
+public class StorageEntity implements Serializable {
 	private NewsEntity news;
 	private boolean isFavorite;
 
