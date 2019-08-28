@@ -7,6 +7,7 @@
 
 package com.example.newsclientapp.core;
 
+import android.annotation.SuppressLint;
 import android.os.Process;
 import android.util.Log;
 import android.content.Context;
@@ -18,6 +19,7 @@ import java.io.PrintWriter;
 
 public final class ExceptionHandler implements Thread.UncaughtExceptionHandler {
 	private static final String TAG = "NewsExceptionHandler";
+	@SuppressLint("StaticFieldLeak")
 	private static ExceptionHandler _instance;
 	private Thread.UncaughtExceptionHandler defaultHandler;
 	private Context _context;

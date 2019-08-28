@@ -7,7 +7,10 @@
 
 package com.example.newsclientapp.network;
 
+import android.text.TextUtils;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 class Keyword implements Serializable {
@@ -286,6 +289,16 @@ public class NewsEntity implements Serializable {
 
 	public String getContent () {
 		return content;
+	}
+
+	public String getCleanContent () {
+		String [] splitStr = content.split("\n");
+		ArrayList<String> paragraphs = new ArrayList<>();
+		for (String string : splitStr) {
+			if (!string.isEmpty())
+				paragraphs.add(string.trim());
+		}
+		return TextUtils.join("\n\n", paragraphs);
 	}
 
 	public void setContent (String content) {
