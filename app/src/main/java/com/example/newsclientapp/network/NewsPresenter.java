@@ -10,7 +10,8 @@ package com.example.newsclientapp.network;
 import android.annotation.SuppressLint;
 
 import android.util.Log;
-import android.widget.Toast;
+
+import com.example.newsclientapp.core.Presenter;
 import com.example.newsclientapp.ui.view.NewsView;
 
 import javax.inject.Inject;

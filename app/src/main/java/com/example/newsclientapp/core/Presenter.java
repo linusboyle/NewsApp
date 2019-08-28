@@ -5,7 +5,7 @@
  * in the root directory or <http://www.gnu.org/licenses/gpl-3.0.html>.
  */
 
-package com.example.newsclientapp.network;
+package com.example.newsclientapp.core;
 
 public interface Presenter {
 	void requestNews(int size,
