@@ -1,6 +1,7 @@
 package com.example.newsclientapp.ui.fragment;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -10,17 +11,18 @@ import butterknife.BindView;
 import com.example.newsclientapp.R;
 import com.example.newsclientapp.injection.DaggerNewsComponent;
 import com.example.newsclientapp.injection.NewsModule;
+import com.example.newsclientapp.listener.OnItemClickListener;
 import com.example.newsclientapp.listener.OnReloadClickListener;
 import com.example.newsclientapp.network.NewsEntity;
 import com.example.newsclientapp.network.NewsPresenter;
 import com.example.newsclientapp.network.NewsResponse;
+import com.example.newsclientapp.ui.activity.NewsDetailActivity;
 import com.example.newsclientapp.ui.adapter.NewsAdapter;
 import com.example.newsclientapp.ui.view.NewsView;
 
 import javax.inject.Inject;
 import java.util.List;
 
-// TODO
 public class NewsFragment extends LazyFragment implements NewsView {
 
 	private final static String CATEGORY = "category";
@@ -125,12 +127,13 @@ public class NewsFragment extends LazyFragment implements NewsView {
 		 		requestNews();
 		 	}
 		 });
-		 // mAdapter.setOnItemClickListener(new OnItemClickListener<NewsEntity>() {
-		 // 	@Override
-		 // 	public void onItemClick(View view, NewsEntity data) {
-		 // 		NewsDetailActivity.startActivity(getActivity(), data.getTitle(), data.getUrl());
-		 // 	}
-		 // });
+		 mAdapter.setOnItemClickListener(new OnItemClickListener<NewsEntity>() {
+		 	@Override
+		 	public void onItemClick(View view, NewsEntity data) {
+		 		// TODO
+		 		NewsDetailActivity.startActivity(getActivity(), data);
+		 	}
+		 });
 		 mRecyclerView.setAdapter(mAdapter);
 		 // 滑到底部监听事件
 		 mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
