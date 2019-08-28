@@ -49,7 +49,7 @@ public class NewsDetailActivity extends BaseActivity {
 		NewsEntity news = (NewsEntity) getIntent().getSerializableExtra(DATA);
 		String[] picUrls = news.getImageURLs();
 		String newsTitle = news.getTitle();
-		String newsText = news.getContent();
+		String newsText = news.getCleanContent();
 
 		// toolbar
 		initToolbar(newsTitle);
