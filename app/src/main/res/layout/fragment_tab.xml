@@ -9,12 +9,13 @@
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_layout"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="wrap_content"
+        android:background="@color/dark_ground_04dp"
         app:tabGravity="center"
         app:tabMode="scrollable"
-        app:tabSelectedTextColor="@color/black"
+        app:tabSelectedTextColor="@color/dark_primary"
         app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
-        app:tabTextColor="@color/grey_500" />
+        app:tabTextColor="@color/dark_text" />
 
     <!--
         <com.google.android.material.tabs.TabItem
@@ -38,6 +39,7 @@
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/dark_ground_00dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 </LinearLayout>

@@ -10,9 +10,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/dark_ground_00dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:fitsSystemWindows="true"
     tools:context=".ui.activity.NewsDetailActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -25,11 +27,11 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:background="@color/dark_ground_08dp"
             app:layout_scrollFlags="scroll|enterAlways"
             app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:titleTextColor="@color/white"/>
+            app:titleTextColor="@color/dark_text"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -53,6 +55,7 @@
             <TextView
                 android:id="@+id/news_title"
                 style="@android:style/TextAppearance.DeviceDefault.WindowTitle"
+                android:textColor="@color/dark_text"
                 android:paddingHorizontal="@dimen/activity_horizontal_margin"
                 android:layout_marginVertical="@dimen/activity_vertical_margin"
                 android:layout_width="match_parent"
@@ -62,6 +65,7 @@
                 style="@android:style/TextAppearance.DeviceDefault.Widget.TextView"
                 android:paddingHorizontal="@dimen/activity_horizontal_margin"
                 android:layout_marginVertical="@dimen/activity_vertical_margin"
+                android:textColor="@color/dark_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
@@ -73,6 +77,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
+        android:background="@color/dark_primary"
         app:maxImageSize="48dp"
         app:srcCompat="@drawable/ic_keyboard_arrow_up_white_36dp"/>
 

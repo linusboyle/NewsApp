@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/rv_item_news_cardview_height"
-    app:cardBackgroundColor="@color/item_background"
+    app:cardBackgroundColor="@color/dark_ground_02dp"
     android:layout_margin="@dimen/rv_item_news_cardview_margin"
     app:cardElevation="@dimen/rv_item_news_cardview_elevation">
 
@@ -32,7 +32,7 @@
             android:layout_alignTop="@id/news_item_photo"
             android:ellipsize="end"
             android:lines="2"
-            android:textColor="@color/primary_text"
+            android:textColor="@color/dark_text"
             android:layout_toEndOf="@+id/news_item_photo"
             android:textSize="15sp"
             tools:text="This Is A News Title"/>
@@ -49,7 +49,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:textColor="@color/secondary_text"
+            android:textColor="@color/dark_subtext"
             android:textSize="12sp"
             tools:text="From: unknown host"/>
 
@@ -59,7 +59,7 @@
             android:layout_height="wrap_content"
             android:layout_toEndOf="@+id/news_item_description"
             android:layout_alignParentBottom="true"
-            android:textColor="@color/secondary_text"
+            android:textColor="@color/dark_subtext"
             android:textSize="12sp"
             android:paddingBottom="5dp"
             tools:text="YYYY-MM-DD HH:MM"/>
