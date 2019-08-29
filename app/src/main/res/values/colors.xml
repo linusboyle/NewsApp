@@ -53,6 +53,7 @@
     <color name="dark_ground_12dp">#363636</color>
     <color name="dark_ground_16dp">#383838</color>
     <color name="dark_ground_24dp">#3B3B3b</color>
+    <color name="dark_ground_06dp_translucent">#B02E2E2E</color>
 
     <color name="dark_primary">#BB86FC</color>
     <color name="dark_ground_primary">#1F1B24</color>

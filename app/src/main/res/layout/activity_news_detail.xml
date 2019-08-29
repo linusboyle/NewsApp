@@ -35,8 +35,8 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="@color/dark_ground_08dp"
                 app:layout_scrollFlags="scroll|enterAlways"
-                app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                app:popupTheme="@style/AppTheme.PopupOverlay"
+                app:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
+                app:popupTheme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
                 app:titleTextColor="@color/dark_text"/>
 
         </com.google.android.material.appbar.AppBarLayout>
