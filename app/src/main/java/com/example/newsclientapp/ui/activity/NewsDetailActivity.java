@@ -17,6 +17,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.newsclientapp.core.ShareUtil;
 import com.example.newsclientapp.network.NewsEntity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -55,12 +56,10 @@ public class NewsDetailActivity extends BaseActivity {
 		initToolbar(newsTitle);
 
 		// fab
-		mFab.setOnClickListener(new View.OnClickListener() {
-		    @Override
-		    public void onClick(View view) {
-		        Snackbar.make(view, "To do with sharing", Snackbar.LENGTH_LONG)
-		                .setAction("Action", null).show();
-		    }
+		mFab.setOnClickListener(view -> {
+		    // Snackbar.make(view, "To do with sharing", Snackbar.LENGTH_LONG)
+			// .setAction("Action", null).show();
+			ShareUtil.share(view.getContext(), news);
 		});
 
 		// page content

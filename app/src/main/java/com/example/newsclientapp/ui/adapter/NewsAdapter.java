@@ -1,6 +1,7 @@
 package com.example.newsclientapp.ui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.newsclientapp.R;
+import com.example.newsclientapp.core.ShareUtil;
 import com.example.newsclientapp.listener.OnItemClickListener;
 import com.example.newsclientapp.listener.OnReloadClickListener;
 import com.example.newsclientapp.network.NewsEntity;
@@ -127,7 +129,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 			funcIcon.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View view) {
-					// TODO
+					ShareUtil.share(view.getContext(), newsEntity);
 				}
 			});
 		}
