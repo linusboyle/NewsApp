@@ -86,6 +86,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 		private ImageView photo;
 		private TextView title, description, datetime;
+		private ImageView funcIcon;
 
 		public NewsViewHolder(View itemView) {
 			super(itemView);
@@ -93,6 +94,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 			title = itemView.findViewById(R.id.news_item_title);
 			description = itemView.findViewById(R.id.news_item_description);
 			datetime = itemView.findViewById(R.id.news_item_datetime);
+			funcIcon = itemView.findViewById(R.id.news_item_function);
 		}
 
 		void loadViewHolder(final NewsEntity newsEntity) {
@@ -119,6 +121,13 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 					if (mOnItemClickListener != null) {
 						mOnItemClickListener.onItemClick(view, newsEntity);
 					}
+				}
+			});
+
+			funcIcon.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					// TODO
 				}
 			});
 		}

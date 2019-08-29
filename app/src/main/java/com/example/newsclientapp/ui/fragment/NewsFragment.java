@@ -118,40 +118,40 @@ public class NewsFragment extends LazyFragment implements NewsView {
 			}
 		});
 		mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-		 mAdapter = new NewsAdapter(getContext());
-		 // 加载更多 异常处理
-		 mAdapter.setOnReloadClickListener(new OnReloadClickListener() {
-		 	@Override
-		 	public void onClick() {
-		 		mAdapter.setLoading();
-		 		requestNews();
-		 	}
-		 });
-		 mAdapter.setOnItemClickListener(new OnItemClickListener<NewsEntity>() {
-		 	@Override
-		 	public void onItemClick(View view, NewsEntity data) {
-		 		// TODO
-		 		NewsDetailActivity.startActivity(getActivity(), data);
-		 	}
-		 });
-		 mRecyclerView.setAdapter(mAdapter);
-		 // 滑到底部监听事件
-		 mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-		 	@Override
-		 	public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-		 		super.onScrollStateChanged(recyclerView, newState);
-		 		LinearLayoutManager lm = (LinearLayoutManager) recyclerView.getLayoutManager();
-		 		int totalItemCount = recyclerView.getAdapter().getItemCount();
-		 		int lastVisibleItemPosition = lm.findLastVisibleItemPosition();
-		 		int visibleItemCount = recyclerView.getChildCount();
-		 		if (!isRefresh && newState == RecyclerView.SCROLL_STATE_IDLE &&
-		 				lastVisibleItemPosition == totalItemCount - 1 && visibleItemCount > 0) {
-		 			isRefresh = false;
-		 			if (!addPageFromBuffer(false))
-		 				mAdapter.setNotMore();
-		 		}
-		 	}
-		 });
+		mAdapter = new NewsAdapter(getContext());
+		// 加载更多 异常处理
+		mAdapter.setOnReloadClickListener(new OnReloadClickListener() {
+			@Override
+			public void onClick() {
+				mAdapter.setLoading();
+				requestNews();
+			}
+		});
+		mAdapter.setOnItemClickListener(new OnItemClickListener<NewsEntity>() {
+			@Override
+			public void onItemClick(View view, NewsEntity data) {
+				// TODO
+				NewsDetailActivity.startActivity(getActivity(), data);
+			}
+		});
+		mRecyclerView.setAdapter(mAdapter);
+		// 滑到底部监听事件
+		mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+			@Override
+			public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+				super.onScrollStateChanged(recyclerView, newState);
+				LinearLayoutManager lm = (LinearLayoutManager) recyclerView.getLayoutManager();
+				int totalItemCount = recyclerView.getAdapter().getItemCount();
+				int lastVisibleItemPosition = lm.findLastVisibleItemPosition();
+				int visibleItemCount = recyclerView.getChildCount();
+				if (!isRefresh && newState == RecyclerView.SCROLL_STATE_IDLE &&
+						lastVisibleItemPosition == totalItemCount - 1 && visibleItemCount > 0) {
+					isRefresh = false;
+					if (!addPageFromBuffer(false))
+						mAdapter.setNotMore();
+				}
+			}
+		});
 	}
 
 	@Override
