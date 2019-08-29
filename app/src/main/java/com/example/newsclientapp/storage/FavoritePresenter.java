@@ -11,31 +11,29 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 
-import com.example.newsclientapp.ui.view.StorageView;
-
-import javax.inject.Inject;
+import com.example.newsclientapp.ui.view.FavoriteView;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class StoragePresenter {
-	private StorageView _view;
-	private static final String TAG = "StoragePresenter";
+public class FavoritePresenter {
+	private FavoriteView _view;
+	private static final String TAG = "FavoritePresenter";
 
-	@Inject
-	public StoragePresenter (StorageView _view) {
+	public FavoritePresenter (FavoriteView _view) {
 		this._view = _view;
 	}
 
 	@SuppressLint("CheckResult")
-	public void requestCache(Context context) {
-		StorageManager.getInstance().getAllCache(context)
+	public void requestFavorite(Context context) {
+		//noinspection ResultOfMethodCallIgnored
+		StorageManager.getInstance().getAllFavorite(context)
 				.subscribeOn(Schedulers.io())
 				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(storageResponse -> _view.onStorageResponsed(storageResponse),
+				.subscribe(storageResponse -> _view.onFavoriteResponsed(storageResponse),
 						throwable -> {
 							Log.w(TAG, "request error");
-							_view.onStorageFailed(throwable.getMessage());
+							_view.onFavoriteFailed(throwable.getMessage());
 						});
 	}
 }

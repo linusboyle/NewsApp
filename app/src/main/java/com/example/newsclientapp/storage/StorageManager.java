@@ -70,7 +70,9 @@ public class StorageManager {
 					}
 
 					@Override
-					public void onComplete () { }
+					public void onComplete () {
+						Log.i(TAG, "StorageManager initialized");
+					}
 				});
 	}
 
@@ -107,55 +109,74 @@ public class StorageManager {
 						FileInputStream fileInputStream = new FileInputStream(f);
 						ObjectInputStream objectInputStream  = new ObjectInputStream(fileInputStream);
 						retval.add((StorageEntity)objectInputStream.readObject());
+						objectInputStream.close();
+						fileInputStream.close();
 					}
 					return new StorageResponse(retval);
 				});
 	}
 
-	public void addCache(Context context, NewsEntity news) {
+	public Observable<StorageResponse> getAllFavorite(Context context) {
+		File cache = context.getDir(CACHE_DIR, Context.MODE_PRIVATE);
+		return Observable.just(cache)
+				.map(file -> {
+					List<StorageEntity> retval = new ArrayList<>();
+					for (String id : favorites) {
+						File newsCache = new File(cache, id);
+						if (newsCache.exists()) {
+							FileInputStream fileInputStream = new FileInputStream(newsCache);
+							ObjectInputStream objectInputStream  = new ObjectInputStream(fileInputStream);
+							retval.add((StorageEntity)objectInputStream.readObject());
+							objectInputStream.close();
+							fileInputStream.close();
+						}
+					}
+					return new StorageResponse(retval);
+				});
+	}
+
+	private void addCacheWithFavorite(Context context, NewsEntity news, boolean isFavorite) {
 		File cache = context.getDir(CACHE_DIR, Context.MODE_PRIVATE);
 		File target = new File(cache, news.getNewsID());
 		if (!target.exists())
 			caches.add(news.getNewsID());
 		StorageEntity storageEntity =
-				new StorageEntity(news, favorites.contains(news.getNewsID()));
+				new StorageEntity(news, isFavorite);
 		new FileStorer().execute(new FileStorePair(target, storageEntity));
 	}
 
-	public boolean setFavorite(Context context, String newsID) {
+
+	public void addCache(Context context, NewsEntity news) {
+		addCacheWithFavorite(context, news, favorites.contains(news.getNewsID()));
+	}
+
+	public boolean setFavorite(Context context, NewsEntity newsEntity) {
 		File favorite = context.getDir(FAVORITE_DIR, Context.MODE_PRIVATE);
-		File target = new File(favorite, newsID);
+		File target = new File(favorite, newsEntity.getNewsID());
 
 		try {
 			if (target.createNewFile()) {
-				favorites.add(newsID);
-				getCache(context, newsID, storageEntity ->
-				{
-					if (storageEntity != null)
-						addCache(context, storageEntity.getNews());
-				});
+				favorites.add(newsEntity.getNewsID());
+				addCacheWithFavorite(context, newsEntity, true);
 			}
 		} catch (IOException e) {
-			Log.e(TAG, "create new file failed: " + e.getMessage());
+			Log.e(TAG, "creating new file fails: " + e.getMessage());
 			return false;
 		}
 
 		return true;
 	}
 
-	public boolean unsetFavorite(Context context, String newsID) {
+	public boolean unsetFavorite(Context context, NewsEntity newsEntity) {
 		File favorite = context.getDir(FAVORITE_DIR, Context.MODE_PRIVATE);
-		File target = new File(favorite, newsID);
+		File target = new File(favorite, newsEntity.getNewsID());
 
 		if (target.delete()) {
-			favorites.remove(newsID);
-			getCache(context, newsID, storageEntity -> {
-				if (storageEntity != null) {
-					addCache(context, storageEntity.getNews());
-				}
-			});
+			favorites.remove(newsEntity.getNewsID());
+			addCacheWithFavorite(context, newsEntity, false);
 			return true;
 		} else {
+			Log.e(TAG, "deleting file fails in unsetFavorite()!");
 			return false;
 		}
 	}

@@ -9,8 +9,8 @@ package com.example.newsclientapp.ui.view;
 
 import com.example.newsclientapp.storage.StorageResponse;
 
-public interface StorageView extends BaseView {
-	void onStorageResponsed(StorageResponse response);
+public interface FavoriteView extends BaseView {
+	void onFavoriteResponsed(StorageResponse response);
 
-	void onStorageFailed(String errorMsg);
+	void onFavoriteFailed(String errorMsg);
 }
