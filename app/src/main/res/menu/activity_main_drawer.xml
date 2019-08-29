@@ -6,25 +6,30 @@
   -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:showIn="navigation_view">
+      xmlns:tools="http://schemas.android.com/tools"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_news_tab_fragment"
             android:icon="@drawable/ic_menu_camera"
+            app:iconTint="@color/dark_text"
             android:title="@string/display_news" />
         <item
             android:id="@+id/nav_gallery"
             android:icon="@drawable/ic_menu_gallery"
+            app:iconTint="@color/dark_text"
             android:title="@string/menu_gallery" />
         <item
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/ic_menu_slideshow"
+            app:iconTint="@color/dark_text"
             android:title="@string/menu_slideshow" />
         <item
             android:id="@+id/nav_tools"
             android:icon="@drawable/ic_menu_manage"
+            app:iconTint="@color/dark_text"
             android:title="@string/menu_tools" />
     </group>
 
@@ -33,10 +38,12 @@
             <item
                 android:id="@+id/nav_share"
                 android:icon="@drawable/ic_menu_share"
+                app:iconTint="@color/dark_text"
                 android:title="@string/menu_share" />
             <item
                 android:id="@+id/nav_send"
                 android:icon="@drawable/ic_menu_send"
+                app:iconTint="@color/dark_text"
                 android:title="@string/menu_send" />
         </menu>
     </item>

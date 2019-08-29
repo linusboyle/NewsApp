@@ -64,6 +64,15 @@
             android:paddingBottom="5dp"
             tools:text="YYYY-MM-DD HH:MM"/>
 
+        <ImageView
+            android:id="@+id/news_item_function"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:tint="@color/dark_primary"
+            app:srcCompat="@drawable/ic_more_horiz_white_24dp"/>
+
     </RelativeLayout>
 
 </com.google.android.material.card.MaterialCardView>

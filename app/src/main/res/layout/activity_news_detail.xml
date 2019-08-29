@@ -57,7 +57,7 @@
                     android:layout_margin="@dimen/activity_vertical_margin"
                     android:adjustViewBounds="true"
                     tools:srcCompat="@tools:sample/backgrounds/scenic"
-                    android:contentDescription="TODO"/>
+                    android:contentDescription="@null"/>
                 <TextView
                     android:id="@+id/news_title"
                     style="@android:style/TextAppearance.DeviceDefault.WindowTitle"
