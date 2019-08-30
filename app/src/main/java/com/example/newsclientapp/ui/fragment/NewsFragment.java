@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import com.example.newsclientapp.R;
+import com.example.newsclientapp.core.DateUtils;
 import com.example.newsclientapp.injection.DaggerNewsComponent;
 import com.example.newsclientapp.injection.NewsModule;
 import com.example.newsclientapp.listener.OnItemClickListener;
@@ -79,7 +80,7 @@ public class NewsFragment extends LazyFragment implements NewsView {
 	}
 
 	private void requestNews() {
-		mPresenter.requestNews(BUFFER_MAX, "", "", "", getCategory());
+		mPresenter.requestNews(BUFFER_MAX, "", DateUtils.getCurrentTimeFormatted(), "", getCategory());
 	}
 
 	private boolean addPageFromBuffer(boolean reset) {
