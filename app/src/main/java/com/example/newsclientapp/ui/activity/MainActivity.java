@@ -10,6 +10,7 @@ package com.example.newsclientapp.ui.activity;
 import android.os.Bundle;
 
 import com.example.newsclientapp.R;
+import com.example.newsclientapp.core.PermissionUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -55,6 +56,9 @@ public class MainActivity extends BaseActivity
         // exception handler
         this.exceptionHandler = ExceptionHandler.getInstance();
         this.exceptionHandler.init(this);
+
+        // permissions
+        PermissionUtils.verifyStoragePermissions(this);
 
         // toolbar
         this.mToolbar.setTitle(R.string.display_news);

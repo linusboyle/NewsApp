@@ -17,10 +17,10 @@ import android.widget.TextView;
 import butterknife.BindView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.newsclientapp.core.ShareUtil;
+import com.example.newsclientapp.core.ShareUtils;
 import com.example.newsclientapp.network.NewsEntity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+
 import androidx.appcompat.widget.Toolbar;
 import com.example.newsclientapp.R;
 
@@ -59,7 +59,7 @@ public class NewsDetailActivity extends BaseActivity {
 		mFab.setOnClickListener(view -> {
 		    // Snackbar.make(view, "To do with sharing", Snackbar.LENGTH_LONG)
 			// .setAction("Action", null).show();
-			ShareUtil.share(view.getContext(), news);
+			ShareUtils.share(view.getContext(), news);
 		});
 
 		// page content
