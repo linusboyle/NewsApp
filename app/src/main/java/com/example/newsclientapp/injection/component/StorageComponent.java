@@ -5,13 +5,14 @@
  * in the root directory or <http://www.gnu.org/licenses/gpl-3.0.html>.
  */
 
-package com.example.newsclientapp.injection;
+package com.example.newsclientapp.injection.component;
 
-import com.example.newsclientapp.ui.fragment.NewsTabFragment;
+import com.example.newsclientapp.injection.module.StorageModule;
+import com.example.newsclientapp.ui.fragment.CacheFragment;
 
 import dagger.Component;
 
 @Component(modules = StorageModule.class)
 public interface StorageComponent {
-	void inject(NewsTabFragment fragment);
+	void inject(CacheFragment fragment);
 }

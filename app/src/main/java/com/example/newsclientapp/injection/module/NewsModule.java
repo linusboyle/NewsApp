@@ -5,7 +5,7 @@
  * in the root directory or <http://www.gnu.org/licenses/gpl-3.0.html>.
  */
 
-package com.example.newsclientapp.injection;
+package com.example.newsclientapp.injection.module;
 
 import com.example.newsclientapp.network.NewsService;
 import com.example.newsclientapp.network.RetrofitClient;

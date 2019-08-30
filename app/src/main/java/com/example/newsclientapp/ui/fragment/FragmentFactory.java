@@ -4,7 +4,8 @@ import java.util.HashMap;
 
 public final class FragmentFactory {
     public enum FragmentEnum {
-        NEWS_TAB_FRAGMENT
+        NEWS_TAB_FRAGMENT,
+        CACHE_FRAGMENT
     }
 
     private static HashMap<FragmentEnum, Class<? extends BaseFragment>> fragmentClassMap;
@@ -12,6 +13,7 @@ public final class FragmentFactory {
     static {
         fragmentClassMap = new HashMap<>();
         fragmentClassMap.put(FragmentEnum.NEWS_TAB_FRAGMENT, NewsTabFragment.class);
+        fragmentClassMap.put(FragmentEnum.CACHE_FRAGMENT, CacheFragment.class);
     }
 
     public static Class<? extends BaseFragment> getFragmentClass(FragmentEnum fIndex) {
