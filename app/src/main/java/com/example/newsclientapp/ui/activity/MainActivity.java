@@ -109,6 +109,7 @@ public class MainActivity extends BaseActivity
     public void onAttachFragment(Fragment fragment) {
         super.onAttachFragment(fragment);
         try {
+            // TODOgT
             for (FragmentEnum fe : FragmentEnum.values()) {
                 Fragment target = this.mFragments.get(fe);
                 Class<? extends BaseFragment> targetClass = FragmentFactory.getFragmentClass(fe);

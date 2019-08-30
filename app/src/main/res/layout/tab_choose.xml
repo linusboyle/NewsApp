@@ -14,7 +14,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 <LinearLayout
-    android:id="@+id/tab_choose"
     android:orientation="vertical"
     android:background="@color/dark_ground_00dp"
     android:weightSum="100"
@@ -37,6 +36,7 @@
     </RelativeLayout>
 
     <androidx.gridlayout.widget.GridLayout
+        android:id="@+id/tab_choose_gridlayout"
         app:columnCount="3"
         app:rowCount="4"
         app:columnOrderPreserved="false"
@@ -47,47 +47,6 @@
         android:paddingHorizontal="@dimen/activity_horizontal_margin">
 
         <!-- row:1 -->
-        <androidx.cardview.widget.CardView
-            android:background="@color/dark_ground_02dp"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_columnWeight="1"
-            app:layout_rowWeight="1"
-            app:cardBackgroundColor="@color/dark_ground_02dp"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin_half"
-            android:layout_marginRight="@dimen/activity_horizontal_margin_half"
-            app:cardElevation="8dp"
-            app:cardCornerRadius="8dp">
-
-            <LinearLayout
-                android:layout_gravity="center_horizontal|center_vertical"
-                android:orientation="vertical"
-                android:layout_margin="@dimen/activity_horizontal_margin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                
-                <ImageView
-                    android:src="@drawable/ic_menu_gallery"
-                    android:tint="@color/dark_text"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-
-                <TextView
-                    android:text="Hello"
-                    android:gravity="center_horizontal"
-                    android:textAlignment="center"
-                    android:textColor="@color/dark_text"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-
         <androidx.cardview.widget.CardView
             android:background="@color/dark_ground_02dp"
             android:layout_width="0dp"
