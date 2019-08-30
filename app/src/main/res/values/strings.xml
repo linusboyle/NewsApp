@@ -24,6 +24,8 @@
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
 
+    <string name="info_change_tab">选择调整标签页</string>
+
     <string name="display_news">时事新闻</string>
 
     <string name="transition_photos">transition_animation_news_photos</string>
