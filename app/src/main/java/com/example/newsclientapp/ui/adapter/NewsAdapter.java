@@ -2,6 +2,7 @@ package com.example.newsclientapp.ui.adapter;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.view.WindowManager;
 import android.widget.*;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.newsclientapp.R;
+import com.example.newsclientapp.core.ShareUtils;
 import com.example.newsclientapp.listener.OnItemClickListener;
 import com.example.newsclientapp.listener.OnReloadClickListener;
 import com.example.newsclientapp.network.NewsEntity;
@@ -127,20 +129,23 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 				@Override
 				public void onClick(View view) {
 					// TODO
-					PopupWindow popupWindow = new PopupWindow(mContext);
-					ArrayList<String> sortList = new ArrayList<String>();
-					sortList.add("Google+");
-					sortList.add("Facebook");
-					sortList.add("Twitter");
-					ArrayAdapter<String> adapter = new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_dropdown_item_1line, sortList);
-					ListView listViewSort = new ListView(mContext);
-					listViewSort.setAdapter(adapter);
-					// listViewSort.setOnItemClickListener(mContext.onItemClickListener());
-					popupWindow.setFocusable(true);
-					popupWindow.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
-					popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
-					popupWindow.setContentView(listViewSort);
-					popupWindow.showAsDropDown(view);
+					// PopupWindow popupWindow = new PopupWindow(mContext);
+					// ArrayList<String> sortList = new ArrayList<String>();
+					// sortList.add("Google+");
+					// sortList.add("Facebook");
+					// sortList.add("Twitter");
+					// ArrayAdapter<String> adapter = new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_dropdown_item_1line, sortList);
+					// ListView listViewSort = new ListView(mContext);
+					// listViewSort.setAdapter(adapter);
+					// // listViewSort.setOnItemClickListener(mContext.onItemClickListener());
+					// popupWindow.setFocusable(true);
+					// popupWindow.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
+					// popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+					// popupWindow.setContentView(listViewSort);
+					// popupWindow.showAsDropDown(view);
+
+					Log.d("funcIcon", "beforeCall");
+					ShareUtils.share(view.getContext(), newsEntity);
 				}
 			});
 		}

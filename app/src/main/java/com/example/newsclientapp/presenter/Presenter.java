@@ -5,13 +5,12 @@
  * in the root directory or <http://www.gnu.org/licenses/gpl-3.0.html>.
  */
 
-package com.example.newsclientapp.injection;
+package com.example.newsclientapp.presenter;
 
-import com.example.newsclientapp.ui.fragment.NewsFragment;
-
-import dagger.Component;
-
-@Component(modules = NewsModule.class)
-public interface NewsComponent {
-	void inject(NewsFragment fragment);
+public interface Presenter {
+	void requestNews(int size,
+	                 String startDate,
+	                 String endDate,
+	                 String words,
+	                 String categories);
 }

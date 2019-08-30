@@ -5,12 +5,10 @@
  * in the root directory or <http://www.gnu.org/licenses/gpl-3.0.html>.
  */
 
-package com.example.newsclientapp.core;
+package com.example.newsclientapp.listener;
 
-public interface Presenter {
-	void requestNews(int size,
-	                 String startDate,
-	                 String endDate,
-	                 String words,
-	                 String categories);
+import com.example.newsclientapp.storage.StorageEntity;
+
+public interface onCacheGotListener {
+	void onCacheGot(StorageEntity entity);
 }

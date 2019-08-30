@@ -5,13 +5,13 @@
  * in the root directory or <http://www.gnu.org/licenses/gpl-3.0.html>.
  */
 
-package com.example.newsclientapp.network;
+package com.example.newsclientapp.presenter;
 
 import android.annotation.SuppressLint;
 
 import android.util.Log;
 
-import com.example.newsclientapp.core.Presenter;
+import com.example.newsclientapp.network.NewsService;
 import com.example.newsclientapp.ui.view.NewsView;
 
 import javax.inject.Inject;

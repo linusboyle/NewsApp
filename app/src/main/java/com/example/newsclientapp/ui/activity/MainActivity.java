@@ -10,12 +10,14 @@ package com.example.newsclientapp.ui.activity;
 import android.os.Bundle;
 
 import com.example.newsclientapp.R;
+import com.example.newsclientapp.core.PermissionUtils;
 
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 
 import android.view.MenuItem;
 
+import com.example.newsclientapp.storage.StorageManager;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -50,10 +52,15 @@ public class MainActivity extends BaseActivity
         this.exceptionHandler = ExceptionHandler.getInstance();
         this.exceptionHandler.init(this);
 
+        // permissions
+        PermissionUtils.verifyStoragePermissions(this);
+
+        // storage
+        StorageManager.getInstance().init(this);
+
         // toolbar
         this.mToolbar.setTitle(R.string.display_news);
         setSupportActionBar(this.mToolbar);
-
 
         // drawer_layout
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -85,10 +92,11 @@ public class MainActivity extends BaseActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
 
+        // TODO
         if (id == R.id.nav_news_tab_fragment) {
             this.setDefaultFragment(FragmentEnum.NEWS_TAB_FRAGMENT);
-        } else if (id == R.id.nav_gallery) {
-
+        } else if (id == R.id.nav_cache) {
+            this.setDefaultFragment(FragmentEnum.CACHE_FRAGMENT);
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_tools) {
@@ -113,7 +121,7 @@ public class MainActivity extends BaseActivity
             for (FragmentEnum fe : FragmentEnum.values()) {
                 Fragment target = this.mFragments.get(fe);
                 Class<? extends BaseFragment> targetClass = FragmentFactory.getFragmentClass(fe);
-                if (target == null && targetClass.equals(target.getClass())) {
+                if (target == null || targetClass.equals(target.getClass())) {
                     this.mFragments.put(fe, targetClass.getConstructor().newInstance());
                     break;
                 }
@@ -133,8 +141,9 @@ public class MainActivity extends BaseActivity
         hideFragments(fragmentTransaction);
 
         try {
-            if (this.mFragments.get(fIndex) != null) {
-                fragmentTransaction.show(this.mFragments.get(fIndex));
+            Fragment fragment = this.mFragments.get(fIndex);
+            if (fragment != null) {
+                fragmentTransaction.show(fragment);
             } else {
                 this.mFragments.put(fIndex, FragmentFactory.getFragmentInstance(fIndex));
                 fragmentTransaction.add(R.id.fragment_content, this.mFragments.get(fIndex));

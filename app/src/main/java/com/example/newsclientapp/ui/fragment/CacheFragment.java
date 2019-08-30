@@ -1,35 +1,46 @@
+/*
+ * Copyright (c) 2019 Zhilei Han and Yihao Chen.
+ * This software falls under the GNU general public license version 3 or later.
+ * It comes WITHOUT ANY WARRANTY WHATSOEVER. For details, see the file LICENSE
+ * in the root directory or <http://www.gnu.org/licenses/gpl-3.0.html>.
+ */
+
 package com.example.newsclientapp.ui.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
-import androidx.annotation.Nullable;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import butterknife.BindView;
+
 import com.example.newsclientapp.R;
-import com.example.newsclientapp.core.DateUtils;
-import com.example.newsclientapp.injection.component.DaggerNewsComponent;
-import com.example.newsclientapp.injection.module.NewsModule;
+import com.example.newsclientapp.injection.component.DaggerStorageComponent;
+import com.example.newsclientapp.injection.module.StorageModule;
 import com.example.newsclientapp.listener.OnItemClickListener;
 import com.example.newsclientapp.listener.OnReloadClickListener;
 import com.example.newsclientapp.network.NewsEntity;
-import com.example.newsclientapp.presenter.NewsPresenter;
-import com.example.newsclientapp.network.NewsResponse;
-import com.example.newsclientapp.storage.StorageManager;
+import com.example.newsclientapp.storage.StorageEntity;
+import com.example.newsclientapp.presenter.StoragePresenter;
+import com.example.newsclientapp.storage.StorageResponse;
 import com.example.newsclientapp.ui.activity.NewsDetailActivity;
 import com.example.newsclientapp.ui.adapter.NewsAdapter;
-import com.example.newsclientapp.ui.view.NewsView;
+import com.example.newsclientapp.ui.view.StorageView;
 
-import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
 
-public class NewsFragment extends LazyFragment implements NewsView {
+import javax.inject.Inject;
 
-	private final static String CATEGORY = "category";
+import butterknife.BindView;
+
+public class CacheFragment extends BaseFragment implements StorageView {
+
 	private final static int COUNT_PER_PAGE = 15;
-	private final static int BUFFER_MAX = 60;
+	private final static String TAG = "CacheFragment";
 
 	@BindView(R.id.recycler_view)
 	RecyclerView mRecyclerView;
@@ -43,46 +54,27 @@ public class NewsFragment extends LazyFragment implements NewsView {
 	private NewsAdapter mAdapter;
 
 	@Inject
-	NewsPresenter mPresenter;
-
-	public static NewsFragment newNewsFragment(String category) {
-		Bundle args = new Bundle();
-		args.putString(CATEGORY, category);
-		NewsFragment newsFragment = new NewsFragment();
-		newsFragment.setArguments(args);
-		return newsFragment;
-	}
-
-	@Override
-	protected void initPrepare(@Nullable Bundle savedInstanceState) {
-		page = 1;
-		isRefresh = true;
-
-		initPresenter();
-		initRecyclerView();
-	}
-
-	@Override
-	protected void onInvisible() {
-	}
-
-	@Override
-	protected void initData() {
-		requestNews();
-	}
+	StoragePresenter mPresenter;
 
 	@Override
 	protected int getLayoutId() {
 		return R.layout.layout_refresh_rv;
 	}
 
-	private String getCategory() {
-		return getArguments().getString(CATEGORY);
+	@Override
+	protected void initData (ViewGroup container, Bundle savedInstanceState) {
+		page = 1;
+		isRefresh = true;
+
+		initPresenter();
+		initRecyclerView();
+		requestNews();
+
+		Log.i(TAG, "initialized!");
 	}
 
 	private void requestNews() {
-		mPresenter.requestNews(BUFFER_MAX, "",
-				DateUtils.getCurrentTimeFormatted(), "", getCategory());
+		mPresenter.requestCache(getContext());
 	}
 
 	private boolean addPageFromBuffer(boolean reset) {
@@ -102,8 +94,8 @@ public class NewsFragment extends LazyFragment implements NewsView {
 	}
 
 	private void initPresenter() {
-		DaggerNewsComponent.builder()
-				.newsModule(new NewsModule(this))
+		DaggerStorageComponent.builder()
+				.storageModule(new StorageModule(this))
 				.build()
 				.inject(this);
 	}
@@ -133,7 +125,6 @@ public class NewsFragment extends LazyFragment implements NewsView {
 		mAdapter.setOnItemClickListener(new OnItemClickListener<NewsEntity>() {
 			@Override
 			public void onItemClick(View view, NewsEntity data) {
-				StorageManager.getInstance().addCache(getContext(), data);
 				NewsDetailActivity.startActivity(getActivity(), data);
 			}
 		});
@@ -157,26 +148,6 @@ public class NewsFragment extends LazyFragment implements NewsView {
 		});
 	}
 
-	@Override
-	public void onNewsResponsed(NewsResponse res) {
-		newsBuffer = res.getData();
-		closeRefreshing();
-		page = 1;
-		isRefresh = false;
-		if(!addPageFromBuffer(true))
-			Toast.makeText(getContext(), "暂无数据", Toast.LENGTH_SHORT).show();
-	}
-
-	@Override
-	public void onFailed(String errorMsg) {
-		closeRefreshing();
-		if (mAdapter.getItemCount() == 0) {
-			Toast.makeText(getContext(), "加载出错：" + errorMsg, Toast.LENGTH_SHORT).show();
-		} else {
-			mAdapter.setNetError();
-		}
-	}
-
 	/**
 	 * 关闭 SwipeRefreshLayout 下拉动画
 	 */
@@ -186,4 +157,28 @@ public class NewsFragment extends LazyFragment implements NewsView {
 		}
 	}
 
+	@Override
+	public void onStorageResponsed (StorageResponse response) {
+		// TODO: use the favorite field
+		List<StorageEntity> storageEntities = response.getStorageEntities();
+		newsBuffer = new ArrayList<>();
+		for (StorageEntity se : storageEntities) {
+			newsBuffer.add(se.getNews());
+		}
+		closeRefreshing();
+		page = 1;
+		isRefresh = false;
+		if(!addPageFromBuffer(true))
+			Toast.makeText(getContext(), "暂无数据", Toast.LENGTH_SHORT).show();
+	}
+
+	@Override
+	public void onStorageFailed (String errorMsg) {
+		closeRefreshing();
+		if (mAdapter.getItemCount() == 0) {
+			Toast.makeText(getContext(), "加载出错：" + errorMsg, Toast.LENGTH_SHORT).show();
+		} else {
+			mAdapter.setNetError();
+		}
+	}
 }
