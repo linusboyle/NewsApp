@@ -117,11 +117,10 @@ public class MainActivity extends BaseActivity
     public void onAttachFragment(Fragment fragment) {
         super.onAttachFragment(fragment);
         try {
-            // TODOgT
             for (FragmentEnum fe : FragmentEnum.values()) {
                 Fragment target = this.mFragments.get(fe);
                 Class<? extends BaseFragment> targetClass = FragmentFactory.getFragmentClass(fe);
-                if (target == null || targetClass.equals(target.getClass())) {
+                if (target == null && targetClass.equals(fragment.getClass())) {
                     this.mFragments.put(fe, targetClass.getConstructor().newInstance());
                     break;
                 }
