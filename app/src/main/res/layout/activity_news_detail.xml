@@ -17,9 +17,9 @@
     tools:openDrawer="start">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:background="@color/dark_ground_00dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/dark_ground_00dp"
         android:orientation="vertical"
         tools:context=".ui.activity.NewsDetailActivity">
 
@@ -35,9 +35,9 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="@color/dark_ground_08dp"
                 app:layout_scrollFlags="scroll|enterAlways"
-                app:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
                 app:popupTheme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
-                app:titleTextColor="@color/dark_text"/>
+                app:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
+                app:titleTextColor="@color/dark_text" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -45,47 +45,71 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:orientation="vertical">
+
                 <ImageView
                     android:id="@+id/news_image"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/activity_vertical_margin"
                     android:adjustViewBounds="true"
-                    tools:srcCompat="@tools:sample/backgrounds/scenic"
-                    android:contentDescription="@null"/>
+                    android:contentDescription="@null"
+                    tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
                 <TextView
                     android:id="@+id/news_title"
                     style="@android:style/TextAppearance.DeviceDefault.WindowTitle"
-                    android:textColor="@color/dark_text"
-                    android:paddingHorizontal="@dimen/activity_horizontal_margin"
-                    android:layout_marginVertical="@dimen/activity_vertical_margin"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent"
+                    android:layout_marginVertical="@dimen/activity_vertical_margin"
+                    android:paddingHorizontal="@dimen/activity_horizontal_margin"
+                    android:textColor="@color/dark_text" />
+
                 <TextView
                     android:id="@+id/news_text"
                     style="@android:style/TextAppearance.DeviceDefault.Widget.TextView"
-                    android:paddingHorizontal="@dimen/activity_horizontal_margin"
-                    android:layout_marginVertical="@dimen/activity_vertical_margin"
-                    android:textColor="@color/dark_text"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/activity_vertical_margin"
+                    android:paddingHorizontal="@dimen/activity_horizontal_margin"
+                    android:textColor="@color/dark_text" />
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+        <com.github.clans.fab.FloatingActionMenu
             android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
             android:layout_margin="@dimen/fab_margin"
-            android:background="@color/dark_primary"
-            app:maxImageSize="48dp"
-            app:srcCompat="@drawable/ic_keyboard_arrow_up_white_36dp"/>
+            app:menu_colorNormal="@color/colorPrimary"
+            app:menu_colorPressed="@color/colorPrimary"
+            app:menu_icon="@drawable/fab_add">
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/fab_share"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_menu_share"
+                app:fab_size="mini"
+                app:fab_colorNormal="@color/colorPrimary"
+                app:fab_colorPressed="@color/colorPrimary"
+                app:fab_label="@string/menu_share" />
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/fab_favorite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_star"
+                app:fab_size="mini"
+                app:fab_colorNormal="@color/colorPrimary"
+                app:fab_colorPressed="@color/colorPrimary"
+                app:fab_label="@string/fab_add_favorite" />
+        </com.github.clans.fab.FloatingActionMenu>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

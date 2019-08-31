@@ -14,25 +14,35 @@ import android.text.TextUtils;
 import android.view.*;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import butterknife.BindView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.newsclientapp.core.ShareUtils;
 import com.example.newsclientapp.network.NewsEntity;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.appcompat.widget.Toolbar;
 import com.example.newsclientapp.R;
+import com.example.newsclientapp.storage.StorageManager;
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 
 public class NewsDetailActivity extends BaseActivity {
 
 	private static String DATA = "web_data";
 
 	@BindView(R.id.toolbar) Toolbar mToolbar;
-	@BindView(R.id.fab) FloatingActionButton mFab;
+	@BindView(R.id.fab) FloatingActionMenu mFabMenu;
 	@BindView(R.id.news_image) ImageView mImageView;
 	@BindView(R.id.news_title) TextView mNewsTitle;
 	@BindView(R.id.news_text) TextView mNewsText;
+	@BindView(R.id.fab_favorite)
+	FloatingActionButton mFavorite;
+	@BindView(R.id.fab_share)
+	FloatingActionButton mShare;
+
+	private boolean fabOpened;
 
 	public static void startActivity (Context context, NewsEntity data) {
 		Intent intent = new Intent(context, NewsDetailActivity.class);
@@ -47,6 +57,7 @@ public class NewsDetailActivity extends BaseActivity {
 
 	@Override
 	protected void initData (Bundle savedInstanceState) {
+		fabOpened = false;
 		NewsEntity news = (NewsEntity) getIntent().getSerializableExtra(DATA);
 		String[] picUrls = news.getImageURLs();
 		String newsTitle = news.getTitle();
@@ -56,10 +67,17 @@ public class NewsDetailActivity extends BaseActivity {
 		initToolbar(newsTitle);
 
 		// fab
-		mFab.setOnClickListener(view -> {
-		    // Snackbar.make(view, "To do with sharing", Snackbar.LENGTH_LONG)
-			// .setAction("Action", null).show();
+		mFabMenu.setClosedOnTouchOutside(true);
+		mShare.setOnClickListener(view -> {
 			ShareUtils.share(view.getContext(), news);
+			if (mFabMenu.isOpened())
+				mFabMenu.close(true);
+		});
+		mFavorite.setOnClickListener(view -> {
+			StorageManager.getInstance().setFavorite(view.getContext(), news);
+			Toast.makeText(view.getContext(), "已添加到收藏", Toast.LENGTH_LONG).show();
+			if (mFabMenu.isOpened())
+				mFabMenu.close(true);
 		});
 
 		// page content
@@ -99,11 +117,34 @@ public class NewsDetailActivity extends BaseActivity {
 
 		setSupportActionBar(mToolbar);
 		mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
-		mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick (View view) {
-				finish();
-			}
-		});
+		mToolbar.setNavigationOnClickListener(view -> finish());
 	}
+
+	/*
+	private void openMenu(View view) {
+		ObjectAnimator objectAnimator =
+				ObjectAnimator.ofFloat(view, "rotation", 0, -155, -135);
+		objectAnimator.setDuration(500);
+		objectAnimator.start();
+		mMask.setVisibility(View.VISIBLE);
+		AlphaAnimation alphaAnimation = new AlphaAnimation(0, 0.7f);
+		alphaAnimation.setDuration(500);
+		alphaAnimation.setFillAfter(true);
+		mMask.startAnimation(alphaAnimation);
+		fabOpened = true;
+	}
+
+	private void closeMenu(View view) {
+		ObjectAnimator objectAnimator =
+				ObjectAnimator.ofFloat(view, "rotation",
+										-135, 20, 0);
+		objectAnimator.setDuration(500);
+		objectAnimator.start();
+		AlphaAnimation alphaAnimation = new AlphaAnimation(0.7f, 0);
+		alphaAnimation.setDuration(500);
+		mMask.startAnimation(alphaAnimation);
+		mMask.setVisibility(View.GONE);
+		fabOpened = false;
+	}
+	*/
 }
