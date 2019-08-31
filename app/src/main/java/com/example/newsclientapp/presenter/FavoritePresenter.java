@@ -14,6 +14,8 @@ import android.util.Log;
 import com.example.newsclientapp.storage.StorageManager;
 import com.example.newsclientapp.ui.view.FavoriteView;
 
+import javax.inject.Inject;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -21,6 +23,7 @@ public class FavoritePresenter {
 	private FavoriteView _view;
 	private static final String TAG = "FavoritePresenter";
 
+	@Inject
 	public FavoritePresenter (FavoriteView _view) {
 		this._view = _view;
 	}

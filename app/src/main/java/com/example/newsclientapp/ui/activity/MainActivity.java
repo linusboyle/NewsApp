@@ -97,8 +97,8 @@ public class MainActivity extends BaseActivity
             this.setDefaultFragment(FragmentEnum.NEWS_TAB_FRAGMENT);
         } else if (id == R.id.nav_cache) {
             this.setDefaultFragment(FragmentEnum.CACHE_FRAGMENT);
-        } else if (id == R.id.nav_slideshow) {
-
+        } else if (id == R.id.nav_favorite) {
+            this.setDefaultFragment(FragmentEnum.FAVORITE_FRAGMENT);
         } else if (id == R.id.nav_tools) {
 
         } else if (id == R.id.nav_share) {

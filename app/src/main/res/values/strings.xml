@@ -19,7 +19,7 @@
 
     <string name="menu_home">Home</string>
     <string name="menu_cache">本地缓存</string>
-    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_favorite">我的收藏</string>
     <string name="menu_tools">Tools</string>
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>

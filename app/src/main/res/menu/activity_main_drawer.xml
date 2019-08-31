@@ -16,16 +16,17 @@
             android:icon="@drawable/ic_menu_camera"
             app:iconTint="@color/dark_text"
             android:title="@string/display_news" />
+        <!-- TODO: change icon -->
         <item
             android:id="@+id/nav_cache"
             android:icon="@drawable/ic_menu_gallery"
             app:iconTint="@color/dark_text"
             android:title="@string/menu_cache" />
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/nav_favorite"
             android:icon="@drawable/ic_menu_slideshow"
             app:iconTint="@color/dark_text"
-            android:title="@string/menu_slideshow" />
+            android:title="@string/menu_favorite" />
         <item
             android:id="@+id/nav_tools"
             android:icon="@drawable/ic_menu_manage"
