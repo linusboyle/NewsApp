@@ -8,16 +8,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.cardview.widget.CardView;
-import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
-import androidx.gridlayout.widget.GridLayout;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.newsclientapp.R;
 import com.example.newsclientapp.core.NewsCategory;
 import com.example.newsclientapp.ui.adapter.ViewPagerAdapter;
+import com.example.newsclientapp.ui.view.DraggableGridView;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
@@ -35,8 +35,8 @@ public class NewsTabFragment extends BaseFragment {
     @BindView(R.id.tab_function) ImageView mTabFunc;
     @BindView(R.id.tab_layout) TabLayout mTabLayout;
     @BindView(R.id.view_pager) ViewPager mViewPager;
-    @BindView(R.id.tab_choose_scroll) NestedScrollView mTabChoose;
-    @BindView(R.id.tab_choose_gridlayout) GridLayout mTabGridlayout;
+    @BindView(R.id.tab_choose_scroll) LinearLayout mTabChoose;
+    @BindView(R.id.tab_choose_gridlayout) DraggableGridView mTabGridlayout;
 
     private List<String> categoryChosen;
     private HashMap<String, Boolean> categoryChosenMap;
@@ -168,13 +168,13 @@ public class NewsTabFragment extends BaseFragment {
             mTextView.setText(category);
             setChosen(true);
 
-	        mCardView.setOnClickListener(new View.OnClickListener() {
-	        	@Override
-                public void onClick(View view) {
-                    String category = getCategory();
-                    categoryChosenMap.put(category, toggle());
-                }
-            });
+	        // mCardView.setOnClickListener(new View.OnClickListener() {
+	        // 	@Override
+            //     public void onClick(View view) {
+            //         String category = getCategory();
+            //         categoryChosenMap.put(category, toggle());
+            //     }
+            // });
         }
 
         public Boolean isChosen() {
