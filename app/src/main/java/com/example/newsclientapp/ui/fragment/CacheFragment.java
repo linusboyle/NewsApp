@@ -22,14 +22,13 @@ import com.example.newsclientapp.injection.component.DaggerStorageComponent;
 import com.example.newsclientapp.injection.module.StorageModule;
 import com.example.newsclientapp.listener.OnItemClickListener;
 import com.example.newsclientapp.listener.OnReloadClickListener;
-import com.example.newsclientapp.storage.StorageEntity;
+import com.example.newsclientapp.network.NewsEntity;
 import com.example.newsclientapp.presenter.StoragePresenter;
 import com.example.newsclientapp.storage.StorageResponse;
 import com.example.newsclientapp.ui.activity.NewsDetailActivity;
 import com.example.newsclientapp.ui.adapter.NewsAdapter;
 import com.example.newsclientapp.ui.view.StorageView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -48,7 +47,7 @@ public class CacheFragment extends BaseFragment implements StorageView {
 
 	private boolean isRefresh;
 
-	private List<StorageEntity> newsBuffer;
+	private List<NewsEntity> newsBuffer;
 	private int page = 1;
 	private NewsAdapter mAdapter;
 
@@ -121,9 +120,9 @@ public class CacheFragment extends BaseFragment implements StorageView {
 				requestNews();
 			}
 		});
-		mAdapter.setOnItemClickListener(new OnItemClickListener<StorageEntity>() {
+		mAdapter.setOnItemClickListener(new OnItemClickListener<NewsEntity>() {
 			@Override
-			public void onItemClick(View view, StorageEntity data) {
+			public void onItemClick(View view, NewsEntity data) {
 				NewsDetailActivity.startActivity(getActivity(), data);
 			}
 		});
@@ -159,7 +158,7 @@ public class CacheFragment extends BaseFragment implements StorageView {
 	@Override
 	public void onStorageResponsed (StorageResponse response) {
 		// TODO: use the favorite field
-		newsBuffer = response.getStorageEntities();
+		newsBuffer = response.getNewsEntities();
 		closeRefreshing();
 		page = 1;
 		isRefresh = false;

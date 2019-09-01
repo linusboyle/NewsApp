@@ -22,8 +22,8 @@ import com.example.newsclientapp.injection.component.DaggerFavoriteComponent;
 import com.example.newsclientapp.injection.module.FavoriteModule;
 import com.example.newsclientapp.listener.OnItemClickListener;
 import com.example.newsclientapp.listener.OnReloadClickListener;
+import com.example.newsclientapp.network.NewsEntity;
 import com.example.newsclientapp.presenter.FavoritePresenter;
-import com.example.newsclientapp.storage.StorageEntity;
 import com.example.newsclientapp.storage.StorageResponse;
 import com.example.newsclientapp.ui.activity.NewsDetailActivity;
 import com.example.newsclientapp.ui.adapter.NewsAdapter;
@@ -47,7 +47,7 @@ public class FavoriteFragment extends BaseFragment implements FavoriteView {
 
 	private boolean isRefresh;
 
-	private List<StorageEntity> newsBuffer;
+	private List<NewsEntity> newsBuffer;
 	private int page = 1;
 	private NewsAdapter mAdapter;
 
@@ -120,9 +120,9 @@ public class FavoriteFragment extends BaseFragment implements FavoriteView {
 				requestNews();
 			}
 		});
-		mAdapter.setOnItemClickListener(new OnItemClickListener<StorageEntity>() {
+		mAdapter.setOnItemClickListener(new OnItemClickListener<NewsEntity>() {
 			@Override
-			public void onItemClick(View view, StorageEntity data) {
+			public void onItemClick(View view, NewsEntity data) {
 				NewsDetailActivity.startActivity(getActivity(), data);
 			}
 		});
@@ -157,7 +157,7 @@ public class FavoriteFragment extends BaseFragment implements FavoriteView {
 
 	@Override
 	public void onFavoriteResponsed (StorageResponse response) {
-		newsBuffer = response.getStorageEntities();
+		newsBuffer = response.getNewsEntities();
 		closeRefreshing();
 		page = 1;
 		isRefresh = false;

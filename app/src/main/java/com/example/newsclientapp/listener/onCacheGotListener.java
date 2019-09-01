@@ -7,8 +7,8 @@
 
 package com.example.newsclientapp.listener;
 
-import com.example.newsclientapp.storage.StorageEntity;
+import com.example.newsclientapp.network.NewsEntity;
 
 public interface onCacheGotListener {
-	void onCacheGot(StorageEntity entity);
+	void onCacheGot(NewsEntity entity);
 }

@@ -7,16 +7,18 @@
 
 package com.example.newsclientapp.storage;
 
+import com.example.newsclientapp.network.NewsEntity;
+
 import java.util.List;
 
 public class StorageResponse {
-	private List<StorageEntity> storageEntities;
+	private List<NewsEntity> newsEntities;
 
-	public StorageResponse (List<StorageEntity> storageEntities) {
-		this.storageEntities = storageEntities;
+	public StorageResponse (List<NewsEntity> newsEntities) {
+		this.newsEntities = newsEntities;
 	}
 
-	public List<StorageEntity> getStorageEntities () {
-		return storageEntities;
+	public List<NewsEntity> getNewsEntities () {
+		return newsEntities;
 	}
 }

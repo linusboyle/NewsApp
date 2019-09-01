@@ -24,7 +24,6 @@ import com.example.newsclientapp.network.NewsEntity;
 
 import androidx.appcompat.widget.Toolbar;
 import com.example.newsclientapp.R;
-import com.example.newsclientapp.storage.StorageEntity;
 import com.example.newsclientapp.storage.StorageManager;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -45,7 +44,7 @@ public class NewsDetailActivity extends BaseActivity {
 
 	private boolean isFavorite;
 
-	public static void startActivity (Context context, StorageEntity data) {
+	public static void startActivity (Context context, NewsEntity data) {
 		Intent intent = new Intent(context, NewsDetailActivity.class);
 		intent.putExtra(DATA, data);
 		context.startActivity(intent);
@@ -58,10 +57,9 @@ public class NewsDetailActivity extends BaseActivity {
 
 	@Override
 	protected void initData (Bundle savedInstanceState) {
-		StorageEntity storageEntity = (StorageEntity) getIntent().getSerializableExtra(DATA);
-		NewsEntity news = storageEntity.getNews();
+        NewsEntity news= (NewsEntity) getIntent().getSerializableExtra(DATA);
 
-		isFavorite = storageEntity.isFavorite();
+		isFavorite = StorageManager.getInstance().getFavoritesList().contains(news.getNewsID());
 
 		String[] picUrls = news.getImageURLs();
 		String newsTitle = news.getTitle();
@@ -80,14 +78,14 @@ public class NewsDetailActivity extends BaseActivity {
 		});
 		mFavorite.setOnClickListener(view -> {
 			if (isFavorite) {
-				if (StorageManager.getInstance().unsetFavorite(view.getContext(), news)) {
+				if (StorageManager.getInstance().unsetFavorite(news)) {
 					Toast.makeText(view.getContext(), "已删除收藏", Toast.LENGTH_LONG).show();
 					isFavorite = false;
 				} else {
 					Toast.makeText(view.getContext(), "操作失败", Toast.LENGTH_LONG).show();
 				}
 			} else {
-				if (StorageManager.getInstance().setFavorite(view.getContext(), news)) {
+				if (StorageManager.getInstance().setFavorite(news)) {
 					Toast.makeText(view.getContext(), "已添加到收藏", Toast.LENGTH_LONG).show();
 					isFavorite = true;
 				} else {
