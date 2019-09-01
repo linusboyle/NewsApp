@@ -22,7 +22,6 @@ import com.example.newsclientapp.injection.component.DaggerStorageComponent;
 import com.example.newsclientapp.injection.module.StorageModule;
 import com.example.newsclientapp.listener.OnItemClickListener;
 import com.example.newsclientapp.listener.OnReloadClickListener;
-import com.example.newsclientapp.network.NewsEntity;
 import com.example.newsclientapp.storage.StorageEntity;
 import com.example.newsclientapp.presenter.StoragePresenter;
 import com.example.newsclientapp.storage.StorageResponse;
@@ -49,7 +48,7 @@ public class CacheFragment extends BaseFragment implements StorageView {
 
 	private boolean isRefresh;
 
-	private List<NewsEntity> newsBuffer;
+	private List<StorageEntity> newsBuffer;
 	private int page = 1;
 	private NewsAdapter mAdapter;
 
@@ -122,9 +121,9 @@ public class CacheFragment extends BaseFragment implements StorageView {
 				requestNews();
 			}
 		});
-		mAdapter.setOnItemClickListener(new OnItemClickListener<NewsEntity>() {
+		mAdapter.setOnItemClickListener(new OnItemClickListener<StorageEntity>() {
 			@Override
-			public void onItemClick(View view, NewsEntity data) {
+			public void onItemClick(View view, StorageEntity data) {
 				NewsDetailActivity.startActivity(getActivity(), data);
 			}
 		});
@@ -160,16 +159,14 @@ public class CacheFragment extends BaseFragment implements StorageView {
 	@Override
 	public void onStorageResponsed (StorageResponse response) {
 		// TODO: use the favorite field
-		List<StorageEntity> storageEntities = response.getStorageEntities();
-		newsBuffer = new ArrayList<>();
-		for (StorageEntity se : storageEntities) {
-			newsBuffer.add(se.getNews());
-		}
+		newsBuffer = response.getStorageEntities();
 		closeRefreshing();
 		page = 1;
 		isRefresh = false;
-		if(!addPageFromBuffer(true))
+		if(!addPageFromBuffer(true)) {
+			mAdapter.clear();
 			Toast.makeText(getContext(), "暂无数据", Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	@Override

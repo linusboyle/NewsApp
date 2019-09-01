@@ -19,7 +19,7 @@ class FileStorePair {
 	File file;
 	StorageEntity entity;
 
-	public FileStorePair (File file, StorageEntity entity) {
+	FileStorePair (File file, StorageEntity entity) {
 		this.file = file;
 		this.entity = entity;
 	}

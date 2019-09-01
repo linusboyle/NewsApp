@@ -17,6 +17,8 @@ import com.example.newsclientapp.listener.OnReloadClickListener;
 import com.example.newsclientapp.network.NewsEntity;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.newsclientapp.storage.StorageEntity;
+import com.example.newsclientapp.storage.StorageManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,9 +29,9 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 	private static final int TYPE_FOOTER = 2;
 
 	private Context mContext;
-	private List<NewsEntity> mList = new ArrayList<>();
+	private List<StorageEntity> mList = new ArrayList<>();
 
-	private OnItemClickListener<NewsEntity> mOnItemClickListener;
+	private OnItemClickListener<StorageEntity> mOnItemClickListener;
 	private FooterViewHolder mFooterViewHolder;
 
 	public NewsAdapter(Context context) {
@@ -71,14 +73,19 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 		return TYPE_ITEM;
 	}
 
-	public void newDataItem(List<NewsEntity> newDataList) {
+	public void clear() {
+		mList.clear();
+		notifyDataSetChanged();
+	}
+
+	public void newDataItem(List<StorageEntity> newDataList) {
 		if (newDataList != null && newDataList.size() != 0) {
 			mList.clear();
 			addMoreItem(newDataList);
 		}
 	}
 
-	public void addMoreItem(List<NewsEntity> newDataList) {
+	public void addMoreItem(List<StorageEntity> newDataList) {
 		if (newDataList != null && newDataList.size() != 0) {
 			mList.addAll(newDataList);
 			notifyDataSetChanged();
@@ -91,7 +98,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 		private TextView title, description, datetime;
 		private ImageView funcIcon;
 
-		public NewsViewHolder(View itemView) {
+		NewsViewHolder (View itemView) {
 			super(itemView);
 			photo = itemView.findViewById(R.id.news_item_photo);
 			title = itemView.findViewById(R.id.news_item_title);
@@ -100,7 +107,16 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 			funcIcon = itemView.findViewById(R.id.news_item_function);
 		}
 
-		void loadViewHolder(final NewsEntity newsEntity) {
+		void setTitleReadColor () {
+			title.setTextColor(mContext.getResources().getColor(R.color.dark_subtext));
+		}
+
+		void setTitleUnreadColor () {
+			title.setTextColor(mContext.getResources().getColor(R.color.dark_text));
+		}
+
+		void loadViewHolder(final StorageEntity storageEntity) {
+			NewsEntity newsEntity = storageEntity.getNews();
 			String[] picUrls = newsEntity.getImageURLs();
 			if (picUrls == null || picUrls.length == 0 || TextUtils.isEmpty(picUrls[0])) {
 				photo.setVisibility(View.GONE);
@@ -115,6 +131,11 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 				photo.setVisibility(View.VISIBLE);
 			}
 			title.setText(newsEntity.getTitle());
+			if (storageEntity.isFavorite() || StorageManager.getInstance().getCachesList().contains(newsEntity.getNewsID())) {
+				setTitleReadColor();
+			} else {
+				setTitleUnreadColor();
+			}
 			description.setText("来源：" + newsEntity.getPublisher());
 			datetime.setText(newsEntity.getPublishTime());
 
@@ -122,7 +143,8 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 				@Override
 				public void onClick(View view) {
 					if (mOnItemClickListener != null) {
-						mOnItemClickListener.onItemClick(view, newsEntity);
+						mOnItemClickListener.onItemClick(view, storageEntity);
+						setTitleReadColor();
 					}
 				}
 			});
@@ -161,14 +183,14 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 		ProgressBar progressBar;
 		TextView prompt;
 
-		public FooterViewHolder(View itemView) {
+		FooterViewHolder (View itemView) {
 			super(itemView);
 			progressBar = itemView.findViewById(R.id.pb_loading);
 			prompt =  itemView.findViewById(R.id.tv_prompt);
 		}
 	}
 
-	public void setOnItemClickListener(OnItemClickListener<NewsEntity> itemClickListener) {
+	public void setOnItemClickListener(OnItemClickListener<StorageEntity> itemClickListener) {
 		this.mOnItemClickListener = itemClickListener;
 	}
 

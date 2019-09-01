@@ -10,7 +10,6 @@ package com.example.newsclientapp.storage;
 import android.content.Context;
 import android.util.Log;
 
-
 import com.example.newsclientapp.listener.onCacheGotListener;
 import com.example.newsclientapp.network.NewsEntity;
 

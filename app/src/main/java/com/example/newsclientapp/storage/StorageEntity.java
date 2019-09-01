@@ -27,7 +27,7 @@ public class StorageEntity implements Serializable {
 		this.isFavorite = isFavorite;
 	}
 
-	StorageEntity (NewsEntity news, boolean isFavorite) {
+	public StorageEntity (NewsEntity news, boolean isFavorite) {
 		this.news = news;
 		this.isFavorite = isFavorite;
 	}

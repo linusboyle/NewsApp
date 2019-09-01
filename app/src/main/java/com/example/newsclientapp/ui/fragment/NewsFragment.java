@@ -17,12 +17,15 @@ import com.example.newsclientapp.listener.OnReloadClickListener;
 import com.example.newsclientapp.network.NewsEntity;
 import com.example.newsclientapp.presenter.NewsPresenter;
 import com.example.newsclientapp.network.NewsResponse;
+import com.example.newsclientapp.storage.StorageEntity;
 import com.example.newsclientapp.storage.StorageManager;
 import com.example.newsclientapp.ui.activity.NewsDetailActivity;
 import com.example.newsclientapp.ui.adapter.NewsAdapter;
 import com.example.newsclientapp.ui.view.NewsView;
 
 import javax.inject.Inject;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class NewsFragment extends LazyFragment implements NewsView {
@@ -38,7 +41,7 @@ public class NewsFragment extends LazyFragment implements NewsView {
 
 	private boolean isRefresh;
 
-	private List<NewsEntity> newsBuffer;
+	private List<StorageEntity> newsBuffer;
 	private int page = 1;
 	private NewsAdapter mAdapter;
 
@@ -85,6 +88,7 @@ public class NewsFragment extends LazyFragment implements NewsView {
 				DateUtils.getCurrentTimeFormatted(), "", getCategory());
 	}
 
+	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 	private boolean addPageFromBuffer(boolean reset) {
 		if (newsBuffer != null && newsBuffer.size() > 0) {
 			int startIndex = (page-1)*COUNT_PER_PAGE;
@@ -130,10 +134,10 @@ public class NewsFragment extends LazyFragment implements NewsView {
 				requestNews();
 			}
 		});
-		mAdapter.setOnItemClickListener(new OnItemClickListener<NewsEntity>() {
+		mAdapter.setOnItemClickListener(new OnItemClickListener<StorageEntity>() {
 			@Override
-			public void onItemClick(View view, NewsEntity data) {
-				StorageManager.getInstance().addCache(getContext(), data);
+			public void onItemClick(View view, StorageEntity data) {
+				StorageManager.getInstance().addCache(getContext(), data.getNews());
 				NewsDetailActivity.startActivity(getActivity(), data);
 			}
 		});
@@ -157,14 +161,26 @@ public class NewsFragment extends LazyFragment implements NewsView {
 		});
 	}
 
+	private List<StorageEntity> processResponse(NewsResponse res) {
+		List<String> favorites = StorageManager.getInstance().getFavoritesList();
+		List<StorageEntity> retval = new ArrayList<>();
+		for (NewsEntity newsEntity : res.getData()) {
+			retval.add(new StorageEntity(newsEntity, favorites.contains(newsEntity.getNewsID())));
+		}
+
+		return retval;
+	}
+
 	@Override
 	public void onNewsResponsed(NewsResponse res) {
-		newsBuffer = res.getData();
+		newsBuffer = processResponse(res);
 		closeRefreshing();
 		page = 1;
 		isRefresh = false;
-		if(!addPageFromBuffer(true))
+		if(!addPageFromBuffer(true)) {
+			mAdapter.clear();
 			Toast.makeText(getContext(), "暂无数据", Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	@Override

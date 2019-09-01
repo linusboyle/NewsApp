@@ -24,6 +24,7 @@ import com.example.newsclientapp.network.NewsEntity;
 
 import androidx.appcompat.widget.Toolbar;
 import com.example.newsclientapp.R;
+import com.example.newsclientapp.storage.StorageEntity;
 import com.example.newsclientapp.storage.StorageManager;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -42,9 +43,9 @@ public class NewsDetailActivity extends BaseActivity {
 	@BindView(R.id.fab_share)
 	FloatingActionButton mShare;
 
-	private boolean fabOpened;
+	private boolean isFavorite;
 
-	public static void startActivity (Context context, NewsEntity data) {
+	public static void startActivity (Context context, StorageEntity data) {
 		Intent intent = new Intent(context, NewsDetailActivity.class);
 		intent.putExtra(DATA, data);
 		context.startActivity(intent);
@@ -57,14 +58,18 @@ public class NewsDetailActivity extends BaseActivity {
 
 	@Override
 	protected void initData (Bundle savedInstanceState) {
-		fabOpened = false;
-		NewsEntity news = (NewsEntity) getIntent().getSerializableExtra(DATA);
+		StorageEntity storageEntity = (StorageEntity) getIntent().getSerializableExtra(DATA);
+		NewsEntity news = storageEntity.getNews();
+
+		isFavorite = storageEntity.isFavorite();
+
 		String[] picUrls = news.getImageURLs();
 		String newsTitle = news.getTitle();
 		String newsText = news.getCleanContent();
 
 		// toolbar
 		initToolbar(newsTitle);
+		syncFavoriteState();
 
 		// fab
 		mFabMenu.setClosedOnTouchOutside(true);
@@ -74,14 +79,39 @@ public class NewsDetailActivity extends BaseActivity {
 				mFabMenu.close(true);
 		});
 		mFavorite.setOnClickListener(view -> {
-			StorageManager.getInstance().setFavorite(view.getContext(), news);
-			Toast.makeText(view.getContext(), "已添加到收藏", Toast.LENGTH_LONG).show();
+			if (isFavorite) {
+				if (StorageManager.getInstance().unsetFavorite(view.getContext(), news)) {
+					Toast.makeText(view.getContext(), "已删除收藏", Toast.LENGTH_LONG).show();
+					isFavorite = false;
+				} else {
+					Toast.makeText(view.getContext(), "操作失败", Toast.LENGTH_LONG).show();
+				}
+			} else {
+				if (StorageManager.getInstance().setFavorite(view.getContext(), news)) {
+					Toast.makeText(view.getContext(), "已添加到收藏", Toast.LENGTH_LONG).show();
+					isFavorite = true;
+				} else {
+					Toast.makeText(view.getContext(), "操作失败", Toast.LENGTH_LONG).show();
+				}
+			}
+			syncFavoriteState();
 			if (mFabMenu.isOpened())
 				mFabMenu.close(true);
 		});
 
 		// page content
 		initNewsPage(picUrls, newsTitle, newsText);
+	}
+
+	private void syncFavoriteState() {
+		if (isFavorite) {
+			mFavorite.setImageDrawable(getDrawable(R.drawable.ic_star));
+			mFavorite.setLabelText("取消收藏");
+		} else {
+			mFavorite.setImageDrawable(getDrawable(R.drawable.ic_empty_star));
+			// mFavorite.setImageIcon(Icon.createWithResource(this, R.drawable.ic_empty_star));
+			mFavorite.setLabelText("收藏");
+		}
 	}
 
 	private void initNewsPage(String[] picUrls, String newsTitle, String newsText) {
@@ -98,18 +128,7 @@ public class NewsDetailActivity extends BaseActivity {
 			mImageView.setVisibility(View.VISIBLE);
 		}
 		mNewsTitle.setText(newsTitle);
-		// description.setText("来源：" + newsEntity.getPublisher());
-		// datetime.setText(newsEntity.getPublishTime());
 		mNewsText.setText(newsText);
-
-		// itemView.setOnClickListener(new View.OnClickListener() {
-		// 	@Override
-		// 	public void onClick(View view) {
-		// 		if (mOnItemClickListener != null) {
-		// 			mOnItemClickListener.onItemClick(view, newsEntity);
-		// 		}
-		// 	}
-		// });
 	}
 
 	private void initToolbar (String title) {
@@ -119,32 +138,4 @@ public class NewsDetailActivity extends BaseActivity {
 		mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
 		mToolbar.setNavigationOnClickListener(view -> finish());
 	}
-
-	/*
-	private void openMenu(View view) {
-		ObjectAnimator objectAnimator =
-				ObjectAnimator.ofFloat(view, "rotation", 0, -155, -135);
-		objectAnimator.setDuration(500);
-		objectAnimator.start();
-		mMask.setVisibility(View.VISIBLE);
-		AlphaAnimation alphaAnimation = new AlphaAnimation(0, 0.7f);
-		alphaAnimation.setDuration(500);
-		alphaAnimation.setFillAfter(true);
-		mMask.startAnimation(alphaAnimation);
-		fabOpened = true;
-	}
-
-	private void closeMenu(View view) {
-		ObjectAnimator objectAnimator =
-				ObjectAnimator.ofFloat(view, "rotation",
-										-135, 20, 0);
-		objectAnimator.setDuration(500);
-		objectAnimator.start();
-		AlphaAnimation alphaAnimation = new AlphaAnimation(0.7f, 0);
-		alphaAnimation.setDuration(500);
-		mMask.startAnimation(alphaAnimation);
-		mMask.setVisibility(View.GONE);
-		fabOpened = false;
-	}
-	*/
 }

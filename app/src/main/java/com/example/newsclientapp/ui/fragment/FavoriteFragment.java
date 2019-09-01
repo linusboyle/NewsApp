@@ -22,7 +22,6 @@ import com.example.newsclientapp.injection.component.DaggerFavoriteComponent;
 import com.example.newsclientapp.injection.module.FavoriteModule;
 import com.example.newsclientapp.listener.OnItemClickListener;
 import com.example.newsclientapp.listener.OnReloadClickListener;
-import com.example.newsclientapp.network.NewsEntity;
 import com.example.newsclientapp.presenter.FavoritePresenter;
 import com.example.newsclientapp.storage.StorageEntity;
 import com.example.newsclientapp.storage.StorageResponse;
@@ -30,7 +29,6 @@ import com.example.newsclientapp.ui.activity.NewsDetailActivity;
 import com.example.newsclientapp.ui.adapter.NewsAdapter;
 import com.example.newsclientapp.ui.view.FavoriteView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -49,7 +47,7 @@ public class FavoriteFragment extends BaseFragment implements FavoriteView {
 
 	private boolean isRefresh;
 
-	private List<NewsEntity> newsBuffer;
+	private List<StorageEntity> newsBuffer;
 	private int page = 1;
 	private NewsAdapter mAdapter;
 
@@ -122,9 +120,9 @@ public class FavoriteFragment extends BaseFragment implements FavoriteView {
 				requestNews();
 			}
 		});
-		mAdapter.setOnItemClickListener(new OnItemClickListener<NewsEntity>() {
+		mAdapter.setOnItemClickListener(new OnItemClickListener<StorageEntity>() {
 			@Override
-			public void onItemClick(View view, NewsEntity data) {
+			public void onItemClick(View view, StorageEntity data) {
 				NewsDetailActivity.startActivity(getActivity(), data);
 			}
 		});
@@ -159,16 +157,14 @@ public class FavoriteFragment extends BaseFragment implements FavoriteView {
 
 	@Override
 	public void onFavoriteResponsed (StorageResponse response) {
-		List<StorageEntity> storageEntities = response.getStorageEntities();
-		newsBuffer = new ArrayList<>();
-		for (StorageEntity se : storageEntities) {
-			newsBuffer.add(se.getNews());
-		}
+		newsBuffer = response.getStorageEntities();
 		closeRefreshing();
 		page = 1;
 		isRefresh = false;
-		if(!addPageFromBuffer(true))
+		if(!addPageFromBuffer(true)) {
+			mAdapter.clear();
 			Toast.makeText(getContext(), "暂无数据", Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	@Override
