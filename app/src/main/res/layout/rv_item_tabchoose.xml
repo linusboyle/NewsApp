@@ -22,6 +22,17 @@
     app:cardElevation="8dp"
     app:cardCornerRadius="8dp">
 
+    <ImageView
+        android:id="@+id/tab_choose_cardview_mark"
+        android:src="@drawable/ic_visibility_off_white_24dp"
+        android:tint="@color/dark_second_primary"
+        android:layout_marginStart="@dimen/activity_horizontal_margin_half"
+        android:layout_marginTop="@dimen/activity_horizontal_margin_half"
+        android:layout_gravity="start|top"
+        android:contentDescription="@null"
+        android:layout_width="14dp"
+        android:layout_height="14dp"/>
+
     <LinearLayout
         android:layout_gravity="center_horizontal|center_vertical"
         android:orientation="vertical"
@@ -29,10 +40,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
+
         <ImageView
             android:id="@+id/tab_choose_cardview_image"
             android:src="@drawable/ic_menu_gallery"
             android:tint="@color/dark_text"
+            android:contentDescription="@null"
             android:layout_gravity="center_horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>

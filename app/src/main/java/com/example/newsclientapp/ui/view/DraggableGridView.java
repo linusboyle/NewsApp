@@ -51,6 +51,7 @@ public class DraggableGridView extends ViewGroup implements OnTouchListener, OnC
 	protected OnClickListener secondaryOnClickListener;
 	private OnItemClickListener onItemClickListener;
 	protected Runnable updateTask = new Runnable() {
+		@Override
 		public void run() {
 			DraggableGridView var10000;
 			if (DraggableGridView.this.dragged != -1) {
@@ -94,20 +95,24 @@ public class DraggableGridView extends ViewGroup implements OnTouchListener, OnC
 		this.setOnLongClickListener(this);
 	}
 
+	@Override
 	public void setOnClickListener(OnClickListener l) {
 		this.secondaryOnClickListener = l;
 	}
 
+	@Override
 	public void addView(View child) {
 		super.addView(child);
 		this.newPositions.add(-1);
 	}
 
+	@Override
 	public void removeViewAt(int index) {
 		super.removeViewAt(index);
 		this.newPositions.remove(index);
 	}
 
+	@Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
 		float w = (float)(r - l) / ((float)this.dpi / 160.0F);
 		this.colCount = 2;
@@ -132,6 +137,7 @@ public class DraggableGridView extends ViewGroup implements OnTouchListener, OnC
 
 	}
 
+	@Override
 	protected int getChildDrawingOrder(int childCount, int i) {
 		if (this.dragged == -1) {
 			return i;
@@ -206,6 +212,7 @@ public class DraggableGridView extends ViewGroup implements OnTouchListener, OnC
 		return -1;
 	}
 
+	@Override
 	public void onClick(View view) {
 		if (this.enabled) {
 			if (this.secondaryOnClickListener != null) {
@@ -219,6 +226,7 @@ public class DraggableGridView extends ViewGroup implements OnTouchListener, OnC
 
 	}
 
+	@Override
 	public boolean onLongClick(View view) {
 		if (!this.enabled) {
 			return false;
@@ -234,6 +242,7 @@ public class DraggableGridView extends ViewGroup implements OnTouchListener, OnC
 		}
 	}
 
+	@Override
 	public boolean onTouch(View view, MotionEvent event) {
 		int action = event.getAction();
 		switch(action & 255) {

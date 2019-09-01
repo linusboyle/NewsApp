@@ -9,34 +9,54 @@ package com.example.newsclientapp.ui.adapter;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import com.example.newsclientapp.ui.fragment.NewsFragment;
 
 import java.util.List;
 
-public class ViewPagerAdapter extends FragmentPagerAdapter {
+public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
 	private List<String> mTitleList;
-	private List<Fragment> mFragmentList;
+	// private List<Fragment> mFragmentList;
 
-	public ViewPagerAdapter(FragmentManager fm, List<String> titleList, List<Fragment> fragmentList) {
+	public ViewPagerAdapter(FragmentManager fm, List<String> titleList/*, List<Fragment> fragmentList*/) {
 		super(fm);
 		this.mTitleList = titleList;
-		this.mFragmentList = fragmentList;
+		// this.mFragmentList = fragmentList;
 	}
 
 	@Override
 	public Fragment getItem(int position) {
-		return mFragmentList.get(position);
+		return NewsFragment.newNewsFragment(mTitleList.get(position));
 	}
 
 	@Override
 	public int getCount() {
-		return mFragmentList.size();
+		return mTitleList.size();
 	}
 
 	@Override
 	public CharSequence getPageTitle(int position) {
 		return mTitleList.get(position);
+	}
+
+	@Override
+	public int getItemPosition(Object item) {
+		// NewsFragment newsFragment = (NewsFragment) item;
+		// String category = newsFragment.getCategory();
+		// int position = mTitleList.indexOf(category);
+
+		// if (position >= 0)
+		// 	return position;
+		// else
+		// 	return POSITION_NONE;
+		return POSITION_NONE;
+	}
+
+	public void setData(List<String> titleList/*, List<Fragment> fragmentList*/) {
+		this.mTitleList = titleList;
+		notifyDataSetChanged();
+		// this.mFragmentList = fragmentList;
 	}
 
 }

@@ -57,6 +57,7 @@
 
     <color name="dark_primary">#BB86FC</color>
     <color name="dark_ground_primary">#1F1B24</color>
+    <color name="dark_second_primary">#E91E63</color>
 
     <color name="dark_text">#CECECE</color>
     <color name="dark_subtext">#989898</color>

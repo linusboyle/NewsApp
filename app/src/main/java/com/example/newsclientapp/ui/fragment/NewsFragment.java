@@ -76,7 +76,7 @@ public class NewsFragment extends LazyFragment implements NewsView {
 		return R.layout.layout_refresh_rv;
 	}
 
-	private String getCategory() {
+	public String getCategory() {
 		return getArguments().getString(CATEGORY);
 	}
 
@@ -185,5 +185,4 @@ public class NewsFragment extends LazyFragment implements NewsView {
 			mRefreshLayout.setRefreshing(false);
 		}
 	}
-
 }

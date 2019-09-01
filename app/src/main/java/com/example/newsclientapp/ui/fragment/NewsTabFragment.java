@@ -2,16 +2,17 @@ package com.example.newsclientapp.ui.fragment;
 
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.cardview.widget.CardView;
-import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.newsclientapp.R;
@@ -22,6 +23,7 @@ import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import butterknife.BindView;
@@ -29,18 +31,18 @@ import butterknife.BindView;
 public class NewsTabFragment extends BaseFragment {
     private static final int PRIMARY_COLOR = 0xFFBB86FC;
     private static final int TEXT_COLOR = 0xFFCECECE;
-    private static final int GROUND_PRIMARY_COLOR = 0xFF1F1B24;
+    private static final int SECOND_PRIMARY_COLOR = 0xFFE91E63;
     private static final int GROUND_02dp_COLOR = 0xFF242424;
 
     @BindView(R.id.tab_function) ImageView mTabFunc;
     @BindView(R.id.tab_layout) TabLayout mTabLayout;
     @BindView(R.id.view_pager) ViewPager mViewPager;
-    @BindView(R.id.tab_choose_scroll) LinearLayout mTabChoose;
+    @BindView(R.id.tab_choose) LinearLayout mTabChoose;
     @BindView(R.id.tab_choose_gridlayout) DraggableGridView mTabGridlayout;
 
-    private List<String> categoryChosen;
-    private HashMap<String, Boolean> categoryChosenMap;
-    private List<ChooseCardAdapter> chooseCard;
+    private HashMap<String, ChooseCardAdapter> category2AdapterMap;
+
+    private ViewPagerAdapter mViewPagerAdapter;
 
     float dp2pixel(int dp) {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
@@ -53,15 +55,27 @@ public class NewsTabFragment extends BaseFragment {
 
     @Override
     protected void initData(ViewGroup container, Bundle savedInstanceState) {
-        // init tab layout
-    	List<Fragment> fragmentList = getFragmentList();
-        mViewPager.setAdapter(new ViewPagerAdapter(getChildFragmentManager(), categoryChosen, fragmentList));
-        mViewPager.setCurrentItem(0);
-        mViewPager.setOffscreenPageLimit(fragmentList.size() - 1);
-        mTabLayout.setupWithViewPager(mViewPager);
+        // restore  categoryChosenList
+        List<String> categoryChosenList = restoreCategoryChosen();
 
-        // init tab choose card
-        initChooseCard();
+        // init tab choose card according to categoryChosenList
+        initChooseCard(categoryChosenList);
+
+        // init tabLayout and viewPager
+	    setTabFragment(categoryChosenList);
+
+        mTabGridlayout.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        	@Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String category = ((TextView) view.findViewById(R.id.tab_choose_cardview_text)).getText().toString();
+                ChooseCardAdapter cardClicked = category2AdapterMap.get(category);
+                if (cardClicked != null) {
+                	cardClicked.toggle();
+                } else {
+                    Log.e("NewsTabFragment", "Position undefined: " + position);
+                }
+            }
+        });
         mTabChoose.setVisibility(View.GONE);
 
         mTabFunc.setOnClickListener(new View.OnClickListener() {
@@ -74,52 +88,78 @@ public class NewsTabFragment extends BaseFragment {
                     mTabChoose.setVisibility(View.VISIBLE);
                     setTabsEnabled(false);
                 } else {
+                    setTabsEnabled(true);
                     mTabFunc.setColorFilter(TEXT_COLOR);
                     mViewPager.setVisibility(View.VISIBLE);
                     mTabChoose.setVisibility(View.GONE);
-                    setTabsEnabled(true);
+                    setTabFragment(getChosenCategoryList());
                 }
             }
         });
     }
 
-    private void initChooseCard() {
+    private void initChooseCard(List<String> categoryChosenList) {
     	mTabGridlayout.removeAllViews();
-    	chooseCard = new ArrayList<>();
+    	category2AdapterMap = new HashMap<>();
 
-    	for (String category: NewsCategory.getCategories()) {
-    	    addChooseCard(category, categoryChosenMap.get(category));
+        HashSet<String> unchosenCategoryPool = new HashSet<>(NewsCategory.getCategories());
+
+    	// add chosen category according to sequence
+    	for (String category: categoryChosenList) {
+            addChooseCard(category, true);
+            unchosenCategoryPool.remove(category);
+        }
+
+    	for (String category: unchosenCategoryPool) {
+            addChooseCard(category, false);
         }
     }
 
     private void addChooseCard(String category, Boolean chosen) {
+        ChooseCardAdapter chooseCardAdapter = category2AdapterMap.get(category);
+        if (chooseCardAdapter != null) {
+            category2AdapterMap.remove(category);
+        }
+
         View tabChooseCard = LayoutInflater.from(getContext())
                 .inflate(R.layout.rv_item_tabchoose, mTabGridlayout, false);
 
-        chooseCard.add(new ChooseCardAdapter(tabChooseCard, category, chosen));
+        chooseCardAdapter = new ChooseCardAdapter(tabChooseCard, category, chosen);
+        category2AdapterMap.put(category, chooseCardAdapter);
         mTabGridlayout.addView(tabChooseCard);
     }
 
-    private List<Fragment> getFragmentList() {
-        if (categoryChosen == null)
-        	initCategoryChosen();
-
-        List<Fragment> fragmentList = new ArrayList<>();
-        for (String category : categoryChosen)
-            fragmentList.add(NewsFragment.newNewsFragment(category));
-
-        return fragmentList;
+    private void setTabFragment(List<String> chosenCategoryList) {
+        if (mViewPagerAdapter == null) {
+            mViewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager(), chosenCategoryList/*, fragmentList*/);
+            mViewPager.setAdapter(mViewPagerAdapter);
+            mViewPager.setCurrentItem(0);
+            mViewPager.setOffscreenPageLimit(chosenCategoryList.size()-1/*fragmentList.size() - 1*/);
+        } else {
+            mViewPagerAdapter.setData(chosenCategoryList/*, fragmentList*/);
+            mViewPager.setOffscreenPageLimit(chosenCategoryList.size()-1);
+        }
+        mTabLayout.setupWithViewPager(mViewPager);
     }
 
-    private void initCategoryChosen() {
-        // TODO: restore
-        categoryChosen = NewsCategory.getCategories();
+    private List<String> getChosenCategoryList() {
+        List<String> categoryChosenList = new ArrayList<>();
+        int childCount = mTabGridlayout.getChildCount();
+        for (int childIndex = 0; childIndex < childCount; childIndex++) {
+            View childView = mTabGridlayout.getChildAt(childIndex);
+            if (childView != null) {
+                String category = ((TextView) childView.findViewById(R.id.tab_choose_cardview_text)).getText().toString();
+                ChooseCardAdapter chooseCardAdapter = category2AdapterMap.get(category);
+                if (chooseCardAdapter != null && chooseCardAdapter.isChosen())
+                    categoryChosenList.add(chooseCardAdapter.getCategory());
+            }
+        }
+        return categoryChosenList;
+    }
 
-        categoryChosenMap = new HashMap<>();
-        for (String category: NewsCategory.getCategories())
-            categoryChosenMap.put(category, false);
-        for (String category: categoryChosen)
-            categoryChosenMap.put(category, true);
+    private List<String> restoreCategoryChosen() {
+        // TODO: logic to restore
+        return NewsCategory.getCategories();
     }
 
     private ViewGroup getTabViewGroup() {
@@ -151,6 +191,7 @@ public class NewsTabFragment extends BaseFragment {
     }
 
     private class ChooseCardAdapter {
+        private ImageView mImageMark;
         private ImageView mImageView;
         private TextView mTextView;
         private CardView mCardView;
@@ -160,6 +201,7 @@ public class NewsTabFragment extends BaseFragment {
 
         ChooseCardAdapter(View view, String category, Boolean chosen) {
             mCardView = (CardView) view;
+            mImageMark = view.findViewById(R.id.tab_choose_cardview_mark);
             mImageView = view.findViewById(R.id.tab_choose_cardview_image);
             mTextView = view.findViewById(R.id.tab_choose_cardview_text);
             this.chosen = chosen;
@@ -167,14 +209,6 @@ public class NewsTabFragment extends BaseFragment {
 
             mTextView.setText(category);
             setChosen(true);
-
-	        // mCardView.setOnClickListener(new View.OnClickListener() {
-	        // 	@Override
-            //     public void onClick(View view) {
-            //         String category = getCategory();
-            //         categoryChosenMap.put(category, toggle());
-            //     }
-            // });
         }
 
         public Boolean isChosen() {
@@ -184,11 +218,13 @@ public class NewsTabFragment extends BaseFragment {
         public void setChosen(Boolean chosen) {
             this.chosen = chosen;
             if (chosen) {
-                mTextView.setTextColor(PRIMARY_COLOR);
-                mImageView.setColorFilter(PRIMARY_COLOR);
-                // mCardView.setBackgroundColor(GROUND_PRIMARY_COLOR);
+            	mImageMark.setVisibility(View.INVISIBLE);
+                mTextView.setTextColor(TEXT_COLOR);
+                mImageView.setColorFilter(TEXT_COLOR);
                 setBackground(GROUND_02dp_COLOR);
             } else {
+                mImageMark.setVisibility(View.VISIBLE);
+                mImageMark.setColorFilter(SECOND_PRIMARY_COLOR);
                 mTextView.setTextColor(TEXT_COLOR);
                 mImageView.setColorFilter(TEXT_COLOR);
                 setBackground(GROUND_02dp_COLOR);
