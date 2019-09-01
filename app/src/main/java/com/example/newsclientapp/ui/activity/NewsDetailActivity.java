@@ -10,7 +10,9 @@ package com.example.newsclientapp.ui.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.*;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -28,9 +30,30 @@ import com.example.newsclientapp.storage.StorageManager;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
+import java.util.Locale;
+
 public class NewsDetailActivity extends BaseActivity {
 
 	private static String DATA = "web_data";
+	private TextToSpeech tts;
+	private String content;
+
+	private class TTSListener implements TextToSpeech.OnInitListener {
+		@Override
+		public void onInit (int status) {
+			if (status == TextToSpeech.SUCCESS) {
+				int result = tts.setLanguage(Locale.CHINESE);
+				if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED){
+					Toast.makeText(NewsDetailActivity.this, "系统不支持中文语音", Toast.LENGTH_SHORT).show();
+				} else if (result == TextToSpeech.LANG_AVAILABLE){
+					tts.speak(content,TextToSpeech.QUEUE_ADD,null);
+				}
+			} else {
+				Toast.makeText(NewsDetailActivity.this, "初始化语音失败", Toast.LENGTH_SHORT).show();
+				Log.e("TAG", "初始化失败");
+			}
+		}
+	}
 
 	@BindView(R.id.toolbar) Toolbar mToolbar;
 	@BindView(R.id.fab) FloatingActionMenu mFabMenu;
@@ -41,8 +64,35 @@ public class NewsDetailActivity extends BaseActivity {
 	FloatingActionButton mFavorite;
 	@BindView(R.id.fab_share)
 	FloatingActionButton mShare;
+	@BindView(R.id.fab_voice)
+	FloatingActionButton mVoice;
 
 	private boolean isFavorite;
+
+	private void startTTS() {
+		stopTTS();
+		tts = new TextToSpeech(this, new TTSListener());
+	}
+
+	private void stopTTS() {
+		if (tts != null) {
+			tts.shutdown();
+			tts.stop();
+			tts = null;
+		}
+	}
+
+	@Override
+	protected void onPause () {
+		stopTTS();
+		super.onPause();
+	}
+
+	@Override
+	protected void onDestroy () {
+		stopTTS();
+		super.onDestroy();
+	}
 
 	public static void startActivity (Context context, NewsEntity data) {
 		Intent intent = new Intent(context, NewsDetailActivity.class);
@@ -57,13 +107,14 @@ public class NewsDetailActivity extends BaseActivity {
 
 	@Override
 	protected void initData (Bundle savedInstanceState) {
-        NewsEntity news= (NewsEntity) getIntent().getSerializableExtra(DATA);
+        NewsEntity news = (NewsEntity) getIntent().getSerializableExtra(DATA);
 
 		isFavorite = StorageManager.getInstance().getFavoritesList().contains(news.getNewsID());
 
 		String[] picUrls = news.getImageURLs();
 		String newsTitle = news.getTitle();
 		String newsText = news.getCleanContent();
+		content = newsText;
 
 		// toolbar
 		initToolbar(newsTitle);
@@ -71,6 +122,9 @@ public class NewsDetailActivity extends BaseActivity {
 
 		// fab
 		mFabMenu.setClosedOnTouchOutside(true);
+		mVoice.setOnClickListener(view -> {
+			startTTS();
+		});
 		mShare.setOnClickListener(view -> {
 			ShareUtils.share(view.getContext(), news);
 			if (mFabMenu.isOpened())

@@ -32,4 +32,5 @@
     <string name="fab_remove_favorite">取消收藏</string>
 
     <string name="transition_photos">transition_animation_news_photos</string>
+    <string name="fab_voice">朗读</string>
 </resources>
