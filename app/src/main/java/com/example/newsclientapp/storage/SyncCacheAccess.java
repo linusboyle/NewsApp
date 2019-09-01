@@ -20,24 +20,23 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class SyncCacheAccess implements Runnable {
 	private static final String TAG = "SyncCacheAccess";
 
-	public enum CacheAction {
+	public enum CacheActionEnum {
 		CACHE_WRITE,
-		// CACHE_READ,
 		CACHE_DELETE,
 		CACHE_FAVORITE_ADD,
 		CACHE_FAVORITE_REMOVE,
 	}
 
-	static class CacheActionPair {
-		CacheAction action;
+	static class CacheAction {
+		CacheActionEnum action;
 		NewsEntity newsEntity;
 
-		CacheActionPair (CacheAction action, NewsEntity newsEntity) {
+		CacheAction (CacheActionEnum action, NewsEntity newsEntity) {
 			this.action = action;
 			this.newsEntity = newsEntity;
 		}
 
-		CacheAction getAction () {
+		CacheActionEnum getAction () {
 			return action;
 		}
 
@@ -46,7 +45,7 @@ public class SyncCacheAccess implements Runnable {
 		}
 	}
 
-	private LinkedBlockingQueue<CacheActionPair> queue;
+	private LinkedBlockingQueue<CacheAction> queue;
 	private File cache_root;
 	private File favorite_root;
 
@@ -56,9 +55,9 @@ public class SyncCacheAccess implements Runnable {
 		this.queue = new LinkedBlockingQueue<>();
 	}
 
-	boolean addAction(CacheActionPair cacheActionPair) {
+	boolean addAction(CacheAction cacheAction) {
 		try {
-			queue.put(cacheActionPair);
+			queue.put(cacheAction);
 			return true;
 		} catch (InterruptedException e) {
 			Log.w(TAG, "addAction failed by interruption" + e.getMessage());
@@ -66,13 +65,13 @@ public class SyncCacheAccess implements Runnable {
 		return false;
 	}
 
-	private void doAction(CacheActionPair cacheActionPair) {
+	private void doAction(CacheAction cacheActionPair) {
 		Log.i(TAG, "Start a new action");
-		CacheAction cacheAction = cacheActionPair.getAction();
+		CacheActionEnum cacheActionEnum = cacheActionPair.getAction();
 		NewsEntity newsEntity = cacheActionPair.getNewsEntity();
 
 		try {
-			switch (cacheAction) {
+			switch (cacheActionEnum) {
 				case CACHE_WRITE: {
 					File target = new File(cache_root, newsEntity.getNewsID());
 					PrintStream printStream = new PrintStream(target);
@@ -114,8 +113,8 @@ public class SyncCacheAccess implements Runnable {
 		Log.i(TAG, "Thread start");
 		try {
 			while (true) {
-				CacheActionPair cacheActionPair = queue.take();
-				doAction(cacheActionPair);
+				CacheAction cacheAction = queue.take();
+				doAction(cacheAction);
 			}
 		} catch (InterruptedException e) {
 			Log.i(TAG, "Interrupted" + e.getMessage());

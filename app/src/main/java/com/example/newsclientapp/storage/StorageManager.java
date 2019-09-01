@@ -144,23 +144,23 @@ public class StorageManager {
 
 	public void addCache(NewsEntity newsEntity) {
 		caches.add(newsEntity.getNewsID());
-		syncCacheAccess.addAction(new SyncCacheAccess.CacheActionPair(
-				SyncCacheAccess.CacheAction.CACHE_WRITE, newsEntity));
+		syncCacheAccess.addAction(new SyncCacheAccess.CacheAction(
+				SyncCacheAccess.CacheActionEnum.CACHE_WRITE, newsEntity));
 	}
 
 	public boolean setFavorite(NewsEntity newsEntity) {
-		syncCacheAccess.addAction(new SyncCacheAccess.CacheActionPair(
-				SyncCacheAccess.CacheAction.CACHE_WRITE, newsEntity));
+		syncCacheAccess.addAction(new SyncCacheAccess.CacheAction(
+				SyncCacheAccess.CacheActionEnum.CACHE_WRITE, newsEntity));
 		favorites.add(newsEntity.getNewsID());
-		return syncCacheAccess.addAction(new SyncCacheAccess.CacheActionPair(
-				SyncCacheAccess.CacheAction.CACHE_FAVORITE_ADD, newsEntity));
+		return syncCacheAccess.addAction(new SyncCacheAccess.CacheAction(
+				SyncCacheAccess.CacheActionEnum.CACHE_FAVORITE_ADD, newsEntity));
 	}
 
 	public boolean unsetFavorite(NewsEntity newsEntity) {
-		syncCacheAccess.addAction(new SyncCacheAccess.CacheActionPair(
-				SyncCacheAccess.CacheAction.CACHE_WRITE, newsEntity));
+		syncCacheAccess.addAction(new SyncCacheAccess.CacheAction(
+				SyncCacheAccess.CacheActionEnum.CACHE_WRITE, newsEntity));
 		favorites.remove(newsEntity.getNewsID());
-		return syncCacheAccess.addAction(new SyncCacheAccess.CacheActionPair(
-				SyncCacheAccess.CacheAction.CACHE_FAVORITE_REMOVE, newsEntity));
+		return syncCacheAccess.addAction(new SyncCacheAccess.CacheAction(
+				SyncCacheAccess.CacheActionEnum.CACHE_FAVORITE_REMOVE, newsEntity));
 	}
 }
