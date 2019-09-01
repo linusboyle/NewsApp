@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2019 Zhilei Han and Yihao Chen.
+  ~ This software falls under the GNU general public license version 3 or later.
+  ~ It comes WITHOUT ANY WARRANTY WHATSOEVER. For details, see the file LICENSE
+  ~ in the root directory or <http://www.gnu.org/licenses/gpl-3.0.html>.
+  -->
+
+<resources>
+    <declare-styleable name="CustomTheme">
+        <attr name="mNavigationViewStyle" format="reference"/>
+        <attr name="mOverlayCompnentStyle" format="reference"/>
+        <attr name="mBackground_00dp" format="reference"/>
+        <attr name="mBackground_02dp" format="reference"/>
+        <attr name="mBackground_04dp" format="reference"/>
+        <attr name="mBackground_06dp" format="reference"/>
+        <attr name="mBackground_08dp" format="reference"/>
+        <attr name="mTextPrimary" format="reference"/>
+        <attr name="mTextSecondary" format="reference"/>
+
+    </declare-styleable>
+</resources>

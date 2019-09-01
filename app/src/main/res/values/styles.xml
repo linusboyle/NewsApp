@@ -9,20 +9,55 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/dark_primary</item>
+        <item name="colorPrimaryDark">@color/dark_ground_primary</item>
+        <item name="colorAccent">@color/dark_primary</item>
+        <item name="colorSecondary">@color/dark_second_primary</item>
         <item name="android:textColorPrimary">@color/dark_text</item>
-    </style>
 
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+        <item name="mOverlayCompnentStyle">@style/ThemeOverlay.MaterialComponents.Dark.ActionBar</item>
+        <item name="mNavigationViewStyle">@style/DarkNavigationViewStyle</item>
+        <item name="mBackground_00dp">@color/dark_ground_00dp</item>
+        <item name="mBackground_02dp">@color/dark_ground_02dp</item>
+        <item name="mBackground_04dp">@color/dark_ground_04dp</item>
+        <item name="mBackground_06dp">@color/dark_ground_06dp</item>
+        <item name="mBackground_08dp">@color/dark_ground_08dp</item>
+        <item name="mTextPrimary">@color/dark_text</item>
+        <item name="mTextSecondary">@color/dark_subtext</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+
+    <!-- Dark app theme -->
+    <style name="DarkAppTheme" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar">
+        <item name="colorPrimary">@color/dark_primary</item>
+        <item name="colorPrimaryDark">@color/dark_ground_primary</item>
+        <item name="colorAccent">@color/dark_primary</item>
+        <item name="android:textColorPrimary">@color/dark_text</item>
+
+        <item name="navigationViewStyle">@style/DarkNavigationViewStyle</item>
+        <item name="android:toolbarStyle">@style/DarkToolBarStyle</item>
+    </style>
+
+
+
+    <style name="DarkToolBarStyle" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar">
+        <item name="android:background">@color/dark_ground_08dp</item>
+        <item name="android:popupMenuStyle">@style/ThemeOverlay.MaterialComponents.Dark.ActionBar</item>
+    </style>
+
+    <style name="DarkNavigationViewStyle">
+        <item name="android:theme">@style/ThemeOverlay.MaterialComponents.Dark.ActionBar</item>
+        <item name="android:background">@color/dark_ground_06dp_translucent</item>
+    </style>
 
 </resources>

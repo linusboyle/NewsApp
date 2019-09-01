@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -31,7 +32,7 @@
             android:layout_alignTop="@id/news_item_photo"
             android:ellipsize="end"
             android:lines="2"
-            android:textColor="@color/dark_text"
+            android:textColor="?attr/mTextPrimary"
             android:layout_toEndOf="@+id/news_item_photo"
             android:textSize="15sp"
             tools:text="This Is A News Title"/>
@@ -48,7 +49,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:textColor="@color/dark_subtext"
+            android:textColor="?attr/mTextSecondary"
             android:textSize="12sp"
             tools:text="From: unknown host"/>
 
@@ -58,7 +59,7 @@
             android:layout_height="wrap_content"
             android:layout_toEndOf="@+id/news_item_description"
             android:layout_alignParentBottom="true"
-            android:textColor="@color/dark_subtext"
+            android:textColor="?attr/mTextSecondary"
             android:textSize="12sp"
             android:paddingBottom="5dp"
             tools:text="YYYY-MM-DD HH:MM"/>
@@ -69,7 +70,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:tint="@color/dark_primary"
+            android:tint="?attr/colorPrimary"
             app:srcCompat="@drawable/ic_more_horiz_white_24dp"/>
 
     </RelativeLayout>

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:background="@color/dark_ground_04dp"
+        android:background="?attr/mBackground_04dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -19,7 +19,7 @@
             android:layout_weight="0"
             android:layout_gravity="center_vertical"
             android:layout_marginHorizontal="16dp"
-            android:tint="@color/dark_text"
+            android:tint="?attr/mTextPrimary"
             app:srcCompat="@drawable/ic_view_array_white_24dp"/>
 
         <com.google.android.material.tabs.TabLayout
@@ -27,12 +27,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/dark_ground_04dp"
+            android:background="?attr/mBackground_04dp"
             app:tabGravity="center"
             app:tabMode="scrollable"
-            app:tabSelectedTextColor="@color/dark_primary"
+            app:tabSelectedTextColor="?attr/colorPrimary"
             app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
-            app:tabTextColor="@color/dark_text"/>
+            app:tabTextColor="?attr/mTextPrimary"/>
 
         <!--
             <com.google.android.material.tabs.TabItem
@@ -58,7 +58,7 @@
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/dark_ground_00dp"
+        android:background="?attr/mBackground_00dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 

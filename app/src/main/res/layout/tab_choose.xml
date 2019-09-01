@@ -11,7 +11,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@color/dark_ground_00dp"
+    android:background="?attr/mBackground_00dp"
     android:weightSum="100"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -24,7 +24,7 @@
         <TextView
             android:id="@+id/tab_choose_info_text"
             android:text="@string/info_change_tab"
-            android:textColor="@color/dark_primary"
+            android:textColor="?attr/colorPrimary"
             android:textSize="16sp"
             android:layout_centerInParent="true"
             android:layout_width="wrap_content"
@@ -40,7 +40,5 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginBottom="@dimen/activity_vertical_margin"/>
-
-
 </LinearLayout>
 

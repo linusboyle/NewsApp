@@ -5,7 +5,8 @@
   ~ in the root directory or <http://www.gnu.org/licenses/gpl-3.0.html>.
   -->
 
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -15,15 +16,15 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar">
+        android:theme="?attr/mOverlayCompnentStyle">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/dark_ground_08dp"
+            android:background="?attr/mBackground_08dp"
             app:layout_scrollFlags="scroll|enterAlways"
-            app:popupTheme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar" />
+            app:popupTheme="?attr/mOverlayCompnentStyle" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -31,7 +32,7 @@
         android:id="@+id/fragment_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/dark_ground_00dp"
+        android:background="?attr/mBackground_00dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:context=".ui.activity.MainActivity"
         tools:showIn="@layout/app_bar_main">
