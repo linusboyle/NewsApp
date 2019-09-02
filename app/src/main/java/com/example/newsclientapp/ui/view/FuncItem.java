@@ -13,7 +13,7 @@ public class FuncItem {
 	View.OnClickListener shareListener;
 	View.OnClickListener galleryListener;
 
-	public FuncItem (View.OnClickListener shareListener, View.OnClickListener galleryListener, Boolean isFavourite) {
+	public FuncItem (View.OnClickListener shareListener, View.OnClickListener galleryListener) {
 		this.shareListener = shareListener;
 		this.galleryListener = galleryListener;
 	}
