@@ -27,6 +27,9 @@ import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.AdapterView.OnItemClickListener;
+
+import com.example.newsclientapp.listener.OnRearrangeListener;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
