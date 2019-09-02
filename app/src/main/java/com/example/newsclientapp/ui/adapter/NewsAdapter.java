@@ -1,14 +1,16 @@
 package com.example.newsclientapp.ui.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
-import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.newsclientapp.R;
 import com.example.newsclientapp.core.ShareUtils;
@@ -19,6 +21,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.newsclientapp.storage.StorageEntity;
 import com.example.newsclientapp.storage.StorageManager;
+import com.example.newsclientapp.ui.view.FuncItem;
+import com.skydoves.powermenu.CustomPowerMenu;
+import com.skydoves.powermenu.MenuAnimation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,9 +38,22 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 	private OnItemClickListener<StorageEntity> mOnItemClickListener;
 	private FooterViewHolder mFooterViewHolder;
+	private CustomPowerMenu funcMenu;
 
 	public NewsAdapter(Context context) {
 		mContext = context;
+
+		float dp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, mContext.getResources().getDisplayMetrics());
+		Drawable shareIcon = ContextCompat.getDrawable(mContext, R.drawable.ic_menu_share);
+		Drawable galleryIcon = ContextCompat.getDrawable(mContext, R.drawable.ic_menu_gallery);
+		funcMenu = new CustomPowerMenu.Builder<>(mContext, new FuncMenuAdapter())
+				.addItem(new FuncItem(shareIcon, galleryIcon))
+				.setAnimation(MenuAnimation.ELASTIC_BOTTOM_RIGHT)
+				.setMenuRadius(30f)
+				.setMenuShadow(10f)
+				.setShowBackground(false)
+				.setWidth(Math.round(100*dp))
+				.build();
 	}
 
 	@NonNull
@@ -153,23 +171,10 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 				@Override
 				public void onClick(View view) {
 					// TODO
-					// PopupWindow popupWindow = new PopupWindow(mContext);
-					// ArrayList<String> sortList = new ArrayList<String>();
-					// sortList.add("Google+");
-					// sortList.add("Facebook");
-					// sortList.add("Twitter");
-					// ArrayAdapter<String> adapter = new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_dropdown_item_1line, sortList);
-					// ListView listViewSort = new ListView(mContext);
-					// listViewSort.setAdapter(adapter);
-					// // listViewSort.setOnItemClickListener(mContext.onItemClickListener());
-					// popupWindow.setFocusable(true);
-					// popupWindow.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
-					// popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
-					// popupWindow.setContentView(listViewSort);
-					// popupWindow.showAsDropDown(view);
-
-					Log.d("funcIcon", "beforeCall");
-					ShareUtils.share(view.getContext(), newsEntity);
+					// ShareUtils.share(view.getContext(), newsEntity);
+					funcMenu.showAsDropDown(view,
+							view.getMeasuredWidth()/2 - funcMenu.getContentViewWidth(),
+							view.getMeasuredHeight()/2 - funcMenu.getContentViewHeight());
 				}
 			});
 		}

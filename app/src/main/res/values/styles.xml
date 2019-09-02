@@ -7,8 +7,7 @@
 
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="DarkAppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/dark_primary</item>
         <item name="colorPrimaryDark">@color/dark_ground_primary</item>
         <item name="colorAccent">@color/dark_primary</item>
@@ -26,29 +25,15 @@
         <item name="mTextSecondary">@color/dark_subtext</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="DarkAppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+    <style name="DarkAppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
-    <style name="AppTheme.NoActionBar">
+    <style name="DarkAppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
-
-
-    <!-- Dark app theme -->
-    <style name="DarkAppTheme" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar">
-        <item name="colorPrimary">@color/dark_primary</item>
-        <item name="colorPrimaryDark">@color/dark_ground_primary</item>
-        <item name="colorAccent">@color/dark_primary</item>
-        <item name="android:textColorPrimary">@color/dark_text</item>
-
-        <item name="navigationViewStyle">@style/DarkNavigationViewStyle</item>
-        <item name="android:toolbarStyle">@style/DarkToolBarStyle</item>
-    </style>
-
-
 
     <style name="DarkToolBarStyle" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar">
         <item name="android:background">@color/dark_ground_08dp</item>

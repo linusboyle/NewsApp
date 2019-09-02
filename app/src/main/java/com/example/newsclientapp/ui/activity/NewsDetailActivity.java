@@ -134,7 +134,9 @@ public class NewsDetailActivity extends BaseActivity {
 	private void initToolbar (String title) {
 		mToolbar.setTitle(title);
 
-		setSupportActionBar(mToolbar);
+		// setSupportActionBar(mToolbar);
+		createToolBarPopupMenu(mToolbar);
+
 		mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
 		mToolbar.setNavigationOnClickListener(view -> finish());
 	}

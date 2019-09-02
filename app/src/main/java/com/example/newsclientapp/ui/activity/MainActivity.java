@@ -60,7 +60,8 @@ public class MainActivity extends BaseActivity
 
         // toolbar
         this.mToolbar.setTitle(R.string.display_news);
-        setSupportActionBar(this.mToolbar);
+        // setSupportActionBar(this.mToolbar);
+	    createToolBarPopupMenu(mToolbar);
 
         // drawer_layout
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

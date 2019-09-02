@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2019 Zhilei Han and Yihao Chen.
+  ~ This software falls under the GNU general public license version 3 or later.
+  ~ It comes WITHOUT ANY WARRANTY WHATSOEVER. For details, see the file LICENSE
+  ~ in the root directory or <http://www.gnu.org/licenses/gpl-3.0.html>.
+  -->
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:background="?attr/mBackground_08dp"
+    android:weightSum="100"
+    android:layout_width="match_parent"
+    android:layout_height="40dp">
+
+    <ImageView
+        android:id="@+id/item_button_icon"
+        android:src="@drawable/ic_menu_share"
+        android:tint="?attr/mTextPrimary"
+        android:layout_margin="@dimen/activity_horizontal_margin_half"
+        android:layout_weight="10"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"/>
+
+    <TextView
+        android:id="@+id/item_button_text"
+        android:gravity="start|center_vertical"
+        android:layout_margin="@dimen/activity_horizontal_margin_half"
+        android:textColor="?attr/mTextPrimary"
+        android:text="hello world"
+        android:layout_weight="60"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"/>
+
+    <com.suke.widget.SwitchButton
+        android:id="@+id/item_button"
+        android:layout_margin="@dimen/activity_horizontal_margin_half"
+        app:sb_button_color="?attr/colorPrimary"
+        android:layout_weight="30"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>
