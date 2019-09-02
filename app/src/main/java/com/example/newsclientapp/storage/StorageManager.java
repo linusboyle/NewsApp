@@ -10,6 +10,7 @@ package com.example.newsclientapp.storage;
 import android.content.Context;
 import android.util.Log;
 
+import com.example.newsclientapp.core.NewsCategory;
 import com.example.newsclientapp.listener.OnNewsGotListener;
 import com.example.newsclientapp.network.NewsEntity;
 
@@ -33,6 +34,7 @@ public class StorageManager {
 	private static final String FAVORITE_DIR= "favorite";
 	private static final String CONFIGURATION_DIR = "configuration";
 	private static final String SEARCH_HISTORY = "search_history";
+	private static final String TAB_HISTORY = "tab_history";
 	private static final String TAG = "StorageManager";
 	private static StorageManager instance;
 
@@ -166,7 +168,6 @@ public class StorageManager {
 		});
 	}
 
-	@SuppressWarnings("UnusedReturnValue")
 	public boolean addCache(NewsEntity newsEntity) {
 		caches.add(newsEntity.getNewsID());
 		return syncCacheAccess.addCache(newsEntity);
@@ -194,7 +195,7 @@ public class StorageManager {
 		return syncCacheAccess.removeCache(newsEntity);
 	}
 
-	public boolean updateSearchHistory(ArrayList<String> searchHistory) {
+	public boolean updateSearchHistory(List<String> searchHistory) {
 		StringBuilder stringBuilder = new StringBuilder();
 		for (String s : searchHistory) {
 			stringBuilder.append(s);
@@ -204,13 +205,25 @@ public class StorageManager {
 		return syncCacheAccess.writeString(search_his_file, stringBuilder.toString());
 	}
 
-	public ArrayList<String> getSearchHistorySync () {
+	public boolean updateTabHistory(List<String> tabs) {
+		StringBuilder stringBuilder = new StringBuilder();
+		for (String s : tabs) {
+			stringBuilder.append(s);
+			stringBuilder.append('\n');
+		}
+		File tab_his_file = new File(configuration_dir, TAB_HISTORY);
+		return syncCacheAccess.writeString(tab_his_file, stringBuilder.toString());
+	}
+
+	public List<String> getSearchHistorySync () {
 		try {
 			ArrayList<String> retval = new ArrayList<>();
 			File search_his_file = new File(configuration_dir, SEARCH_HISTORY);
 			Scanner sc = new Scanner(search_his_file);
 			while (sc.hasNextLine()) {
-				retval.add(sc.nextLine());
+				String nextline = sc.nextLine();
+				if (!nextline.trim().equals(""))
+					retval.add(nextline);
 			}
 
 			return retval;
@@ -220,4 +233,21 @@ public class StorageManager {
 		}
 	}
 
+	public List<String> getTabHistory () {
+		try {
+			ArrayList<String> retval = new ArrayList<>();
+			File tab_his_file = new File(configuration_dir, TAB_HISTORY);
+			Scanner sc = new Scanner(tab_his_file);
+			while (sc.hasNextLine()) {
+				String nextline = sc.nextLine();
+				if (!nextline.trim().equals(""))
+					retval.add(nextline);
+			}
+
+			return retval;
+		} catch (FileNotFoundException e) {
+			// it's the first time running this app, no search history:
+			return NewsCategory.getCategories();
+		}
+	}
 }

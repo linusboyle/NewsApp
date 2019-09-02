@@ -1,6 +1,7 @@
 package com.example.newsclientapp.ui.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
@@ -29,6 +30,7 @@ import java.util.List;
 public class NewsFragment extends LazyFragment implements NewsView {
 
 	private final static String CATEGORY = "category";
+	private final static String TAG = "NewsFragment";
 	private final static int COUNT_PER_PAGE = 15;
 	private final static int BUFFER_MAX = 60;
 
@@ -135,7 +137,8 @@ public class NewsFragment extends LazyFragment implements NewsView {
 		mAdapter.setOnItemClickListener(new OnItemClickListener<NewsEntity>() {
 			@Override
 			public void onItemClick(View view, NewsEntity data) {
-				StorageManager.getInstance().addCache(data);
+				if (!StorageManager.getInstance().addCache(data))
+					Log.w(TAG, "add to cache has failed");
 				NewsDetailActivity.startActivity(getActivity(), data);
 			}
 		});

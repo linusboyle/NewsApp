@@ -15,8 +15,10 @@ import android.widget.TextView;
 import androidx.cardview.widget.CardView;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.newsclientapp.BuildConfig;
 import com.example.newsclientapp.R;
 import com.example.newsclientapp.core.NewsCategory;
+import com.example.newsclientapp.storage.StorageManager;
 import com.example.newsclientapp.ui.adapter.ViewPagerAdapter;
 import com.example.newsclientapp.ui.view.DraggableGridView;
 import com.google.android.material.tabs.TabLayout;
@@ -34,6 +36,8 @@ public class NewsTabFragment extends BaseFragment {
     private static final int SECOND_PRIMARY_COLOR = 0xFFE91E63;
     private static final int GROUND_02dp_COLOR = 0xFF242424;
 
+    private static final String TAG = "NewsTabFragment";
+
     @BindView(R.id.tab_function) ImageView mTabFunc;
     @BindView(R.id.tab_layout) TabLayout mTabLayout;
     @BindView(R.id.view_pager) ViewPager mViewPager;
@@ -44,7 +48,7 @@ public class NewsTabFragment extends BaseFragment {
 
     private ViewPagerAdapter mViewPagerAdapter;
 
-    float dp2pixel(int dp) {
+    private float dp2pixel (@SuppressWarnings("SameParameterValue") int dp) {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
     }
 
@@ -64,6 +68,7 @@ public class NewsTabFragment extends BaseFragment {
         // init tabLayout and viewPager
 	    setTabFragment(categoryChosenList);
 
+        //noinspection Convert2Lambda
         mTabGridlayout.setOnItemClickListener(new AdapterView.OnItemClickListener() {
         	@Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -72,16 +77,16 @@ public class NewsTabFragment extends BaseFragment {
                 if (cardClicked != null) {
                 	cardClicked.toggle();
                 } else {
-                    Log.e("NewsTabFragment", "Position undefined: " + position);
+                    Log.e(TAG, "Position undefined: " + position);
                 }
             }
         });
         mTabChoose.setVisibility(View.GONE);
 
+        //noinspection Convert2Lambda
         mTabFunc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View view) {
-                // TODO update chosen list
                 if (mViewPager.getVisibility() == View.VISIBLE) {
                     mTabFunc.setColorFilter(PRIMARY_COLOR);
                     mViewPager.setVisibility(View.GONE);
@@ -92,7 +97,11 @@ public class NewsTabFragment extends BaseFragment {
                     mTabFunc.setColorFilter(TEXT_COLOR);
                     mViewPager.setVisibility(View.VISIBLE);
                     mTabChoose.setVisibility(View.GONE);
-                    setTabFragment(getChosenCategoryList());
+                    List<String> chosenCategoryList = getChosenCategoryList();
+                    if (!StorageManager.getInstance().updateTabHistory(chosenCategoryList)) {
+                        Log.w(TAG, "updating the tabs config has failed!");
+                    }
+                    setTabFragment(chosenCategoryList);
                 }
             }
         });
@@ -106,6 +115,9 @@ public class NewsTabFragment extends BaseFragment {
 
     	// add chosen category according to sequence
     	for (String category: categoryChosenList) {
+    	    if (BuildConfig.DEBUG && !NewsCategory.getCategories().contains(category)) {
+    	        throw new AssertionError();
+            }
             addChooseCard(category, true);
             unchosenCategoryPool.remove(category);
         }
@@ -158,8 +170,7 @@ public class NewsTabFragment extends BaseFragment {
     }
 
     private List<String> restoreCategoryChosen() {
-        // TODO: logic to restore
-        return NewsCategory.getCategories();
+        return StorageManager.getInstance().getTabHistory();
     }
 
     private ViewGroup getTabViewGroup() {
@@ -208,7 +219,7 @@ public class NewsTabFragment extends BaseFragment {
             this.category = category;
 
             mTextView.setText(category);
-            setChosen(true);
+            setChosen(chosen);
         }
 
         public Boolean isChosen() {
@@ -235,6 +246,7 @@ public class NewsTabFragment extends BaseFragment {
             return this.category;
         }
 
+        @SuppressWarnings("UnusedReturnValue")
         public Boolean toggle() {
         	setChosen(!chosen);
         	return chosen;

@@ -13,7 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.newsclientapp.R;
-import com.example.newsclientapp.core.ShareUtils;
 import com.example.newsclientapp.listener.OnItemClickListener;
 import com.example.newsclientapp.listener.OnReloadClickListener;
 import com.example.newsclientapp.network.NewsEntity;

@@ -26,6 +26,7 @@ import com.example.newsclientapp.R;
 import com.example.newsclientapp.storage.StorageManager;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 
@@ -37,7 +38,7 @@ public class SearchFragment extends BaseFragment implements SearchView.OnQueryTe
 	private final static String TAG = "SearchFragment";
 
 	private final ArrayList<String> suggestionsArray = new ArrayList<>();
-	private ArrayList<String> historyArray;
+	private List<String> historyArray;
 	private SuggestAdapter suggestAdapter;
 
 	@Override
