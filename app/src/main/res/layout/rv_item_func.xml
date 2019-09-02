@@ -20,15 +20,15 @@
     <ImageView
         android:id="@+id/item_func_shareIcon"
         android:src="@drawable/ic_menu_share"
-        android:tint="@color/dark_second_primary"
+        android:tint="?attr/mTextPrimary"
         android:layout_width="wrap_content"
         android:layout_margin="@dimen/activity_horizontal_margin_half"
         android:layout_height="match_parent"/>
 
     <ImageView
         android:id="@+id/item_func_galleryIcon"
-        android:src="@drawable/ic_menu_gallery"
-        android:tint="@color/dark_second_primary"
+        android:src="@drawable/ic_star"
+        android:tint="?attr/mTextPrimary"
         android:layout_margin="@dimen/activity_horizontal_margin_half"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"/>
