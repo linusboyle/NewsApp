@@ -109,6 +109,7 @@ public class NewsDetailActivity extends BaseActivity {
 	protected void initData (Bundle savedInstanceState) {
         NewsEntity news = (NewsEntity) getIntent().getSerializableExtra(DATA);
 
+		assert news != null;
 		isFavorite = StorageManager.getInstance().getFavoritesList().contains(news.getNewsID());
 
 		String[] picUrls = news.getImageURLs();
@@ -122,9 +123,7 @@ public class NewsDetailActivity extends BaseActivity {
 
 		// fab
 		mFabMenu.setClosedOnTouchOutside(true);
-		mVoice.setOnClickListener(view -> {
-			startTTS();
-		});
+		mVoice.setOnClickListener(view -> startTTS());
 		mShare.setOnClickListener(view -> {
 			ShareUtils.share(view.getContext(), news);
 			if (mFabMenu.isOpened())

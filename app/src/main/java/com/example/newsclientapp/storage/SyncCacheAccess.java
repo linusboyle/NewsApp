@@ -172,6 +172,7 @@ public class SyncCacheAccess implements Runnable {
 	public void run () {
 		Log.i(TAG, "Thread start");
 		try {
+			//noinspection InfiniteLoopStatement
 			while (true) {
 				CacheAction cacheAction = queue.take();
 				doAction(cacheAction);

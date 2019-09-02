@@ -1,5 +1,6 @@
 package com.example.newsclientapp.ui.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
@@ -131,6 +132,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 			title.setTextColor(mContext.getResources().getColor(R.color.dark_text));
 		}
 
+		@SuppressLint("SetTextI18n")
 		void loadViewHolder(final NewsEntity newsEntity) {
 			String[] picUrls = newsEntity.getImageURLs();
 			if (picUrls == null || picUrls.length == 0 || TextUtils.isEmpty(picUrls[0])) {
@@ -154,6 +156,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 			description.setText("来源：" + newsEntity.getPublisher());
 			datetime.setText(newsEntity.getPublishTime());
 
+			//noinspection Convert2Lambda
 			itemView.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View view) {
@@ -164,11 +167,10 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 				}
 			});
 
+			//noinspection Convert2Lambda
 			funcIcon.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View view) {
-					// TODO
-					// ShareUtils.share(view.getContext(), newsEntity);
 					funcMenu.showAsDropDown(view,
 							view.getMeasuredWidth()/2 - funcMenu.getContentViewWidth(),
 							view.getMeasuredHeight()/2 - funcMenu.getContentViewHeight());
@@ -218,6 +220,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 	public void setNetError() {
 		mFooterViewHolder.prompt.setText("加载失败，点击重试");
+		//noinspection Convert2Lambda
 		mFooterViewHolder.prompt.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {

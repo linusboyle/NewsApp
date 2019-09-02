@@ -42,6 +42,7 @@ public class StorageManager {
 	private HashSet<String> caches = new HashSet<>();
 
 	private SyncCacheAccess syncCacheAccess;
+	@SuppressWarnings("FieldCanBeLocal")
 	private Thread _thread;
 	private File configuration_dir;
 
