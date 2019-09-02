@@ -23,8 +23,10 @@ public class ButtonItemAdapter extends MenuBaseAdapter<ButtonItem> {
 	public View getView(int index, View view, ViewGroup viewGroup) {
 		final Context context = viewGroup.getContext();
 
-		if (view == null)
-			view = LayoutInflater.from(context).inflate(R.layout.rv_item_button, viewGroup, false);
+		if (view == null) {
+			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			view = inflater.inflate(R.layout.rv_item_button, viewGroup, false);
+		}
 
 		ButtonItem item = (ButtonItem) getItem(index);
 		final ImageView itemIcon = view.findViewById(R.id.item_button_icon);
@@ -37,8 +39,8 @@ public class ButtonItemAdapter extends MenuBaseAdapter<ButtonItem> {
 			itemButton.setOnCheckedChangeListener(itemListener);
 			itemButton.setChecked(item.getIsChecked());
 		} else {
-			// itemButton.setEnabled(false);
-			// itemButton.setVisibility(View.INVISIBLE);
+			itemButton.setEnabled(false);
+			itemButton.setVisibility(View.INVISIBLE);
 		}
 
 		return super.getView(index, view, viewGroup);

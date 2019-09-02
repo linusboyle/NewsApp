@@ -31,28 +31,21 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 	private static final int TYPE_ITEM = 1;
 	private static final int TYPE_FOOTER = 2;
+	private final float dp;
+	private final Drawable shareIcon;
+	private final Drawable galleryIcon;
 
 	private Context mContext;
 	private List<NewsEntity> mList = new ArrayList<>();
 
 	private OnItemClickListener<NewsEntity> mOnItemClickListener;
 	private FooterViewHolder mFooterViewHolder;
-	private CustomPowerMenu funcMenu;
 
 	public NewsAdapter(Context context) {
 		mContext = context;
-
-		float dp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, mContext.getResources().getDisplayMetrics());
-		Drawable shareIcon = ContextCompat.getDrawable(mContext, R.drawable.ic_menu_share);
-		Drawable galleryIcon = ContextCompat.getDrawable(mContext, R.drawable.ic_menu_gallery);
-		funcMenu = new CustomPowerMenu.Builder<>(mContext, new FuncMenuAdapter())
-				.addItem(new FuncItem(shareIcon, galleryIcon))
-				.setAnimation(MenuAnimation.ELASTIC_BOTTOM_RIGHT)
-				.setMenuRadius(30f)
-				.setMenuShadow(10f)
-				.setShowBackground(false)
-				.setWidth(Math.round(100*dp))
-				.build();
+		dp = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, mContext.getResources().getDisplayMetrics());
+		shareIcon = ContextCompat.getDrawable(mContext, R.drawable.ic_menu_share);
+		galleryIcon = ContextCompat.getDrawable(mContext, R.drawable.ic_menu_gallery);
 	}
 
 	@NonNull
@@ -165,11 +158,50 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 				}
 			});
 
+			View.OnClickListener shareListener = new View.OnClickListener() {
+				@Override
+				public void onClick (View view) {
+					ShareUtils.share(view.getContext(), newsEntity);
+				}
+			};
+
+			View.OnClickListener galleryListener = new View.OnClickListener() {
+				@Override
+				public void onClick (View view) {
+					Boolean isFavourite = StorageManager.getInstance().getFavoritesList().contains(newsEntity.getNewsID());
+					if (isFavourite) {
+						if (StorageManager.getInstance().unsetFavorite(newsEntity)) {
+							Toast.makeText(view.getContext(), "已删除收藏", Toast.LENGTH_LONG).show();
+							((ImageView) view).setImageDrawable(mContext.getDrawable(R.drawable.ic_star_border_white_24dp));
+							((ImageView) view).setColorFilter(ContextCompat.getColor(view.getContext(), R.color.dark_text));
+						} else {
+							Toast.makeText(view.getContext(), "操作失败", Toast.LENGTH_LONG).show();
+						}
+					} else {
+						if (StorageManager.getInstance().setFavorite(newsEntity)) {
+							Toast.makeText(view.getContext(), "已添加到收藏", Toast.LENGTH_LONG).show();
+							((ImageView) view).setImageDrawable(mContext.getDrawable(R.drawable.ic_star_white_24dp));
+							((ImageView) view).setColorFilter(ContextCompat.getColor(view.getContext(), R.color.dark_second_primary));
+						} else {
+							Toast.makeText(view.getContext(), "操作失败", Toast.LENGTH_LONG).show();
+						}
+					}
+				}
+			};
+
+			Boolean isFavourite = StorageManager.getInstance().getFavoritesList().contains(newsEntity.getNewsID());
+			CustomPowerMenu funcMenu = new CustomPowerMenu.Builder<>(mContext, new FuncMenuAdapter())
+					.addItem(new FuncItem(shareListener, galleryListener, isFavourite))
+					.setAnimation(MenuAnimation.ELASTIC_BOTTOM_RIGHT)
+					.setMenuRadius(30f)
+					.setMenuShadow(10f)
+					.setShowBackground(false)
+					.setWidth(Math.round(100*dp))
+					.build();
+
 			funcIcon.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View view) {
-					// TODO
-					// ShareUtils.share(view.getContext(), newsEntity);
 					funcMenu.showAsDropDown(view,
 							view.getMeasuredWidth()/2 - funcMenu.getContentViewWidth(),
 							view.getMeasuredHeight()/2 - funcMenu.getContentViewHeight());
