@@ -23,6 +23,7 @@ import androidx.cursoradapter.widget.CursorAdapter;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.newsclientapp.R;
+import com.example.newsclientapp.storage.StorageManager;
 
 import java.util.ArrayList;
 
@@ -36,7 +37,7 @@ public class SearchFragment extends BaseFragment implements SearchView.OnQueryTe
 	private final static String TAG = "SearchFragment";
 
 	private final ArrayList<String> suggestionsArray = new ArrayList<>();
-	private final ArrayList<String> historyArray = new ArrayList<>();
+	private ArrayList<String> historyArray;
 	private SuggestAdapter suggestAdapter;
 
 	@Override
@@ -46,6 +47,7 @@ public class SearchFragment extends BaseFragment implements SearchView.OnQueryTe
 
 	@Override
 	protected void initData (ViewGroup container, Bundle savedInstanceState) {
+		historyArray = StorageManager.getInstance().getSearchHistorySync();
 		mView.setQueryRefinementEnabled(true);
 		mView.setIconifiedByDefault(false);
 		mView.setSubmitButtonEnabled(true);
@@ -67,8 +69,11 @@ public class SearchFragment extends BaseFragment implements SearchView.OnQueryTe
 	public boolean onQueryTextSubmit (String s) {
 		mView.clearFocus();
 		changeFragment(s);
-		if (!historyArray.contains(s))
+		if (!historyArray.contains(s)) {
 			historyArray.add(s);
+			if (!StorageManager.getInstance().updateSearchHistory(historyArray))
+				Log.w(TAG, "update search history has failed");
+		}
 
 		suggestionsArray.clear();
 		MatrixCursor matrixCursor = getCursor(suggestionsArray);

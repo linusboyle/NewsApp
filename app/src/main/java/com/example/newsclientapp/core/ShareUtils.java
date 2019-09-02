@@ -114,47 +114,4 @@ public class ShareUtils {
 			}
 		}
 	}
-
-	/*
-	class SaveImageTask extends AsyncTask<String, Void, File> {
-
-		@Override
-		protected File doInBackground (String... strings) {
-			try {
-				URL url = new URL(strings[0]);
-				HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-				httpURLConnection.setConnectTimeout(5 * 1000);
-				httpURLConnection.setReadTimeout(5 * 1000);
-
-				File root = new File(Environment.getDataDirectory(), EXTERNAL_TMP_DIR);
-				if (!root.exists()) {
-					root.mkdir();
-				}
-				File target = new File(root, UUID.randomUUID().toString());
-				FileOutputStream fileOutputStream = new FileOutputStream(target);
-				if (httpURLConnection.getResponseCode() == 200) {
-					InputStream inputStream = httpURLConnection.getInputStream();
-					int next = 0;
-					byte[] bytes = new byte[2048];
-					while((next = inputStream.read(bytes)) > 0) {
-						fileOutputStream.write(bytes, 0, next);
-					}
-					fileOutputStream.flush();
-					fileOutputStream.close();
-					inputStream.close();
-					return target;
-				}
-			} catch (IOException e) {
-				Log.w(TAG, "exception: " + e.getMessage());
-			}
-
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(File file) {
-
-		}
-	}
-	*/
 }

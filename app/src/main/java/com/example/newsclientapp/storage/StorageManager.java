@@ -10,15 +10,17 @@ package com.example.newsclientapp.storage;
 import android.content.Context;
 import android.util.Log;
 
-import com.example.newsclientapp.listener.onCacheGotListener;
+import com.example.newsclientapp.listener.OnNewsGotListener;
 import com.example.newsclientapp.network.NewsEntity;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Scanner;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -29,6 +31,8 @@ import io.reactivex.schedulers.Schedulers;
 public class StorageManager {
 	private static final String CACHE_DIR = "cache";
 	private static final String FAVORITE_DIR= "favorite";
+	private static final String CONFIGURATION_DIR = "configuration";
+	private static final String SEARCH_HISTORY = "search_history";
 	private static final String TAG = "StorageManager";
 	private static StorageManager instance;
 
@@ -37,6 +41,7 @@ public class StorageManager {
 
 	private SyncCacheAccess syncCacheAccess;
 	private Thread _thread;
+	private File configuration_dir;
 
 	private StorageManager() { }
 
@@ -49,6 +54,8 @@ public class StorageManager {
 	public void init(Context context) {
 		File cacheDir = context.getDir(CACHE_DIR, Context.MODE_PRIVATE);
 		File favoriteDir = context.getDir(FAVORITE_DIR, Context.MODE_PRIVATE);
+		configuration_dir = context.getDir(CONFIGURATION_DIR, Context.MODE_PRIVATE);
+
 		syncCacheAccess = new SyncCacheAccess(cacheDir, favoriteDir);
 		_thread = new Thread(syncCacheAccess);
 		_thread.start();
@@ -99,10 +106,10 @@ public class StorageManager {
 		return favorites;
 	}
 
-	public void getCache(Context context, String newsId, onCacheGotListener listener) {
+	public void getCache(Context context, String newsId, OnNewsGotListener listener) {
 		File cache = context.getDir(CACHE_DIR, Context.MODE_PRIVATE);
 		File target = new File(cache, newsId);
-		FileLoader<NewsEntity> fileLoader = new FileLoader<>(listener::onCacheGot);
+		FileLoader<NewsEntity> fileLoader = new FileLoader<>(listener::onNewsGot);
 		fileLoader.execute(target);
 	}
 
@@ -112,6 +119,7 @@ public class StorageManager {
 				.map(file -> {
 					File [] files = file.listFiles();
 					List<NewsEntity> retval = new ArrayList<>();
+					assert files != null;
 					for (File f : files) {
 						FileInputStream fileInputStream = new FileInputStream(f);
 						ObjectInputStream objectInputStream  = new ObjectInputStream(fileInputStream);
@@ -142,25 +150,74 @@ public class StorageManager {
 				});
 	}
 
-	public void addCache(NewsEntity newsEntity) {
+	// check the returned object if you call this function
+	public<T> Observable<T> getObject(File target) {
+		return Observable.just(target).map(file -> {
+			if (file.exists()) {
+				FileInputStream fileInputStream = new FileInputStream(file);
+				ObjectInputStream objectInputStream  = new ObjectInputStream(fileInputStream);
+				T retval = (T)objectInputStream.readObject();
+				objectInputStream.close();
+				fileInputStream.close();
+				return retval;
+			} else {
+				return null;
+			}
+		});
+	}
+
+	@SuppressWarnings("UnusedReturnValue")
+	public boolean addCache(NewsEntity newsEntity) {
 		caches.add(newsEntity.getNewsID());
-		syncCacheAccess.addAction(new SyncCacheAccess.CacheAction(
-				SyncCacheAccess.CacheActionEnum.CACHE_WRITE, newsEntity));
+		return syncCacheAccess.addCache(newsEntity);
 	}
 
 	public boolean setFavorite(NewsEntity newsEntity) {
-		syncCacheAccess.addAction(new SyncCacheAccess.CacheAction(
-				SyncCacheAccess.CacheActionEnum.CACHE_WRITE, newsEntity));
+		// favorite must be cached
+		addCache(newsEntity);
 		favorites.add(newsEntity.getNewsID());
-		return syncCacheAccess.addAction(new SyncCacheAccess.CacheAction(
-				SyncCacheAccess.CacheActionEnum.CACHE_FAVORITE_ADD, newsEntity));
+		return syncCacheAccess.setFavorite(newsEntity);
 	}
 
 	public boolean unsetFavorite(NewsEntity newsEntity) {
-		syncCacheAccess.addAction(new SyncCacheAccess.CacheAction(
-				SyncCacheAccess.CacheActionEnum.CACHE_WRITE, newsEntity));
+		// no need to remove or add cache here.
 		favorites.remove(newsEntity.getNewsID());
-		return syncCacheAccess.addAction(new SyncCacheAccess.CacheAction(
-				SyncCacheAccess.CacheActionEnum.CACHE_FAVORITE_REMOVE, newsEntity));
+		return syncCacheAccess.unsetFavorite(newsEntity);
 	}
+
+	public boolean writeObject(File target, Object object) {
+		return syncCacheAccess.writeObject(target, object);
+	}
+
+	public boolean removeCache(NewsEntity newsEntity) {
+		caches.remove(newsEntity.getNewsID());
+		return syncCacheAccess.removeCache(newsEntity);
+	}
+
+	public boolean updateSearchHistory(ArrayList<String> searchHistory) {
+		StringBuilder stringBuilder = new StringBuilder();
+		for (String s : searchHistory) {
+			stringBuilder.append(s);
+			stringBuilder.append('\n');
+		}
+		File search_his_file = new File(configuration_dir, SEARCH_HISTORY);
+		return syncCacheAccess.writeString(search_his_file, stringBuilder.toString());
+	}
+
+	public ArrayList<String> getSearchHistorySync () {
+		try {
+			ArrayList<String> retval = new ArrayList<>();
+			File search_his_file = new File(configuration_dir, SEARCH_HISTORY);
+			Scanner sc = new Scanner(search_his_file);
+			while (sc.hasNextLine()) {
+				retval.add(sc.nextLine());
+			}
+
+			return retval;
+		} catch (FileNotFoundException e) {
+			// it's the first time running this app, no search history:
+			return new ArrayList<>();
+		}
+	}
+
 }

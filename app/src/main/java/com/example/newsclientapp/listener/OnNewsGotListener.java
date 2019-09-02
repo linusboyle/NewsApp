@@ -9,6 +9,6 @@ package com.example.newsclientapp.listener;
 
 import com.example.newsclientapp.network.NewsEntity;
 
-public interface onCacheGotListener {
-	void onCacheGot(NewsEntity entity);
+public interface OnNewsGotListener {
+	void onNewsGot (NewsEntity entity);
 }

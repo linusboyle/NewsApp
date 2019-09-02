@@ -25,24 +25,17 @@ public class SyncCacheAccess implements Runnable {
 		CACHE_DELETE,
 		CACHE_FAVORITE_ADD,
 		CACHE_FAVORITE_REMOVE,
+		STRING_WIRTE,
+		OBJECT_WRITE,
 	}
 
-	static class CacheAction {
+	private class CacheAction {
 		CacheActionEnum action;
 		NewsEntity newsEntity;
+		Object object;
+		File file;
 
-		CacheAction (CacheActionEnum action, NewsEntity newsEntity) {
-			this.action = action;
-			this.newsEntity = newsEntity;
-		}
-
-		CacheActionEnum getAction () {
-			return action;
-		}
-
-		NewsEntity getNewsEntity () {
-			return newsEntity;
-		}
+		CacheAction () {}
 	}
 
 	private LinkedBlockingQueue<CacheAction> queue;
@@ -55,7 +48,51 @@ public class SyncCacheAccess implements Runnable {
 		this.queue = new LinkedBlockingQueue<>();
 	}
 
-	boolean addAction(CacheAction cacheAction) {
+	boolean addCache(NewsEntity newsEntity) {
+		CacheAction cacheAction = new CacheAction();
+		cacheAction.newsEntity = newsEntity;
+		cacheAction.action = CacheActionEnum.CACHE_WRITE;
+		return addAction(cacheAction);
+	}
+
+	boolean removeCache(NewsEntity newsEntity) {
+		CacheAction cacheAction = new CacheAction();
+		cacheAction.newsEntity = newsEntity;
+		cacheAction.action = CacheActionEnum.CACHE_DELETE;
+		return addAction(cacheAction);
+	}
+
+	boolean setFavorite(NewsEntity newsEntity) {
+		CacheAction cacheAction = new CacheAction();
+		cacheAction.newsEntity = newsEntity;
+		cacheAction.action = CacheActionEnum.CACHE_FAVORITE_ADD;
+		return addAction(cacheAction);
+	}
+
+	boolean unsetFavorite(NewsEntity newsEntity) {
+		CacheAction cacheAction = new CacheAction();
+		cacheAction.newsEntity = newsEntity;
+		cacheAction.action = CacheActionEnum.CACHE_FAVORITE_REMOVE;
+		return addAction(cacheAction);
+	}
+
+	boolean writeObject(File target, Object object) {
+		CacheAction cacheAction = new CacheAction();
+		cacheAction.object = object;
+		cacheAction.file = target;
+		cacheAction.action = CacheActionEnum.OBJECT_WRITE;
+		return addAction(cacheAction);
+	}
+
+	boolean writeString(File target, String string) {
+		CacheAction cacheAction = new CacheAction();
+		cacheAction.object = string;
+		cacheAction.file = target;
+		cacheAction.action = CacheActionEnum.STRING_WIRTE;
+		return addAction(cacheAction);
+	}
+
+	private boolean addAction(CacheAction cacheAction) {
 		try {
 			queue.put(cacheAction);
 			return true;
@@ -65,14 +102,14 @@ public class SyncCacheAccess implements Runnable {
 		return false;
 	}
 
-	private void doAction(CacheAction cacheActionPair) {
+	private void doAction(CacheAction cacheAction) {
 		Log.i(TAG, "Start a new action");
-		CacheActionEnum cacheActionEnum = cacheActionPair.getAction();
-		NewsEntity newsEntity = cacheActionPair.getNewsEntity();
+		CacheActionEnum cacheActionEnum = cacheAction.action;
 
 		try {
 			switch (cacheActionEnum) {
 				case CACHE_WRITE: {
+					NewsEntity newsEntity = cacheAction.newsEntity;
 					File target = new File(cache_root, newsEntity.getNewsID());
 					PrintStream printStream = new PrintStream(target);
 					ObjectOutputStream objectOutputStream =
@@ -83,6 +120,7 @@ public class SyncCacheAccess implements Runnable {
 					break;
 				}
 				case CACHE_DELETE: {
+					NewsEntity newsEntity = cacheAction.newsEntity;
 					File target = new File(cache_root, newsEntity.getNewsID());
 					if (target.exists())
 						if (!target.delete())
@@ -90,21 +128,43 @@ public class SyncCacheAccess implements Runnable {
 					break;
 				}
 				case CACHE_FAVORITE_ADD: {
+					NewsEntity newsEntity = cacheAction.newsEntity;
 					File target = new File(favorite_root, newsEntity.getNewsID());
 					if (!target.createNewFile())
 						throw new IOException("Create favorite file failed");
 					break;
 				}
 				case CACHE_FAVORITE_REMOVE: {
+					NewsEntity newsEntity = cacheAction.newsEntity;
 					File target = new File(favorite_root, newsEntity.getNewsID());
 					if (target.exists())
 						if (!target.delete())
 							throw new IOException("Delete favorite file failed");
 					break;
 				}
+				case OBJECT_WRITE: {
+					Object object = cacheAction.object;
+					File target = cacheAction.file;
+					PrintStream printStream = new PrintStream(target);
+					ObjectOutputStream objectOutputStream =
+							new ObjectOutputStream(printStream);
+					objectOutputStream.writeObject(object);
+					objectOutputStream.close();
+					printStream.close();
+					break;
+				}
+				case STRING_WIRTE: {
+					String string = (String)cacheAction.object;
+					assert string != null;
+					File target = cacheAction.file;
+					PrintStream printStream = new PrintStream(target);
+					printStream.println(string);
+					printStream.close();
+					break;
+				}
 			}
 		} catch (IOException e) {
-			Log.w(TAG, "exception in queue action:" + e.getMessage());
+			Log.w(TAG, "IOException in queue action:" + e.getMessage());
 		}
 	}
 
@@ -118,6 +178,8 @@ public class SyncCacheAccess implements Runnable {
 			}
 		} catch (InterruptedException e) {
 			Log.i(TAG, "Interrupted" + e.getMessage());
+		} catch (Exception e) {
+			Log.i(TAG, "Exception thrown inside message thread:" + e.getMessage());
 		}
 	}
 }
