@@ -33,4 +33,5 @@
 
     <string name="transition_photos">transition_animation_news_photos</string>
     <string name="fab_voice">朗读</string>
+    <string name="search_hint">输入关键词</string>
 </resources>

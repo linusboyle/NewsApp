@@ -8,6 +8,7 @@
 package com.example.newsclientapp.ui.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -52,7 +53,6 @@ public class SearchResultFragment extends LazyFragment implements NewsView {
 	private List<NewsEntity> newsBuffer;
 	private int page = 1;
 	private NewsAdapter mAdapter;
-	// private String keyword;
 
 	@Inject
 	NewsPresenter mPresenter;
@@ -74,21 +74,12 @@ public class SearchResultFragment extends LazyFragment implements NewsView {
 		initRecyclerView();
 	}
 
-	/*
-	public void changeKeyword(String keyword) {
-		// this.keyword = keyword;
-		mAdapter.clear();
-		requestNews();
-	}
-	*/
-
 	@Override
 	protected void onInvisible() {
 	}
 
 	@Override
 	protected void initData() {
-		// keyword = getArguments().getString(KEYWORD);
 		requestNews();
 	}
 
@@ -196,6 +187,7 @@ public class SearchResultFragment extends LazyFragment implements NewsView {
 		closeRefreshing();
 		if (mAdapter.getItemCount() == 0) {
 			Toast.makeText(getContext(), "加载出错：" + errorMsg, Toast.LENGTH_SHORT).show();
+			Log.e("SearchResultFragment", errorMsg);
 		} else {
 			mAdapter.setNetError();
 		}

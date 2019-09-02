@@ -7,24 +7,16 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/search_bar"
+    <TextView
+        android:id="@+id/tvSearchTerm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:closeIcon="@drawable/ic_clear"
-        app:goIcon="@drawable/ic_right_arrow"
-        app:searchHintIcon="@drawable/ic_search"
-        app:searchIcon="@drawable/ic_search" />
-
-    <FrameLayout
-        android:id="@+id/search_frame"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    </FrameLayout>
+        android:background="@color/dark_ground_01dp"
+        android:text="@string/app_name"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
 
 </LinearLayout>
