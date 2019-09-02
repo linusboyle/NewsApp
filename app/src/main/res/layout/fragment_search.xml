@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2019 Zhilei Han and Yihao Chen.
+  ~ This software falls under the GNU general public license version 3 or later.
+  ~ It comes WITHOUT ANY WARRANTY WHATSOEVER. For details, see the file LICENSE
+  ~ in the root directory or <http://www.gnu.org/licenses/gpl-3.0.html>.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <SearchView
+        android:id="@+id/search_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:closeIcon="@drawable/ic_clear"
+        android:goIcon="@drawable/ic_right_arrow"
+        android:searchHintIcon="@drawable/ic_search"
+        android:searchIcon="@drawable/ic_search" />
+
+    <FrameLayout
+        android:id="@+id/search_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </FrameLayout>
+
+</LinearLayout>

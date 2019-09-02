@@ -10,7 +10,9 @@ package com.example.newsclientapp.ui.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.*;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,14 +26,34 @@ import com.example.newsclientapp.network.NewsEntity;
 
 import androidx.appcompat.widget.Toolbar;
 import com.example.newsclientapp.R;
-import com.example.newsclientapp.storage.StorageEntity;
 import com.example.newsclientapp.storage.StorageManager;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
+import java.util.Locale;
+
 public class NewsDetailActivity extends BaseActivity {
 
 	private static String DATA = "web_data";
+	private TextToSpeech tts;
+	private String content;
+
+	private class TTSListener implements TextToSpeech.OnInitListener {
+		@Override
+		public void onInit (int status) {
+			if (status == TextToSpeech.SUCCESS) {
+				int result = tts.setLanguage(Locale.CHINESE);
+				if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED){
+					Toast.makeText(NewsDetailActivity.this, "系统不支持中文语音", Toast.LENGTH_SHORT).show();
+				} else if (result == TextToSpeech.LANG_AVAILABLE){
+					tts.speak(content,TextToSpeech.QUEUE_ADD,null);
+				}
+			} else {
+				Toast.makeText(NewsDetailActivity.this, "初始化语音失败", Toast.LENGTH_SHORT).show();
+				Log.e("TAG", "初始化失败");
+			}
+		}
+	}
 
 	@BindView(R.id.toolbar) Toolbar mToolbar;
 	@BindView(R.id.fab) FloatingActionMenu mFabMenu;
@@ -42,10 +64,37 @@ public class NewsDetailActivity extends BaseActivity {
 	FloatingActionButton mFavorite;
 	@BindView(R.id.fab_share)
 	FloatingActionButton mShare;
+	@BindView(R.id.fab_voice)
+	FloatingActionButton mVoice;
 
 	private boolean isFavorite;
 
-	public static void startActivity (Context context, StorageEntity data) {
+	private void startTTS() {
+		stopTTS();
+		tts = new TextToSpeech(this, new TTSListener());
+	}
+
+	private void stopTTS() {
+		if (tts != null) {
+			tts.shutdown();
+			tts.stop();
+			tts = null;
+		}
+	}
+
+	@Override
+	protected void onPause () {
+		stopTTS();
+		super.onPause();
+	}
+
+	@Override
+	protected void onDestroy () {
+		stopTTS();
+		super.onDestroy();
+	}
+
+	public static void startActivity (Context context, NewsEntity data) {
 		Intent intent = new Intent(context, NewsDetailActivity.class);
 		intent.putExtra(DATA, data);
 		context.startActivity(intent);
@@ -58,14 +107,14 @@ public class NewsDetailActivity extends BaseActivity {
 
 	@Override
 	protected void initData (Bundle savedInstanceState) {
-		StorageEntity storageEntity = (StorageEntity) getIntent().getSerializableExtra(DATA);
-		NewsEntity news = storageEntity.getNews();
+        NewsEntity news = (NewsEntity) getIntent().getSerializableExtra(DATA);
 
-		isFavorite = storageEntity.isFavorite();
+		isFavorite = StorageManager.getInstance().getFavoritesList().contains(news.getNewsID());
 
 		String[] picUrls = news.getImageURLs();
 		String newsTitle = news.getTitle();
 		String newsText = news.getCleanContent();
+		content = newsText;
 
 		// toolbar
 		initToolbar(newsTitle);
@@ -73,6 +122,9 @@ public class NewsDetailActivity extends BaseActivity {
 
 		// fab
 		mFabMenu.setClosedOnTouchOutside(true);
+		mVoice.setOnClickListener(view -> {
+			startTTS();
+		});
 		mShare.setOnClickListener(view -> {
 			ShareUtils.share(view.getContext(), news);
 			if (mFabMenu.isOpened())
@@ -80,14 +132,14 @@ public class NewsDetailActivity extends BaseActivity {
 		});
 		mFavorite.setOnClickListener(view -> {
 			if (isFavorite) {
-				if (StorageManager.getInstance().unsetFavorite(view.getContext(), news)) {
+				if (StorageManager.getInstance().unsetFavorite(news)) {
 					Toast.makeText(view.getContext(), "已删除收藏", Toast.LENGTH_LONG).show();
 					isFavorite = false;
 				} else {
 					Toast.makeText(view.getContext(), "操作失败", Toast.LENGTH_LONG).show();
 				}
 			} else {
-				if (StorageManager.getInstance().setFavorite(view.getContext(), news)) {
+				if (StorageManager.getInstance().setFavorite(news)) {
 					Toast.makeText(view.getContext(), "已添加到收藏", Toast.LENGTH_LONG).show();
 					isFavorite = true;
 				} else {

@@ -100,8 +100,8 @@ public class MainActivity extends BaseActivity
             this.setDefaultFragment(FragmentEnum.CACHE_FRAGMENT);
         } else if (id == R.id.nav_favorite) {
             this.setDefaultFragment(FragmentEnum.FAVORITE_FRAGMENT);
-        } else if (id == R.id.nav_tools) {
-
+        } else if (id == R.id.nav_search) {
+            this.setDefaultFragment(FragmentEnum.SEARCH_FRAGMENT);
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {

@@ -19,7 +19,6 @@ import com.example.newsclientapp.listener.OnReloadClickListener;
 import com.example.newsclientapp.network.NewsEntity;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.newsclientapp.storage.StorageEntity;
 import com.example.newsclientapp.storage.StorageManager;
 import com.example.newsclientapp.ui.view.FuncItem;
 import com.skydoves.powermenu.CustomPowerMenu;
@@ -34,9 +33,9 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 	private static final int TYPE_FOOTER = 2;
 
 	private Context mContext;
-	private List<StorageEntity> mList = new ArrayList<>();
+	private List<NewsEntity> mList = new ArrayList<>();
 
-	private OnItemClickListener<StorageEntity> mOnItemClickListener;
+	private OnItemClickListener<NewsEntity> mOnItemClickListener;
 	private FooterViewHolder mFooterViewHolder;
 	private CustomPowerMenu funcMenu;
 
@@ -96,14 +95,14 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 		notifyDataSetChanged();
 	}
 
-	public void newDataItem(List<StorageEntity> newDataList) {
+	public void newDataItem(List<NewsEntity> newDataList) {
 		if (newDataList != null && newDataList.size() != 0) {
 			mList.clear();
 			addMoreItem(newDataList);
 		}
 	}
 
-	public void addMoreItem(List<StorageEntity> newDataList) {
+	public void addMoreItem(List<NewsEntity> newDataList) {
 		if (newDataList != null && newDataList.size() != 0) {
 			mList.addAll(newDataList);
 			notifyDataSetChanged();
@@ -133,8 +132,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 			title.setTextColor(mContext.getResources().getColor(R.color.dark_text));
 		}
 
-		void loadViewHolder(final StorageEntity storageEntity) {
-			NewsEntity newsEntity = storageEntity.getNews();
+		void loadViewHolder(final NewsEntity newsEntity) {
 			String[] picUrls = newsEntity.getImageURLs();
 			if (picUrls == null || picUrls.length == 0 || TextUtils.isEmpty(picUrls[0])) {
 				photo.setVisibility(View.GONE);
@@ -149,7 +147,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 				photo.setVisibility(View.VISIBLE);
 			}
 			title.setText(newsEntity.getTitle());
-			if (storageEntity.isFavorite() || StorageManager.getInstance().getCachesList().contains(newsEntity.getNewsID())) {
+			if (StorageManager.getInstance().getCachesList().contains(newsEntity.getNewsID())) {
 				setTitleReadColor();
 			} else {
 				setTitleUnreadColor();
@@ -161,7 +159,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 				@Override
 				public void onClick(View view) {
 					if (mOnItemClickListener != null) {
-						mOnItemClickListener.onItemClick(view, storageEntity);
+						mOnItemClickListener.onItemClick(view, newsEntity);
 						setTitleReadColor();
 					}
 				}
@@ -195,7 +193,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 		}
 	}
 
-	public void setOnItemClickListener(OnItemClickListener<StorageEntity> itemClickListener) {
+	public void setOnItemClickListener(OnItemClickListener<NewsEntity> itemClickListener) {
 		this.mOnItemClickListener = itemClickListener;
 	}
 

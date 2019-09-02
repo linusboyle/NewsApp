@@ -17,7 +17,6 @@ import com.example.newsclientapp.listener.OnReloadClickListener;
 import com.example.newsclientapp.network.NewsEntity;
 import com.example.newsclientapp.presenter.NewsPresenter;
 import com.example.newsclientapp.network.NewsResponse;
-import com.example.newsclientapp.storage.StorageEntity;
 import com.example.newsclientapp.storage.StorageManager;
 import com.example.newsclientapp.ui.activity.NewsDetailActivity;
 import com.example.newsclientapp.ui.adapter.NewsAdapter;
@@ -25,7 +24,6 @@ import com.example.newsclientapp.ui.view.NewsView;
 
 import javax.inject.Inject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class NewsFragment extends LazyFragment implements NewsView {
@@ -41,7 +39,7 @@ public class NewsFragment extends LazyFragment implements NewsView {
 
 	private boolean isRefresh;
 
-	private List<StorageEntity> newsBuffer;
+	private List<NewsEntity> newsBuffer;
 	private int page = 1;
 	private NewsAdapter mAdapter;
 
@@ -79,7 +77,7 @@ public class NewsFragment extends LazyFragment implements NewsView {
 		return R.layout.layout_refresh_rv;
 	}
 
-	public String getCategory() {
+	private String getCategory () {
 		return getArguments().getString(CATEGORY);
 	}
 
@@ -134,10 +132,10 @@ public class NewsFragment extends LazyFragment implements NewsView {
 				requestNews();
 			}
 		});
-		mAdapter.setOnItemClickListener(new OnItemClickListener<StorageEntity>() {
+		mAdapter.setOnItemClickListener(new OnItemClickListener<NewsEntity>() {
 			@Override
-			public void onItemClick(View view, StorageEntity data) {
-				StorageManager.getInstance().addCache(getContext(), data.getNews());
+			public void onItemClick(View view, NewsEntity data) {
+				StorageManager.getInstance().addCache(data);
 				NewsDetailActivity.startActivity(getActivity(), data);
 			}
 		});
@@ -161,19 +159,9 @@ public class NewsFragment extends LazyFragment implements NewsView {
 		});
 	}
 
-	private List<StorageEntity> processResponse(NewsResponse res) {
-		List<String> favorites = StorageManager.getInstance().getFavoritesList();
-		List<StorageEntity> retval = new ArrayList<>();
-		for (NewsEntity newsEntity : res.getData()) {
-			retval.add(new StorageEntity(newsEntity, favorites.contains(newsEntity.getNewsID())));
-		}
-
-		return retval;
-	}
-
 	@Override
 	public void onNewsResponsed(NewsResponse res) {
-		newsBuffer = processResponse(res);
+		newsBuffer = res.getData();
 		closeRefreshing();
 		page = 1;
 		isRefresh = false;

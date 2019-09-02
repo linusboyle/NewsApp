@@ -20,16 +20,17 @@
     <string name="menu_home">Home</string>
     <string name="menu_cache">缓存</string>
     <string name="menu_favorite">收藏</string>
-    <string name="menu_tools">Tools</string>
+    <string name="menu_search">搜索</string>
     <string name="menu_share">分享</string>
     <string name="menu_send">Send</string>
 
     <string name="info_change_tab">选择调整标签页</string>
 
-    <string name="display_news">时事新闻</string>
+    <string name="display_news">新闻</string>
 
     <string name="fab_add_favorite">收藏</string>
     <string name="fab_remove_favorite">取消收藏</string>
 
     <string name="transition_photos">transition_animation_news_photos</string>
+    <string name="fab_voice">朗读</string>
 </resources>

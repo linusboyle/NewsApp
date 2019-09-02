@@ -8,26 +8,27 @@
 package com.example.newsclientapp.ui.fragment;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.newsclientapp.R;
-import com.example.newsclientapp.injection.component.DaggerStorageComponent;
-import com.example.newsclientapp.injection.module.StorageModule;
+import com.example.newsclientapp.core.DateUtils;
+import com.example.newsclientapp.injection.component.DaggerNewsComponent;
+import com.example.newsclientapp.injection.module.NewsModule;
 import com.example.newsclientapp.listener.OnItemClickListener;
 import com.example.newsclientapp.listener.OnReloadClickListener;
 import com.example.newsclientapp.network.NewsEntity;
-import com.example.newsclientapp.presenter.StoragePresenter;
-import com.example.newsclientapp.storage.StorageResponse;
+import com.example.newsclientapp.network.NewsResponse;
+import com.example.newsclientapp.presenter.NewsPresenter;
+import com.example.newsclientapp.storage.StorageManager;
 import com.example.newsclientapp.ui.activity.NewsDetailActivity;
 import com.example.newsclientapp.ui.adapter.NewsAdapter;
-import com.example.newsclientapp.ui.view.StorageView;
+import com.example.newsclientapp.ui.view.NewsView;
 
 import java.util.List;
 
@@ -35,10 +36,11 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 
-public class CacheFragment extends BaseFragment implements StorageView {
+public class SearchResultFragment extends LazyFragment implements NewsView {
 
+	private final static String KEYWORD = "keyword";
 	private final static int COUNT_PER_PAGE = 15;
-	private final static String TAG = "CacheFragment";
+	private final static int BUFFER_MAX = 60;
 
 	@BindView(R.id.recycler_view)
 	RecyclerView mRecyclerView;
@@ -50,31 +52,61 @@ public class CacheFragment extends BaseFragment implements StorageView {
 	private List<NewsEntity> newsBuffer;
 	private int page = 1;
 	private NewsAdapter mAdapter;
+	// private String keyword;
 
 	@Inject
-	StoragePresenter mPresenter;
+	NewsPresenter mPresenter;
+
+	public static SearchResultFragment newSearchResultFragment (String keyword) {
+		Bundle args = new Bundle();
+		args.putString(KEYWORD, keyword);
+		SearchResultFragment searchResultFragment = new SearchResultFragment();
+		searchResultFragment.setArguments(args);
+		return searchResultFragment;
+	}
+
+	@Override
+	protected void initPrepare(@Nullable Bundle savedInstanceState) {
+		page = 1;
+		isRefresh = true;
+
+		initPresenter();
+		initRecyclerView();
+	}
+
+	/*
+	public void changeKeyword(String keyword) {
+		// this.keyword = keyword;
+		mAdapter.clear();
+		requestNews();
+	}
+	*/
+
+	@Override
+	protected void onInvisible() {
+	}
+
+	@Override
+	protected void initData() {
+		// keyword = getArguments().getString(KEYWORD);
+		requestNews();
+	}
 
 	@Override
 	protected int getLayoutId() {
 		return R.layout.layout_refresh_rv;
 	}
 
-	@Override
-	protected void initData (ViewGroup container, Bundle savedInstanceState) {
-		page = 1;
-		isRefresh = true;
-
-		initPresenter();
-		initRecyclerView();
-		requestNews();
-
-		Log.i(TAG, "initialized!");
+	private String getKeyword () {
+		return getArguments().getString(KEYWORD);
 	}
 
 	private void requestNews() {
-		mPresenter.requestCache(getContext());
+		mPresenter.requestNews(BUFFER_MAX, "",
+				DateUtils.getCurrentTimeFormatted(), getKeyword(), "");
 	}
 
+	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 	private boolean addPageFromBuffer(boolean reset) {
 		if (newsBuffer != null && newsBuffer.size() > 0) {
 			int startIndex = (page-1)*COUNT_PER_PAGE;
@@ -92,8 +124,8 @@ public class CacheFragment extends BaseFragment implements StorageView {
 	}
 
 	private void initPresenter() {
-		DaggerStorageComponent.builder()
-				.storageModule(new StorageModule(this))
+		DaggerNewsComponent.builder()
+				.newsModule(new NewsModule(this))
 				.build()
 				.inject(this);
 	}
@@ -123,6 +155,7 @@ public class CacheFragment extends BaseFragment implements StorageView {
 		mAdapter.setOnItemClickListener(new OnItemClickListener<NewsEntity>() {
 			@Override
 			public void onItemClick(View view, NewsEntity data) {
+				StorageManager.getInstance().addCache(data);
 				NewsDetailActivity.startActivity(getActivity(), data);
 			}
 		});
@@ -146,19 +179,9 @@ public class CacheFragment extends BaseFragment implements StorageView {
 		});
 	}
 
-	/**
-	 * 关闭 SwipeRefreshLayout 下拉动画
-	 */
-	private void closeRefreshing() {
-		if (mRefreshLayout.isRefreshing()) {
-			mRefreshLayout.setRefreshing(false);
-		}
-	}
-
 	@Override
-	public void onStorageResponsed (StorageResponse response) {
-		// TODO: use the favorite field
-		newsBuffer = response.getNewsEntities();
+	public void onNewsResponsed(NewsResponse res) {
+		newsBuffer = res.getData();
 		closeRefreshing();
 		page = 1;
 		isRefresh = false;
@@ -169,12 +192,21 @@ public class CacheFragment extends BaseFragment implements StorageView {
 	}
 
 	@Override
-	public void onStorageFailed (String errorMsg) {
+	public void onFailed(String errorMsg) {
 		closeRefreshing();
 		if (mAdapter.getItemCount() == 0) {
 			Toast.makeText(getContext(), "加载出错：" + errorMsg, Toast.LENGTH_SHORT).show();
 		} else {
 			mAdapter.setNetError();
+		}
+	}
+
+	/**
+	 * 关闭 SwipeRefreshLayout 下拉动画
+	 */
+	private void closeRefreshing() {
+		if (mRefreshLayout.isRefreshing()) {
+			mRefreshLayout.setRefreshing(false);
 		}
 	}
 }
