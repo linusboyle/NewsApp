@@ -22,9 +22,11 @@ public class FuncMenuAdapter extends MenuBaseAdapter<FuncItem> {
 	public View getView(int index, View view, ViewGroup viewGroup) {
 		final Context context = viewGroup.getContext();
 
+		Boolean initFlag = false;
 		if (view == null) {
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			view = inflater.inflate(R.layout.rv_item_func, viewGroup, false);
+			initFlag = true;
 		}
 
 		FuncItem item = (FuncItem) getItem(index);
@@ -35,13 +37,14 @@ public class FuncMenuAdapter extends MenuBaseAdapter<FuncItem> {
 		final ImageView galleryIcon = view.findViewById(R.id.item_func_galleryIcon);
 		galleryIcon.setOnClickListener(item.getGalleryListener());
 
-		if (item.getFavourite()) {
-			galleryIcon.setImageDrawable(context.getDrawable(R.drawable.ic_star_white_24dp));
-			galleryIcon.setColorFilter(ContextCompat.getColor(view.getContext(), R.color.dark_second_primary));
-		} else {
-			galleryIcon.setImageDrawable(context.getDrawable(R.drawable.ic_star_border_white_24dp));
-			galleryIcon.setColorFilter(ContextCompat.getColor(view.getContext(), R.color.dark_text));
-		}
+		if(initFlag)
+			if (item.getFavourite()) {
+				galleryIcon.setImageDrawable(context.getDrawable(R.drawable.ic_star_white_24dp));
+				galleryIcon.setColorFilter(ContextCompat.getColor(view.getContext(), R.color.dark_second_primary));
+			} else {
+				galleryIcon.setImageDrawable(context.getDrawable(R.drawable.ic_star_border_white_24dp));
+				galleryIcon.setColorFilter(ContextCompat.getColor(view.getContext(), R.color.dark_text));
+			}
 
 		return super.getView(index, view, viewGroup);
 	}
