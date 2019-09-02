@@ -107,6 +107,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 		private ImageView photo;
 		private TextView title, description, datetime;
 		private ImageView funcIcon;
+		private FuncMenuAdapter funcMenuAdapter;
 
 		NewsViewHolder (View itemView) {
 			super(itemView);
@@ -115,6 +116,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 			description = itemView.findViewById(R.id.news_item_description);
 			datetime = itemView.findViewById(R.id.news_item_datetime);
 			funcIcon = itemView.findViewById(R.id.news_item_function);
+			funcMenuAdapter = new FuncMenuAdapter();
 		}
 
 		void setTitleReadColor () {
@@ -189,8 +191,9 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 				}
 			};
 
+			funcMenuAdapter.updateFavourite(StorageManager.getInstance().getFavoritesList().contains(newsEntity.getNewsID()));
 			Boolean isFavourite = StorageManager.getInstance().getFavoritesList().contains(newsEntity.getNewsID());
-			CustomPowerMenu funcMenu = new CustomPowerMenu.Builder<>(mContext, new FuncMenuAdapter())
+			CustomPowerMenu funcMenu = new CustomPowerMenu.Builder<>(mContext, funcMenuAdapter)
 					.addItem(new FuncItem(shareListener, galleryListener, isFavourite))
 					.setAnimation(MenuAnimation.ELASTIC_BOTTOM_RIGHT)
 					.setMenuRadius(30f)
@@ -202,6 +205,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 			funcIcon.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View view) {
+					funcMenuAdapter.updateFavourite(StorageManager.getInstance().getFavoritesList().contains(newsEntity.getNewsID()));
 					funcMenu.showAsDropDown(view,
 							view.getMeasuredWidth()/2 - funcMenu.getContentViewWidth(),
 							view.getMeasuredHeight()/2 - funcMenu.getContentViewHeight());

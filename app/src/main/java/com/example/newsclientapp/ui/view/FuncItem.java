@@ -12,12 +12,10 @@ import android.view.View;
 public class FuncItem {
 	View.OnClickListener shareListener;
 	View.OnClickListener galleryListener;
-	Boolean isFavourite;
 
 	public FuncItem (View.OnClickListener shareListener, View.OnClickListener galleryListener, Boolean isFavourite) {
 		this.shareListener = shareListener;
 		this.galleryListener = galleryListener;
-		this.isFavourite = isFavourite;
 	}
 
 	public View.OnClickListener getGalleryListener () {
@@ -26,9 +24,5 @@ public class FuncItem {
 
 	public View.OnClickListener getShareListener () {
 		return shareListener;
-	}
-
-	public Boolean getFavourite () {
-		return isFavourite;
 	}
 }
