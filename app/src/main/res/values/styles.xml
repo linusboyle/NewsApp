@@ -23,12 +23,10 @@
         <item name="mBackground_08dp">@color/dark_ground_08dp</item>
         <item name="mTextPrimary">@color/dark_text</item>
         <item name="mTextSecondary">@color/dark_subtext</item>
+        <item name="mContrastColor">@color/white</item>
     </style>
-
     <style name="DarkAppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
-
     <style name="DarkAppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
-
     <style name="DarkAppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -45,4 +43,42 @@
         <item name="android:background">@color/dark_ground_06dp_translucent</item>
     </style>
 
+
+
+    <style name="LightAppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/light_primary</item>
+        <item name="colorPrimaryDark">@color/light_ground_primary</item>
+        <item name="colorAccent">@color/light_second_primary</item>
+        <item name="colorSecondary">@color/light_second_primary</item>
+        <item name="android:textColorPrimary">@color/light_text</item>
+
+        <item name="mOverlayComponentStyle">@style/ThemeOverlay.MaterialComponents.Dark.ActionBar</item>
+        <item name="mNavigationViewStyle">@style/LightNavigationViewStyle</item>
+        <item name="mBackground_00dp">@color/light_background</item>
+        <item name="mBackground_02dp">@color/light_background</item>
+        <item name="mBackground_04dp">@color/light_background</item>
+        <item name="mBackground_06dp">@color/light_background</item>
+        <item name="mBackground_08dp">@color/light_primary</item>
+        <item name="mTextPrimary">@color/light_text</item>
+        <item name="mTextSecondary">@color/light_subtext</item>
+        <item name="mContrastColor">@color/white</item>
+    </style>
+    <style name="LightAppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="LightAppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+    <style name="LightAppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="LightNavigationViewStyle">
+        <item name="android:theme">@style/ThemeOverlay.AppCompat.Light</item>
+    </style>
+
+    <style name="LightToolBarStyle" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:popupMenuStyle">@style/ThemeOverlay.MaterialComponents.Light</item>
+    </style>
+
+
 </resources>
+

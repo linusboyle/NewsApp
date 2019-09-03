@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/rv_item_news_cardview_height"
-    app:cardBackgroundColor="@color/dark_ground_02dp"
+    app:cardBackgroundColor="?attr/mBackground_02dp"
     android:layout_margin="@dimen/rv_item_news_cardview_margin"
     app:cardElevation="@dimen/rv_item_news_cardview_elevation">
 

@@ -11,37 +11,12 @@
     <color name="black">#000000</color>
     <color name="grey_500">#9E9E9E</color>
 
-<!-- normal
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
-
-    <color name="transparent">@android:color/transparent</color>
-    <color name="white">#FFFFFF</color>
-    <color name="black">#000000</color>
-    <color name="grey_500">#9E9E9E</color>
-
-    <color name="item_background">#FAFAFA</color>
-
-    <color name="primary_text">#de000000</color>
-    <color name="secondary_text">#8a000000</color>
-
-    <color name="swipeRefreshLayoutColor_1">#FF5252</color>
-    <color name="swipeRefreshLayoutColor_2">#FF4081</color>
-    <color name="swipeRefreshLayoutColor_3">#427FED</color>
-    <color name="swipeRefreshLayoutColor_4">#B23424</color>
-    <integer-array name="swipeRefreshLayoutColor">
-        <item>@color/swipeRefreshLayoutColor_1</item>
-        <item>@color/swipeRefreshLayoutColor_2</item>
-        <item>@color/swipeRefreshLayoutColor_3</item>
-        <item>@color/swipeRefreshLayoutColor_4</item>
-    </integer-array>
--->
-
-    <!-- dark -->
-    <color name="colorPrimary">#BB86FC</color>
-    <color name="colorPrimaryDark">#1F1B24</color>
-    <color name="colorAccent">#BB86FC</color>
+    <color name="light_primary">#9C27B0</color>
+    <color name="light_ground_primary">#7B1FA2</color>
+    <color name="light_second_primary">#D81B60</color>
+    <color name="light_text">#de000000</color>
+    <color name="light_subtext">#8a000000</color>
+    <color name="light_background">#FAFAFA</color>
 
     <color name="dark_ground_00dp">#121212</color>
     <color name="dark_ground_01dp">#1F1F1f</color>
@@ -54,11 +29,9 @@
     <color name="dark_ground_16dp">#383838</color>
     <color name="dark_ground_24dp">#3B3B3b</color>
     <color name="dark_ground_06dp_translucent">#B02E2E2E</color>
-
     <color name="dark_primary">#BB86FC</color>
     <color name="dark_ground_primary">#1F1B24</color>
     <color name="dark_second_primary">#E91E63</color>
-
     <color name="dark_text">#CECECE</color>
     <color name="dark_subtext">#989898</color>
 

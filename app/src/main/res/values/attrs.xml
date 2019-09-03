@@ -17,6 +17,7 @@
         <attr name="mBackground_08dp" format="reference"/>
         <attr name="mTextPrimary" format="reference"/>
         <attr name="mTextSecondary" format="reference"/>
+        <attr name="mContrastColor" format="reference"/>
 
     </declare-styleable>
 </resources>

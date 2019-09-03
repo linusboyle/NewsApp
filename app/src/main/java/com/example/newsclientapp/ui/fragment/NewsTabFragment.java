@@ -30,12 +30,9 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class NewsTabFragment extends BaseFragment {
-    private static final int PRIMARY_COLOR = 0xFFBB86FC;
-    private static final int TEXT_COLOR = 0xFFCECECE;
-    private static final int SECOND_PRIMARY_COLOR = 0xFFE91E63;
-    private static final int GROUND_02dp_COLOR = 0xFF242424;
+import static com.example.newsclientapp.core.ThemeUtils.getAttrColor;
 
+public class NewsTabFragment extends BaseFragment {
     private static final String TAG = "NewsTabFragment";
 
     @BindView(R.id.tab_function) ImageView mTabFunc;
@@ -88,13 +85,13 @@ public class NewsTabFragment extends BaseFragment {
             @Override
             public void onClick (View view) {
                 if (mViewPager.getVisibility() == View.VISIBLE) {
-                    mTabFunc.setColorFilter(PRIMARY_COLOR);
+                    mTabFunc.setColorFilter(getAttrColor(getContext(), R.attr.colorPrimary));
                     mViewPager.setVisibility(View.GONE);
                     mTabChoose.setVisibility(View.VISIBLE);
                     setTabsEnabled(false);
                 } else {
                     setTabsEnabled(true);
-                    mTabFunc.setColorFilter(TEXT_COLOR);
+                    mTabFunc.setColorFilter(getAttrColor(getContext(), R.attr.mTextPrimary));
                     mViewPager.setVisibility(View.VISIBLE);
                     mTabChoose.setVisibility(View.GONE);
                     List<String> chosenCategoryList = getChosenCategoryList();
@@ -230,15 +227,11 @@ public class NewsTabFragment extends BaseFragment {
             this.chosen = chosen;
             if (chosen) {
             	mImageMark.setVisibility(View.INVISIBLE);
-                mTextView.setTextColor(TEXT_COLOR);
-                mImageView.setColorFilter(TEXT_COLOR);
-                setBackground(GROUND_02dp_COLOR);
+                setBackground(getAttrColor(getContext(), R.attr.mBackground_02dp));
             } else {
                 mImageMark.setVisibility(View.VISIBLE);
-                mImageMark.setColorFilter(SECOND_PRIMARY_COLOR);
-                mTextView.setTextColor(TEXT_COLOR);
-                mImageView.setColorFilter(TEXT_COLOR);
-                setBackground(GROUND_02dp_COLOR);
+                mImageMark.setColorFilter(getAttrColor(getContext(), R.attr.colorSecondary));
+                setBackground(getAttrColor(getContext(), R.attr.mBackground_02dp));
             }
         }
 

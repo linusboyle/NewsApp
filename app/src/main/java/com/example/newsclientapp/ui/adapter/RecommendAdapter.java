@@ -36,6 +36,8 @@ import com.skydoves.powermenu.MenuAnimation;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.newsclientapp.core.ThemeUtils.getAttrColor;
+
 public class RecommendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 	private static final int TYPE_ITEM = 1;
@@ -108,11 +110,11 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 		}
 
 		void setTitleReadColor () {
-			title.setTextColor(mContext.getResources().getColor(R.color.dark_subtext));
+			title.setTextColor(getAttrColor(mContext, R.attr.mTextSecondary));
 		}
 
 		void setTitleUnreadColor () {
-			title.setTextColor(mContext.getResources().getColor(R.color.dark_text));
+			title.setTextColor(getAttrColor(mContext, R.attr.mTextPrimary));
 		}
 
 		@SuppressLint("SetTextI18n")
@@ -167,7 +169,7 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 						if (StorageManager.getInstance().unsetFavorite(newsEntity)) {
 							Toast.makeText(view.getContext(), "已删除收藏", Toast.LENGTH_LONG).show();
 							((ImageView) view).setImageDrawable(mContext.getDrawable(R.drawable.ic_star_border_white_24dp));
-							((ImageView) view).setColorFilter(ContextCompat.getColor(view.getContext(), R.color.dark_text));
+							((ImageView) view).setColorFilter(getAttrColor(mContext, R.attr.mTextPrimary));
 						} else {
 							Toast.makeText(view.getContext(), "操作失败", Toast.LENGTH_LONG).show();
 						}
@@ -175,7 +177,7 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 						if (StorageManager.getInstance().setFavorite(newsEntity)) {
 							Toast.makeText(view.getContext(), "已添加到收藏", Toast.LENGTH_LONG).show();
 							((ImageView) view).setImageDrawable(mContext.getDrawable(R.drawable.ic_star_white_24dp));
-							((ImageView) view).setColorFilter(ContextCompat.getColor(view.getContext(), R.color.dark_second_primary));
+							((ImageView) view).setColorFilter(getAttrColor(mContext, R.attr.colorSecondary));
 						} else {
 							Toast.makeText(view.getContext(), "操作失败", Toast.LENGTH_LONG).show();
 						}

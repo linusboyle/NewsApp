@@ -12,10 +12,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import androidx.core.content.ContextCompat;
 import com.example.newsclientapp.R;
 import com.example.newsclientapp.ui.view.FuncItem;
 import com.skydoves.powermenu.MenuBaseAdapter;
+
+import static com.example.newsclientapp.core.ThemeUtils.getAttrColor;
 
 public class FuncMenuAdapter extends MenuBaseAdapter<FuncItem> {
 	private Boolean isFavourite;
@@ -37,12 +38,15 @@ public class FuncMenuAdapter extends MenuBaseAdapter<FuncItem> {
 		final ImageView galleryIcon = view.findViewById(R.id.item_func_galleryIcon);
 		galleryIcon.setOnClickListener(item.getGalleryListener());
 
+		int normal_color = getAttrColor(context, R.attr.mTextPrimary);
+		int selected_color = getAttrColor(context, R.attr.colorSecondary);
+
 		if (isFavourite) {
 			galleryIcon.setImageDrawable(context.getDrawable(R.drawable.ic_star_white_24dp));
-			galleryIcon.setColorFilter(ContextCompat.getColor(view.getContext(), R.color.dark_second_primary));
+			galleryIcon.setColorFilter(selected_color);
 		} else {
 			galleryIcon.setImageDrawable(context.getDrawable(R.drawable.ic_star_border_white_24dp));
-			galleryIcon.setColorFilter(ContextCompat.getColor(view.getContext(), R.color.dark_text));
+			galleryIcon.setColorFilter(normal_color);
 		}
 
 		return super.getView(index, view, viewGroup);

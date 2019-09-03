@@ -23,6 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/mBackground_08dp"
+            app:titleTextColor="?attr/mContrastColor"
             app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="?attr/mOverlayComponentStyle">
 
@@ -33,7 +34,7 @@
                 android:layout_gravity="end"
                 android:layout_marginEnd="12dp"
                 android:layout_marginVertical="0dp"
-                android:tint="@color/white"
+                android:tint="?attr/mContrastColor"
                 android:src="@drawable/ic_more_vert_white_24dp"/>
 
         </androidx.appcompat.widget.Toolbar>
