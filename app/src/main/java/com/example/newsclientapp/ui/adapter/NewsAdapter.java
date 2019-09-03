@@ -227,6 +227,8 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 			super(itemView);
 			progressBar = itemView.findViewById(R.id.pb_loading);
 			prompt =  itemView.findViewById(R.id.tv_prompt);
+			progressBar.setVisibility(View.GONE);
+			prompt.setVisibility(View.GONE);
 		}
 	}
 
@@ -251,11 +253,13 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 	public void setNotMore() {
 		mFooterViewHolder.prompt.setText("没有更多了");
+		mFooterViewHolder.prompt.setVisibility(View.VISIBLE);
 		mFooterViewHolder.progressBar.setVisibility(View.GONE);
 	}
 
 	public void setNetError() {
 		mFooterViewHolder.prompt.setText("加载失败，点击重试");
+		mFooterViewHolder.prompt.setVisibility(View.VISIBLE);
 		mFooterViewHolder.prompt.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
