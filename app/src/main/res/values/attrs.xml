@@ -9,7 +9,7 @@
 <resources>
     <declare-styleable name="CustomTheme">
         <attr name="mNavigationViewStyle" format="reference"/>
-        <attr name="mOverlayCompnentStyle" format="reference"/>
+        <attr name="mOverlayComponentStyle" format="reference"/>
         <attr name="mBackground_00dp" format="reference"/>
         <attr name="mBackground_02dp" format="reference"/>
         <attr name="mBackground_04dp" format="reference"/>

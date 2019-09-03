@@ -157,7 +157,6 @@ public class CacheFragment extends BaseFragment implements StorageView {
 
 	@Override
 	public void onStorageResponsed (StorageResponse response) {
-		// TODO: use the favorite field
 		newsBuffer = response.getNewsEntities();
 		closeRefreshing();
 		page = 1;
