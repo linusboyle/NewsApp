@@ -84,8 +84,10 @@ public class NewsFragment extends LazyFragment implements NewsView {
 	}
 
 	private void requestNews() {
-		mPresenter.requestNews(BUFFER_MAX, "",
-				DateUtils.getCurrentTimeFormatted(), "", getCategory());
+		 mPresenter.requestNews(BUFFER_MAX, "",
+				 DateUtils.getCurrentTimeFormatted(), "", getCategory());
+		// mPresenter.requestNews(BUFFER_MAX, "2018-08-15",
+		//		"2018-08-21", "野熊", "");
 	}
 
 	@SuppressWarnings("BooleanMethodIsAlwaysInverted")

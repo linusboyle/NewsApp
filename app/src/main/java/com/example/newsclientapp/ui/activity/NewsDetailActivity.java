@@ -9,16 +9,23 @@ package com.example.newsclientapp.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.speech.tts.TextToSpeech;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.*;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import butterknife.BindView;
+import cn.jzvd.Jzvd;
+import cn.jzvd.JzvdStd;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.newsclientapp.core.ShareUtils;
@@ -33,12 +40,16 @@ import com.example.newsclientapp.storage.StorageManager;
 import com.example.newsclientapp.ui.fragment.RecommendFragment;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.youth.banner.Banner;
+import com.youth.banner.loader.ImageLoader;
 
+import java.util.Arrays;
 import java.util.Locale;
 
 public class NewsDetailActivity extends BaseActivity {
 
 	private static String DATA = "web_data";
+	private static final String TAG = "NewsDetailActivity";
 	private TextToSpeech tts;
 	private String content;
 
@@ -61,7 +72,11 @@ public class NewsDetailActivity extends BaseActivity {
 
 	@BindView(R.id.toolbar) Toolbar mToolbar;
 	@BindView(R.id.fab) FloatingActionMenu mFabMenu;
-	@BindView(R.id.news_image) ImageView mImageView;
+	// @BindView(R.id.news_image) ImageView mImageView;
+	@BindView(R.id.banner)
+	Banner _banner;
+	@BindView(R.id.video)
+	JzvdStd _video;
 	@BindView(R.id.news_title) TextView mNewsTitle;
 	@BindView(R.id.news_text) TextView mNewsText;
 	@BindView(R.id.fab_favorite)
@@ -89,7 +104,14 @@ public class NewsDetailActivity extends BaseActivity {
 	@Override
 	protected void onPause () {
 		stopTTS();
+		Jzvd.releaseAllVideos();
 		super.onPause();
+	}
+
+	@Override
+	public void onBackPressed () {
+		Jzvd.backPress();
+		super.onBackPressed();
 	}
 
 	@Override
@@ -132,6 +154,7 @@ public class NewsDetailActivity extends BaseActivity {
 		String[] picUrls = news.getImageURLs();
 		String newsTitle = news.getTitle();
 		String newsText = news.getCleanContent();
+		String video = news.getVideo();
 		content = newsText;
 
 		// toolbar
@@ -168,7 +191,7 @@ public class NewsDetailActivity extends BaseActivity {
 		});
 
 		// page content
-		initNewsPage(picUrls, newsTitle, newsText);
+		initNewsPage(video, picUrls, newsTitle, newsText);
 	}
 
 	private void syncFavoriteState() {
@@ -182,18 +205,23 @@ public class NewsDetailActivity extends BaseActivity {
 		}
 	}
 
-	private void initNewsPage(String[] picUrls, String newsTitle, String newsText) {
-		if (picUrls == null || picUrls.length == 0 || TextUtils.isEmpty(picUrls[0])) {
-			mImageView.setVisibility(View.GONE);
+	private void initNewsPage(String videoUrl, String[] picUrls, String newsTitle, String newsText) {
+		if (videoUrl.length() != 0) {
+			Log.i(TAG, "display video");
+			_video.setUp(videoUrl, "视频", JzvdStd.SCREEN_NORMAL);
+			_banner.setVisibility(View.GONE);
 		} else {
-			String picUrl = picUrls[0];
-			Glide.with(this)
-					.load(picUrl)
-					.diskCacheStrategy(DiskCacheStrategy.ALL)
-					.placeholder(R.drawable.glide_pic_default)
-					.error(R.drawable.glide_pic_failed)
-					.into(mImageView);
-			mImageView.setVisibility(View.VISIBLE);
+			_video.setVisibility(View.GONE);
+			if (picUrls == null || picUrls.length == 0 || TextUtils.isEmpty(picUrls[0])) {
+				_banner.setVisibility(View.GONE);
+			} else {
+				for (String string : picUrls)
+					Log.i(TAG, string);
+				_banner.setImageLoader(new GlideImageLoader());
+				_banner.setDelayTime(3000);
+				_banner.setImages(Arrays.asList(picUrls));
+				_banner.start();
+			}
 		}
 		mNewsTitle.setText(newsTitle);
 		mNewsText.setText(newsText);
@@ -207,5 +235,17 @@ public class NewsDetailActivity extends BaseActivity {
 
 		mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
 		mToolbar.setNavigationOnClickListener(view -> finish());
+	}
+
+	private class GlideImageLoader extends ImageLoader {
+		@Override
+		public void displayImage (Context context, Object path, ImageView imageView) {
+			Glide.with(context)
+			.load((String)path)
+			.diskCacheStrategy(DiskCacheStrategy.ALL)
+			.placeholder(R.drawable.glide_pic_default)
+			.error(R.drawable.glide_pic_failed)
+			.into(imageView);
+		}
 	}
 }
