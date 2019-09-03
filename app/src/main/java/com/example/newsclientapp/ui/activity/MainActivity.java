@@ -35,9 +35,12 @@ public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
+    @BindView(R.id.nav_view) NavigationView mNavigationView;
+    @BindView(R.id.drawer_layout) DrawerLayout mDrawer;
 
     private static final String TAG = "MainActivity";
     private HashMap<FragmentEnum, Fragment> mFragments = new HashMap<>();;
+    private static int checkedNaviPosition = 0;
 
 
     @Override
@@ -52,29 +55,23 @@ public class MainActivity extends BaseActivity
 
         // toolbar
         this.mToolbar.setTitle(R.string.display_news);
-        // setSupportActionBar(this.mToolbar);
 	    createToolBarPopupMenu(mToolbar);
 
-        // drawer_layout
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-
         // nav_view
-        NavigationView navigationView = findViewById(R.id.nav_view);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, this.mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
+                this, mDrawer, this.mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawer.addDrawerListener(toggle);
         toggle.syncState();
-        navigationView.setNavigationItemSelectedListener(this);
+        mNavigationView.setNavigationItemSelectedListener(this);
 
-        // fragment
-        setDefaultFragment(FragmentEnum.NEWS_TAB_FRAGMENT);
+        // default fragment
+        onNavigationItemSelected(mNavigationView.getMenu().getItem(checkedNaviPosition).setChecked(true));
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        if (mDrawer.isDrawerOpen(GravityCompat.START)) {
+            mDrawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
@@ -88,20 +85,23 @@ public class MainActivity extends BaseActivity
         // TODO
         if (id == R.id.nav_news_tab_fragment) {
             this.setDefaultFragment(FragmentEnum.NEWS_TAB_FRAGMENT);
+            checkedNaviPosition = 0;
         } else if (id == R.id.nav_cache) {
             this.setDefaultFragment(FragmentEnum.CACHE_FRAGMENT);
+            checkedNaviPosition = 1;
         } else if (id == R.id.nav_favorite) {
             this.setDefaultFragment(FragmentEnum.FAVORITE_FRAGMENT);
+            checkedNaviPosition = 2;
         } else if (id == R.id.nav_search) {
             this.setDefaultFragment(FragmentEnum.SEARCH_FRAGMENT);
+            checkedNaviPosition = 3;
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
 
         }
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        mDrawer.closeDrawer(GravityCompat.START);
         this.mToolbar.setTitle(item.getTitle());
         return true;
     }
