@@ -17,7 +17,7 @@
     <ImageView
         android:id="@+id/item_button_icon"
         android:src="@drawable/ic_menu_share"
-        android:tint="?attr/mTextPrimary"
+        android:tint="?attr/mContrastColor"
         android:layout_margin="@dimen/activity_horizontal_margin_half"
         android:layout_weight="10"
         android:layout_width="0dp"
@@ -27,7 +27,7 @@
         android:id="@+id/item_button_text"
         android:gravity="start|center_vertical"
         android:layout_margin="@dimen/activity_horizontal_margin_half"
-        android:textColor="?attr/mTextPrimary"
+        android:textColor="?attr/mContrastColor"
         android:text="hello world"
         android:layout_weight="60"
         android:layout_width="0dp"
