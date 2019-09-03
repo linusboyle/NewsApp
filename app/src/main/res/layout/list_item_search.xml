@@ -14,9 +14,10 @@
         android:id="@+id/tvSearchTerm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/dark_ground_01dp"
+        android:padding="@dimen/activity_horizontal_margin_half"
+        android:background="?attr/mBackground_04dp"
         android:text="@string/app_name"
-        android:textColor="@color/white"
-        android:textSize="20sp" />
+        android:textColor="?attr/mTextPrimary"
+        android:textSize="16sp" />
 
 </LinearLayout>

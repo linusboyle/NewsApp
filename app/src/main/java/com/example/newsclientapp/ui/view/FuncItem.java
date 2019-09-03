@@ -7,22 +7,22 @@
 
 package com.example.newsclientapp.ui.view;
 
-import android.graphics.drawable.Drawable;
+import android.view.View;
 
 public class FuncItem {
-	Drawable shareIcon;
-	Drawable galleryIcon;
+	View.OnClickListener shareListener;
+	View.OnClickListener galleryListener;
 
-	public FuncItem (Drawable shareIcon, Drawable galleryIcon) {
-		this.shareIcon = shareIcon;
-		this.galleryIcon = galleryIcon;
+	public FuncItem (View.OnClickListener shareListener, View.OnClickListener galleryListener) {
+		this.shareListener = shareListener;
+		this.galleryListener = galleryListener;
 	}
 
-	public Drawable getShareIcon() {
-		return this.shareIcon;
+	public View.OnClickListener getGalleryListener () {
+		return galleryListener;
 	}
 
-	public Drawable getGalleryIcon() {
-		return this.galleryIcon;
+	public View.OnClickListener getShareListener () {
+		return shareListener;
 	}
 }

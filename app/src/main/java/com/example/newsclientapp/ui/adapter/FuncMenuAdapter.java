@@ -12,24 +12,43 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import androidx.core.content.ContextCompat;
 import com.example.newsclientapp.R;
 import com.example.newsclientapp.ui.view.FuncItem;
 import com.skydoves.powermenu.MenuBaseAdapter;
 
 public class FuncMenuAdapter extends MenuBaseAdapter<FuncItem> {
+	private Boolean isFavourite;
+
 	@Override
 	public View getView(int index, View view, ViewGroup viewGroup) {
 		final Context context = viewGroup.getContext();
 
-		if (view == null)
-			view = LayoutInflater.from(context).inflate(R.layout.rv_item_func, viewGroup, false);
+		if (view == null) {
+			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			view = inflater.inflate(R.layout.rv_item_func, viewGroup, false);
+		}
 
 		FuncItem item = (FuncItem) getItem(index);
+
 		final ImageView shareIcon = view.findViewById(R.id.item_func_shareIcon);
-		shareIcon.setImageDrawable(item.getShareIcon());
+		shareIcon.setOnClickListener(item.getShareListener());
+
 		final ImageView galleryIcon = view.findViewById(R.id.item_func_galleryIcon);
-		galleryIcon.setImageDrawable(item.getGalleryIcon());
+		galleryIcon.setOnClickListener(item.getGalleryListener());
+
+		if (isFavourite) {
+			galleryIcon.setImageDrawable(context.getDrawable(R.drawable.ic_star_white_24dp));
+			galleryIcon.setColorFilter(ContextCompat.getColor(view.getContext(), R.color.dark_second_primary));
+		} else {
+			galleryIcon.setImageDrawable(context.getDrawable(R.drawable.ic_star_border_white_24dp));
+			galleryIcon.setColorFilter(ContextCompat.getColor(view.getContext(), R.color.dark_text));
+		}
 
 		return super.getView(index, view, viewGroup);
+	}
+
+	public void updateFavourite(Boolean isFavourite) {
+		this.isFavourite = isFavourite;
 	}
 }
