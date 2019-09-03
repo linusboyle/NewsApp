@@ -14,7 +14,7 @@
         <item name="colorSecondary">@color/dark_second_primary</item>
         <item name="android:textColorPrimary">@color/dark_text</item>
 
-        <item name="mOverlayCompnentStyle">@style/ThemeOverlay.MaterialComponents.Dark.ActionBar</item>
+        <item name="mOverlayComponentStyle">@style/ThemeOverlay.MaterialComponents.Dark.ActionBar</item>
         <item name="mNavigationViewStyle">@style/DarkNavigationViewStyle</item>
         <item name="mBackground_00dp">@color/dark_ground_00dp</item>
         <item name="mBackground_02dp">@color/dark_ground_02dp</item>

@@ -25,8 +25,12 @@ import com.example.newsclientapp.core.ShareUtils;
 import com.example.newsclientapp.network.NewsEntity;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.example.newsclientapp.R;
 import com.example.newsclientapp.storage.StorageManager;
+import com.example.newsclientapp.ui.fragment.RecommendFragment;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
@@ -105,12 +109,25 @@ public class NewsDetailActivity extends BaseActivity {
 		return R.layout.activity_news_detail;
 	}
 
+	private void initRecommendationFragment(NewsEntity news) {
+		String keyword = news.getAKeyword();
+		if (keyword == null)
+			return; // no instantiation
+		FragmentManager fragmentManager = getSupportFragmentManager();
+		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+		RecommendFragment recommendFragment =
+				RecommendFragment.newFragment(news);
+		fragmentTransaction.add(R.id.detail_frame, recommendFragment);
+		fragmentTransaction.commit();
+	}
+
 	@Override
 	protected void initData (Bundle savedInstanceState) {
         NewsEntity news = (NewsEntity) getIntent().getSerializableExtra(DATA);
 
 		assert news != null;
 		isFavorite = StorageManager.getInstance().getFavoritesList().contains(news.getNewsID());
+		initRecommendationFragment(news);
 
 		String[] picUrls = news.getImageURLs();
 		String newsTitle = news.getTitle();

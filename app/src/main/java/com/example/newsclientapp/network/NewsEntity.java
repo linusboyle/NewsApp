@@ -10,6 +10,7 @@ package com.example.newsclientapp.network;
 import android.text.TextUtils;
 
 import java.io.Serializable;
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -375,5 +376,13 @@ public class NewsEntity implements Serializable {
 
 	public void setWho (List<NewsFigure> who) {
 		this.who = who;
+	}
+
+	public String getAKeyword() {
+		List<Keyword> keywords = getKeywords();
+		if (keywords.isEmpty())
+			return null;
+		else
+			return keywords.get(0).getWord();
 	}
 }

@@ -171,7 +171,8 @@ public class CacheFragment extends BaseFragment implements StorageView {
 	public void onStorageFailed (String errorMsg) {
 		closeRefreshing();
 		if (mAdapter.getItemCount() == 0) {
-			Toast.makeText(getContext(), "加载出错：" + errorMsg, Toast.LENGTH_SHORT).show();
+			Toast.makeText(getContext(), "加载缓存出错", Toast.LENGTH_SHORT).show();
+			Log.e(TAG, errorMsg);
 		} else {
 			mAdapter.setNetError();
 		}
