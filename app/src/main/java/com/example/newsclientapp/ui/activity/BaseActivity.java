@@ -49,6 +49,7 @@ public abstract class BaseActivity extends RxAppCompatActivity {
 		super.onDestroy();
 		if (mUnBinder != null) {
 			mUnBinder.unbind();
+			mUnBinder = null;
 		}
 	}
 

@@ -53,6 +53,7 @@ public abstract class BaseFragment extends RxFragment implements BaseView{
         super.onDestroy();
         if (mUnBinder != null) {
             mUnBinder.unbind();
+            mUnBinder = null;
         }
     }
 
