@@ -7,9 +7,7 @@
 
 package com.example.newsclientapp.core;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 import android.util.TypedValue;
 import androidx.core.content.ContextCompat;

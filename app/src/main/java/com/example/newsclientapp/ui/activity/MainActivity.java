@@ -36,8 +36,9 @@ public class MainActivity extends BaseActivity
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
 
-    private HashMap<FragmentEnum, Fragment> mFragments = new HashMap<>(6);
     private static final String TAG = "MainActivity";
+    private HashMap<FragmentEnum, Fragment> mFragments = new HashMap<>();;
+
 
     @Override
     protected int getLayout() {
@@ -110,10 +111,11 @@ public class MainActivity extends BaseActivity
         super.onAttachFragment(fragment);
         try {
             for (FragmentEnum fe : FragmentEnum.values()) {
-                Fragment target = this.mFragments.get(fe);
+                // Fragment target = this.mFragments.get(fe);
                 Class<? extends BaseFragment> targetClass = FragmentFactory.getFragmentClass(fe);
-                if (target == null && targetClass.equals(fragment.getClass())) {
-                    this.mFragments.put(fe, targetClass.getConstructor().newInstance());
+                if (/*target == null &&*/ targetClass.equals(fragment.getClass())) {
+                    // this.mFragments.put(fe, targetClass.getConstructor().newInstance());
+                    this.mFragments.put(fe, fragment);
                     break;
                 }
             }
@@ -157,5 +159,17 @@ public class MainActivity extends BaseActivity
                 fragmentTransaction.hide(fragment);
             }
         }
+    }
+
+    @Override
+    public void recreate() {
+        // to prevent the fragments from recreating
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        for (Fragment fragment : mFragments.values())
+            fragmentTransaction.remove(fragment);
+        fragmentTransaction.commitNow();
+        mFragments = new HashMap<>();
+
+        super.recreate();
     }
 }

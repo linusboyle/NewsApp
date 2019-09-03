@@ -1,10 +1,7 @@
 package com.example.newsclientapp.ui.activity;
 
-import android.content.res.Resources;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -35,7 +32,7 @@ public abstract class BaseActivity extends RxAppCompatActivity {
 	private PowerMenu dialog;
 	private Toolbar toolbar;
 
-	private ThemeUtils.AppTheme mTheme;
+	protected ThemeUtils.AppTheme mTheme;
 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {

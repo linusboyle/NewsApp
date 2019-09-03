@@ -170,7 +170,8 @@ public class NewsFragment extends LazyFragment implements NewsView {
 		isRefresh = false;
 		if(!addPageFromBuffer(true)) {
 			mAdapter.clear();
-			Toast.makeText(getContext(), "暂无数据", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getContext(), "暂无新闻数据", Toast.LENGTH_SHORT).show();
+			Log.i(TAG, "暂无新闻数据: " + this);
 		}
 	}
 

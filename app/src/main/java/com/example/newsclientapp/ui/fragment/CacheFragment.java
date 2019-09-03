@@ -68,7 +68,7 @@ public class CacheFragment extends BaseFragment implements StorageView {
 		initRecyclerView();
 		requestNews();
 
-		Log.i(TAG, "initialized!");
+		Log.i(TAG, "initialized: " + this);
 	}
 
 	private void requestNews() {
@@ -163,7 +163,8 @@ public class CacheFragment extends BaseFragment implements StorageView {
 		isRefresh = false;
 		if(!addPageFromBuffer(true)) {
 			mAdapter.clear();
-			Toast.makeText(getContext(), "暂无数据", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getContext(), "暂无缓存数据", Toast.LENGTH_SHORT).show();
+			Log.i(TAG, "暂无缓存数据: " + this);
 		}
 	}
 

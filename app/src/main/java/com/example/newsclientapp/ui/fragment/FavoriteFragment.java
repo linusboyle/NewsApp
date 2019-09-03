@@ -68,7 +68,7 @@ public class FavoriteFragment extends BaseFragment implements FavoriteView {
 		initRecyclerView();
 		requestNews();
 
-		Log.i(TAG, "initialized!");
+		Log.i(TAG, "initialized: " + this);
 	}
 
 	private void requestNews() {
@@ -163,7 +163,8 @@ public class FavoriteFragment extends BaseFragment implements FavoriteView {
 		isRefresh = false;
 		if(!addPageFromBuffer(true)) {
 			mAdapter.clear();
-			Toast.makeText(getContext(), "暂无数据", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getContext(), "暂无收藏数据", Toast.LENGTH_SHORT).show();
+			Log.i(TAG, "暂无收藏数据: " + this);
 		}
 	}
 

@@ -39,6 +39,7 @@ import butterknife.BindView;
 
 public class SearchResultFragment extends LazyFragment implements NewsView {
 
+	private final static String TAG = "SearchResultFragment";
 	private final static String KEYWORD = "keyword";
 	private final static int COUNT_PER_PAGE = 15;
 	private final static int BUFFER_MAX = 60;
@@ -178,7 +179,8 @@ public class SearchResultFragment extends LazyFragment implements NewsView {
 		isRefresh = false;
 		if(!addPageFromBuffer(true)) {
 			mAdapter.clear();
-			Toast.makeText(getContext(), "暂无数据", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getContext(), "暂无搜索数据", Toast.LENGTH_SHORT).show();
+			Log.i(TAG, "暂无搜索数据: " + this);
 		}
 	}
 
