@@ -11,6 +11,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.example.newsclientapp.core.NewsCategory;
+import com.example.newsclientapp.core.ThemeUtils;
 import com.example.newsclientapp.listener.OnNewsGotListener;
 import com.example.newsclientapp.network.NewsEntity;
 
@@ -35,6 +36,7 @@ public class StorageManager {
 	private static final String CONFIGURATION_DIR = "configuration";
 	private static final String SEARCH_HISTORY = "search_history";
 	private static final String TAB_HISTORY = "tab_history";
+	private static final String THEME_HISTORY = "theme_history";
 	private static final String TAG = "StorageManager";
 	private static StorageManager instance;
 
@@ -216,6 +218,27 @@ public class StorageManager {
 		return syncCacheAccess.writeString(tab_his_file, stringBuilder.toString());
 	}
 
+	public boolean updateThemeHistory(ThemeUtils.AppTheme theme) {
+		String string = theme == ThemeUtils.AppTheme.DARK ? "Dark" : "Light";
+		File theme_his_file = new File(configuration_dir, THEME_HISTORY);
+		return syncCacheAccess.writeString(theme_his_file, string);
+	}
+
+	public ThemeUtils.AppTheme getThemeHistorySync() {
+		try {
+			File theme_his_file = new File(configuration_dir, THEME_HISTORY);
+			Scanner sc = new Scanner(theme_his_file);
+			if (sc.hasNextLine()) {
+				String string = sc.nextLine();
+				if (string.trim().equals("Dark"))
+					return ThemeUtils.AppTheme.DARK;
+				else
+					return ThemeUtils.AppTheme.LIGHT;
+			}
+		} catch (FileNotFoundException ignored) { }
+		return ThemeUtils.AppTheme.DARK;
+	}
+
 	public List<String> getSearchHistorySync () {
 		try {
 			ArrayList<String> retval = new ArrayList<>();
@@ -234,7 +257,7 @@ public class StorageManager {
 		}
 	}
 
-	public List<String> getTabHistory () {
+	public List<String> getTabHistorySync () {
 		try {
 			ArrayList<String> retval = new ArrayList<>();
 			File tab_his_file = new File(configuration_dir, TAB_HISTORY);

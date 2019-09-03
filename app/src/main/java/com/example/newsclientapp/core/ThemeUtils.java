@@ -10,9 +10,11 @@ package com.example.newsclientapp.core;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.util.TypedValue;
 import androidx.core.content.ContextCompat;
 import com.example.newsclientapp.R;
+import com.example.newsclientapp.storage.StorageManager;
 
 public class ThemeUtils {
 	public enum AppTheme {
@@ -22,19 +24,20 @@ public class ThemeUtils {
 
 	private static AppTheme sTheme;
 	private static Boolean toInitiate = true;
+	private static final String TAG = "ThemeUtils";
 
 	public static void changeToTheme(Activity activity, AppTheme theme) {
 		if (theme == sTheme) return;
 		sTheme = theme;
-		// TODO store theme
+		if (!StorageManager.getInstance().updateThemeHistory(sTheme))
+			Log.w(TAG, "update theme config has failed!");
 		activity.finish();
 		activity.startActivity(new Intent(activity, activity.getClass()));
 	}
 
 	public static void initTheme() {
-		// TODO restore theme
 		if (!toInitiate) return;
-		sTheme = AppTheme.DARK;
+		sTheme = StorageManager.getInstance().getThemeHistorySync();
 		toInitiate = false;
 	}
 

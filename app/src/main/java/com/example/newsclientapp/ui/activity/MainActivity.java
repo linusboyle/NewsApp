@@ -10,14 +10,14 @@ package com.example.newsclientapp.ui.activity;
 import android.os.Bundle;
 
 import com.example.newsclientapp.R;
-import com.example.newsclientapp.core.PermissionUtils;
 
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 
+import android.util.Log;
 import android.view.MenuItem;
 
-import com.example.newsclientapp.storage.StorageManager;
+import com.example.newsclientapp.core.PermissionUtils;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -30,7 +30,6 @@ import butterknife.BindView;
 import java.util.HashMap;
 import com.example.newsclientapp.ui.fragment.*;
 import com.example.newsclientapp.ui.fragment.FragmentFactory.FragmentEnum;
-import com.example.newsclientapp.core.ExceptionHandler;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -38,7 +37,7 @@ public class MainActivity extends BaseActivity
     @BindView(R.id.toolbar) Toolbar mToolbar;
 
     private HashMap<FragmentEnum, Fragment> mFragments = new HashMap<>(6);
-    private ExceptionHandler exceptionHandler;
+    private static final String TAG = "MainActivity";
 
     @Override
     protected int getLayout() {
@@ -47,16 +46,8 @@ public class MainActivity extends BaseActivity
 
     @Override
     protected void initData(Bundle savedInstanceState) {
-
-        // exception handler
-        this.exceptionHandler = ExceptionHandler.getInstance();
-        this.exceptionHandler.init(this);
-
         // permissions
         PermissionUtils.verifyStoragePermissions(this);
-
-        // storage
-        StorageManager.getInstance().init(this);
 
         // toolbar
         this.mToolbar.setTitle(R.string.display_news);
@@ -127,7 +118,8 @@ public class MainActivity extends BaseActivity
                 }
             }
         } catch (Exception e) {
-            this.exceptionHandler.uncaughtException(Thread.currentThread(), e);
+            //noinspection ConstantConditions
+            Log.e(TAG, e.getMessage());
         }
     }
 
@@ -149,7 +141,7 @@ public class MainActivity extends BaseActivity
                 fragmentTransaction.add(R.id.fragment_content, this.mFragments.get(fIndex));
             }
         } catch (Exception e) {
-            this.exceptionHandler.uncaughtException(Thread.currentThread(), e);
+            Log.e(TAG, e.getMessage());
         }
 
         fragmentTransaction.commit();
