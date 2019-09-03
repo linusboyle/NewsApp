@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.util.TypedValue;
 import androidx.core.content.ContextCompat;
 import com.example.newsclientapp.R;
+import com.example.newsclientapp.ui.activity.BaseActivity;
 
 public class ThemeUtils {
 	public enum AppTheme {
@@ -23,12 +24,11 @@ public class ThemeUtils {
 	private static AppTheme sTheme;
 	private static Boolean toInitiate = true;
 
-	public static void changeToTheme(Activity activity, AppTheme theme) {
+	public static void changeToTheme(BaseActivity activity, AppTheme theme) {
 		if (theme == sTheme) return;
 		sTheme = theme;
 		// TODO store theme
-		activity.finish();
-		activity.startActivity(new Intent(activity, activity.getClass()));
+		activity.recreate();
 	}
 
 	public static void initTheme() {
@@ -38,14 +38,16 @@ public class ThemeUtils {
 		toInitiate = false;
 	}
 
-	public static void onActivityCreateSetTheme(Activity activity) {
+	public static void onActivityCreateSetTheme(BaseActivity activity) {
 		initTheme();
 		switch (sTheme) {
 			case DARK:
 				activity.setTheme(R.style.DarkAppTheme_NoActionBar);
+				activity.setThemeMark(sTheme);
 				break;
 			case LIGHT:
 				activity.setTheme(R.style.LightAppTheme_NoActionBar);
+				activity.setThemeMark(sTheme);
 				break;
 		}
 	}
@@ -58,5 +60,9 @@ public class ThemeUtils {
 
 	public static Boolean isDarkMode() {
 		return sTheme == AppTheme.DARK;
+	}
+
+	public static AppTheme getCurTheme () {
+		return sTheme;
 	}
 }

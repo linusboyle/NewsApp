@@ -35,6 +35,8 @@ public abstract class BaseActivity extends RxAppCompatActivity {
 	private PowerMenu dialog;
 	private Toolbar toolbar;
 
+	private ThemeUtils.AppTheme mTheme;
+
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -64,6 +66,17 @@ public abstract class BaseActivity extends RxAppCompatActivity {
 			mUnBinder.unbind();
 			mUnBinder = null;
 		}
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if (mTheme != ThemeUtils.getCurTheme())
+			recreate();
+	}
+
+	public void setThemeMark(ThemeUtils.AppTheme newTheme) {
+		mTheme = newTheme;
 	}
 
 	protected void createToolBarPopupMenu(Toolbar toolbar) {
