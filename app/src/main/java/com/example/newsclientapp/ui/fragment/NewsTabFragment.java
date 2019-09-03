@@ -167,7 +167,7 @@ public class NewsTabFragment extends BaseFragment {
     }
 
     private List<String> restoreCategoryChosen() {
-        return StorageManager.getInstance().getTabHistory();
+        return StorageManager.getInstance().getTabHistorySync();
     }
 
     private ViewGroup getTabViewGroup() {
