@@ -57,4 +57,6 @@ dependencies {
     implementation 'com.github.clans:fab:1.6.4'
     implementation 'com.github.zcweng:switch-button:0.0.3@aar'
     implementation 'com.github.skydoves:powermenu:2.1.2'
+    implementation 'com.youth.banner:banner:1.4.10'
+    implementation 'cn.jzvd:jiaozivideoplayer:7.0.5'
 }
