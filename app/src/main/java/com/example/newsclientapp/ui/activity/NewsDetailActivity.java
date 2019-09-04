@@ -185,9 +185,9 @@ public class NewsDetailActivity extends BaseActivity {
 					Toast.makeText(view.getContext(), "操作失败", Toast.LENGTH_LONG).show();
 				}
 			}
-			syncFavoriteState();
 			if (mFabMenu.isOpened())
-				mFabMenu.close(true);
+				mFabMenu.close(false);
+			syncFavoriteState();
 		});
 
 		// page content
