@@ -111,7 +111,8 @@ public class RecommendFragment extends BaseFragment implements NewsView {
 			}
 		}
 		Collections.shuffle(retval);
-		recommendAdapter.newDataItem(retval.subList(0, DISPLAY));
+		if (!retval.isEmpty())
+			recommendAdapter.newDataItem(retval.subList(0, DISPLAY < retval.size() ? DISPLAY : retval.size()));
 	}
 
 	@Override
